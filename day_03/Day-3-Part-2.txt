@@ -1,0 +1,63 @@
+=================================================
+               Day-3 part-2
+=================================================
+
+In windows        In redhat Linux 
+
+Software          Package 
+
+ .exe               .rpm
+=================================================
+Terminal  ===> Type  ==> Command ===> ENTER ===> Syntax   ===> OKAY  ===> INPUT ===> ACCEPT   ==> Process   ===> OUTPUT
+=================================================
+Set of rules ?
+=================================================
+1- Command without usign any options  ===> will perform thier default function
+2- Command with available Options     ===> as per option use case ===> features will increase/deacrese
+=================================================
+
+[root@localhost ~]# userdel  --help    ===> will display the all available options with any command 
+
+
+Options ===> 1- single hiphen  ====  character based  options
+             2- double hiphen  ====  word based  option
+
+================================================
+# command 
+
+# command value 
+
+# command option-1   options-2   optionis-3...so on   value 
+
+===============================================
+How we can login in RHEL-9 with Remote Login concept  ?
+===============================================
+
+1- Local to local  ===> username + Password 
+
+2- remote login    ==> username  + password  + targeted  machine IP address + Software ===> to give request for remote login 
+
+===============================================
+
+on linux machine ==> get IP from your Internet Modem 
+
+  128  ifconfig 
+  129  nmcli connection down  ens160
+  130  nmcli connection up  ens160
+  131  ifconfig 
+
+Assume my system IP is ===> 192.168.1.106
+
+===============================================
+
+on windows machine 
+
+step-1  download and install  putty software   OR Others Tool as well 
+step-2  open putty appliaction  
+
+
+
+
+
+
+

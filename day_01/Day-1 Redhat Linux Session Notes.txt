@@ -1,0 +1,309 @@
+================================================================
+==================================================================================
+Redhat Linux Training  OR Linux Training OR RHCSA Training
+==================================================================================
+Discussion about Basic Terms before start the linux Classes ?
+==================================================================================
+
+
+
+user1  ====> communicate  ====> User2  ===> need the communication device ===> MOBILE
+user2  ====> communicate  ====> User1  ===> need the communication device ===> MOBILE
+
+
+Mobile [H/W Device]   <=====>   Operating System  <======      Whatsapp [Example of any applications]
+
+
+Types of Vendor ?
+
+	1- H/W providing   Vendor                      ====> NOKIA + VIVO+OPPO+APPLE
+	2- OS Providing Vendor                           ====> Pre Installed Operating System  ===> Andoid/IOS  ===> example of Mobile based operating system
+	3- Application providing Vendor           ====> App1  App2   App3 App4              ===> WhatsApp + Youtube + FB + Insta App ==> Example of application
+	
+==================================================================================
+if we are working in IT based ORG/IT based Infra/IT Baed ENV ===> we need to understand about these three terms ?
+===================================================================================
+
+	1- What is Computer  ?   ==> Laptop/Desktop/Machine ===> all are the Examples of Computer OR H/W
+	
+	2- What is Operating System ? and why we need the Operating system ?
+
+	1- What is Application/software/Tools/utility/services ?
+
+
+===================================================================================
+IT based infra
+
+	1- H/W providing   Vendor
+	2- OS   providing   Vendor
+	3- Application/Software Providing Vendor 
+	
+===================================================================================
+
+1- Computer  ===> set of devices = ===>  keyboard + mouse + monitor + CPU + RAM + DISK  + Motherboard ==> ready to use machine 
+
+==> Example of Blank Hardware/Machine
+
+
+A computer is an electronic device that can process and store information. It can perform calculations, manipulate data, and execute.
+
+
+
+
+Note:- Applications  ==> we can run OR install the Application directly on any Blank Hardware.
+We need to install first Operating system on this blank Hardware so that our application can communicate with H/W
+
+
+What is Operating System ?
+
+
+An operating system (OS) is system software that manages computer hardware and software resources, and provides common services for computer programs
+
+Application software refers to software that performs specific functions for a user.
+
+
+=========================================================================
+
+IT based infra
+
+	1- H/W providing   Vendor                                           ===> DELL+HP+LENOVO  OR else we can create our own with required H/W configuration
+	2- OS   providing   Vendor                                            ===> Windows/Apple MAC/Linux/Unix
+	3- Application/Software Providing Vendor              ====> Applications  ===> MS-Office + Tally + Others 
+
+================================================================================
+
+Machine [H/W]      <=== Operating System  <=== Applications/Services/Tools/Utility  <=== login  <== as  per requirement  <=== task perform  <=== infra Engineer OR Application Engineer
+
+	1- H/W Choice OR Cloud Based Vendor 
+	2- OS Choice
+	3- Application Choice
+	
+================================================================================
+Project/Client/Customer?
+================================================================================
+
+Types of Project ?
+
+	1- Internal project/Internal Application infra/Inhouse Application
+	
+	2- External project/Third Party Client/Third party Customer Application
+
+
+
+================================================================================
+
+Project/Client/Customer  ===> Pre Sales Team OR project Manager ===> Discuss with Customer need   ===> will explain the same requirement with office infra Management Team
+
+============================   Deal Close =========================================
+
+Project Planning  ?
+
+
+	1- Application/Tools/utility/Services Required in our project as per my customer  need  ===> First Focus ==> Application Vendor ===> as per cutomer need
+	2- OS Planning  ===> Windows/Apple MAC/UNIX/Linux Based operating system
+	3- H/W Planning ===> As per our application work load OR Application+OS planning 
+
+Types of Machine ? ===> set of devices  ==> ready to use machine ==> Blank Hardware
+
+	1- Physical machine OR Physical Infra
+	2- Virtual Machine OR Virtualization Based Infra 
+	3- Cloud Based Machine OR Cloud based infra     ===> EXAMPLE- AWS Cloud + Google Cloud + Azure Cloud and other Vedor 
+
+
+Types of Machine  ===> H/W    <== RAM + CPU + DISK + Network interface Card   <=========
+================================================================================
+
+Machine   [ H/W ]                             <=====    Operating System                                   <==== Applications
+
+	1- Physical                                                      Windows/Linux Based OS 
+	2- Virtual
+	3- Cloud based
+======================================================================
+
+
+================================================================
+OS Management Task/Application Related Task  <=== HUMAN 
+================================================================
+
+Types of Language ?
+
+1- HUMAN Language                  ====> HINDI + ENGLISH + PUBJABI  Other
+
+2- Computer programming Language   ====> C C++ Python Java .... so on 
+
+================================================================
+1- Programs                       ===> set of indtruction defined by the programmer using any XYZ programming langauge
+2- Appliaction/Tools/Software     ===> set of programm  ===> build  ===> Application as per need
+================================================================
+
+1-  Developer              ===> always developerd the application as per market requirement with respective of the supported Operating system.
+
+2-  Tester  OR testing Department ===> verify the Application Code and Performace 
+
+3-  Admin/Administrator    ===> Download/Install/Operate/Update/backup/Secuirty/DailyMonitor 
+
+================================================================
+
+ABC Person  ===> XYZ Company ===> join ===> as per your skills  ===> Appoint as per project need ? ===> 
+
+1- H/W Management OR support Team
+2- network Management team
+3- Security Management team
+4- Database management team
+4- monitoring team                                  ====> IT Infra Management team
+5- backup Management team
+6- OS managament/Application management  ===> Windows admin/Linux Admin
+7- Cloud admin
+
+================================================================
+Linux Training ===>  H/W  + OS  + Application  ===> Combined Training 
+================================================================
+Linux Trainng  + Cloud Training ===>  
+================================================================
+
+Team planning  ?==> Windows/Linux Team   ==> internal team  OR Project management team
+
+
+1- L1 TEAM
+2- L2 TEAM
+3- L3 TEAM
+......so on 
+
+================================================================
+
+Types of Vendor Support ?
+
+1- H/W Vendor OR Virtualization Vendor OR Cloud based Vendor
+
+2- OS Vendor 
+
+3- Application Vendor 
+
+================================================================
+H/W   <------ windows OS  <---- Windows Based Applicaiton  
+================================================================ H/W   OS  Application
+
+Types of Application Providing vendor ?
+
+1- OS Vendor itself                                         ===> MS-Office
+
+2- Third party vendor based Application/Global Application  ===> Google chrome  + VLC Media player + Tally 
+
+3- Inhouse Application/Inhouse Tools Which is developed our inhouse developer to give support to our inhouse Customer
+
+================================================================
+
+What is the meaning of  Vendor OR Provider OR Distributors  ?
+
+What is the meaning of Flavor ?
+
+================================================================
+
+Mobile  ?
+
+1- Sumsung Mobile  ====> TECHNOLOGY  ===> MOBILE  ===> Vendor ==> SAMSUNG  ==> VERSION launch  ===> Version name + NAME 
+2- Nokia Mobile
+3- VIVO  Mobile
+
+================================================================Samsung  ==> Mobile  ==> GRAND-2
+Linux ===> same lile as Windows OS ===> It is also an Open Source Operating System. 
+================================================================
+OS Providing vendor  ====> Linux Source Code  ===> New version ===> Lanuch 
+================================================================
+Linux ===> in 1991 ===> by Linus Torvalds ===> LINUX  ===> OLD name ===> "freax"
+================================================================
+UNIX
+    ===> MINUX
+              ===> Linux  
+
+                        ===> linux based Flvors  
+
+                                              
+=============================================================== 
+Linux ?
+
+1- Redhat Linux   ===> Linux based Flavor ===> NAME + VERSION   
+2- Ubuntu Linux
+3- kali Linux
+4- Centos Linux
+5- SUSE linux 
+6- Fedora Linux 
+.......so on 
+-------------------> Working Style  ==> almost ===> SAME
+
+===============================================================
+
+Machine [H/W]       <=====  Operating System     <==== Appliactions
+                          Windows/Unix/Linux based
+
+1- H/W Choice
+2- OS choice
+3- Application choice
+
+===============================================================
+Unix Based Flavors ?
+
+IBM   <====> AIX 
+HP    <====> HP-UX
+SUN   <====> Sun Solaris
+.....so on
+=============================================================== Unix/Linux admin 
+
+Linux Training
+
+Redhat linux training
+
+RHEL-9 training
+
+RHCSA Training 
+
+RHCSA Training  + Certification 
+
+==============================================================
+
+Linux based ===> Operating System ===> providers  ===> Website ===> OS Dowload  ===> Install 
+
+==============================================================
+
+Redhat ===> Role
+
+
+1- OS 
+2- Application  
+3- Training  
+4- Certification  
+5- Support
+
+===============================================================
+
+What is Windows OS ?
+
+Windows is a product line of proprietary graphical operating systems developed and marketed by Microsoft.
+
+
+===============================================================
+What is Unix and Linux ?
+
+===============================================================
+GNU/Linux ===> ready to use  ===> operating system
+===============================================================
+machine [H/W]  <==== linux based Flavor  <==== OS installation  <==== login <=== Practise Start
+            [we wre going to work with Redhat Linux]
+===============================================================
+===============================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

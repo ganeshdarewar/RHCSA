@@ -1,0 +1,284 @@
+===========================================================================
+                      Day-2 Session
+===========================================================================
+Day-1 Session
+===========================================================================
+
+1- What is Computer System OR Computer Machine ?
+
+2- What is Operating System ?
+
+3- What is Application/Software/Tools/utility/Services ?
+
+4- Types of vendor ===> 1- H/W   2- OS vendor  3- Application vendor
+
+5- Types of project 
+
+5- Project Planning  ===> 1- Application  2- OS Planning  3- Infra Planning  ==> choice-1 physical  choice-2 Virtual   choice3- Cloud based
+
+===========================================================================
+Machine [H/W]     <==== Operating System as per your project Need   <=====  Applications As per project Need OR Customer Need 
+===========================================================================
+
+1- Laptop/Desktop  ===> Example of Blank Hardware 
+
+2- You need the laptop with Pre installed Operating System OR else you can install your operating system as per need after the purchage
+
+3- Application  ===> Free OR paid  
+
+===========================================================================
+machine  [H/W]   <=== Windows/Linux Based Operating System   <=== Linux based Application
+===========================================================================
+Objective:-1  Will discuss about the basic terms Before Redhat linux Installation  OR linux Installation Planning 
+Objective:-2  How we can Install Redhat Linux on any blank machine  ?
+===========================================================================
+
+Types of Login Mode OR Types of Login Env in Redhat Linux   ?
+
+
+1- GUI   [Graphical User Inteface]
+2- CLI   [Command Line interface]
+
+Linux basically support both types of Mode ===> 1- GUI mode   2- CLI mode  
+
+Note:   We have the login choice in Redhat Linux OR linux based operating system, 
+        But we can decide in which mode we want to run any linux machine 
+
+
+===========================================================================
+
+How we can select login env in Redhat linux machine ?
+
+
+1- During the OS installation we can decide this feature 
+
+2- After the OS installation we can also change the login env if we want to change this using command line
+
+===========================================================================
+
+Choices
+
+1- Server with GUI        ===> check  ==> next  ===>  you will get both login env  ===> 1- GUI Mode    2- CLI Mode  
+2- Minimal Installation   ===> check  ==> next  ===>  Now you will get only CLI mode 
+
+===========================================================================
+GUI Mode  ===> Switch  ===> in CLI Mode  ===> using command line  ===> YES 
+Again come back ===> from the CLI mode  ===> to  ===> GUI mode    ===> YES
+
+===========================================================================
+
+if we have already installed machine with CLI mode ===> switch  ===> GUI mode  ===> default answer is no why ?
+
+First we need to install required application OR Packages to run OR switch this machine in GUI mode then we can easily switch in GUI mode.
+
+===========================================================================
+What is  IPO Concept  ? ===> INPUT Processing Output  ===> Choice-1  click click click OR GUI based    Choice-2  using only keyboard 
+===========================================================================
+
+===========================================================================
+1- Command Prompt OR Terminal OR Command Inteface ===> types ===> commnad  ===> Enter ===> INPUT ===> code  ==> read  ===> action ===> output
+2- Command  ===> Pre defined set of action code  
+===========================================================================
+INPUT  ===> check  ==> is it available or not  ===> # cals      Error   cals command not found  
+===========================================================================
+
+Linux admin Login  ===> Types of Mode  ===> 1- GUI     2- CLI  [ aroud 80% Task perform using command line ]  
+
+===========================================================================
+Windows         ===> Software OR application OR Tools  ===> Extention  ===>  .exe  OR setup File
+Redhat Linux    ===> Software OR application OR Tools  ===> Extention  ===>  .rpm  [Redhat Package Manager]
+                                   OR
+                                Package  OR   RPM 
+
+===========================================================================
+Command prompt  ===> types ===> Command  ==> Enter  ===> Input  ===> processing ===> Output 
+===========================================================================
+command ===> Respective ===> rpms must be available in our machine
+===========================================================================
+# tree  ===> Command ====> Repective XYZ Package 
+# useradd  ===> Commadn ===> Respective XYZ Packge 
+===========================================================================
+
+package installation Choice  ?
+
+1- During the OS installation time ===> as group Selection ===> 1- Server with GUI    2- Minimal Installation  
+
+2- After the OS installation we can install required packages OR rpms as per our needs
+
+===========================================================================
+
+
+Windows      Redhat Linux
+.exe        .rpm
+
+Package Management OR RPMs Management ===> 1- Install 2- Erase  2- update   4- downgrade   5- Complete information find out
+
+===========================================================================
+google chrome download for windows      ===>  .exe format
+google chrome download for Redhat linux ===>  .rpm format
+===========================================================================
+
+MACHINE ===>  [H/W]     <==== OS   <=== default application OR default Package  + Need to Install manually 
+
+Choice-1  Physical Machine 
+
+Choice-2  Virtual Machine based setup with the help of any Virtualization Software 
+
+Choice-3  Cloud based Setup OR Cloud based Ready to use platform we can create own machine as per required H/W configuration
+
+===========================================================================
+
+choice-2 just for study purpose we are going to create our LAB with virtual machine concept
+
+Note:-  We need to Download and Install any XYZ Software which can create the virtual machines.
+
+Example:-  VMware Workstation  OR virtual BOX and others ...as well 
+
+===========================================================================
+
+Vendor
+
+1- H/W Vendor  OR cloud Vendor
+2- OS Vendor                     ===> OS installation  ===> need to download the OS installation Image  OR .iso file  OR ISO image  
+3- Application Vendor
+
+===========================================================================
+OS Vendor  ===> Website  ===> download  ==> .iso image   ===> having OS booting File and default collection of RPMs
+===========================================================================
+
+group  ===> Select  ===> 1- server with GUI    2- Minimal  ===> machine ==> ready 
+
+===========================================================================
+
+How we can download Linux Flavors ISO image  ===> Website   ===> download ===> iso  ==> latest version ===> download  
+
+===========================================================================
+Types of Login User in Linux  ?
+
+
+1- Super User           ===> root                      ===> degault create  ==> during the OS Installation ===> 100% power
+
+
+2- Normal Users         ===> amit sumit deepak soniya  ===> Except of root user ==> need to create manually ===> 
+
+
+Limited Power but yes we can       increase/Deacrese therightn for these users as per needs
+
+==========================================================================
+
+Linux ===> root     ===> Terminal  ===> type ===> command ===>  Enter  
+
+Linux ===> Soniya   ===> Terminal  ===> type ===> command ====> Enter  ===> user must have the command execution rights
+
+==========================================================================
+Error  ===> command not Found
+Error  ===> Permission denied
+==========================================================================
+
+root   ===> super  user    ===> terminal     ===> symbol      ====> #  
+soniya ===> super  user    ===> terminal     ===> symbol      ====> $  ===> Rights  ==> change 
+
+
+Normal User  OR custom user
+
+==========================================================================
+RAM + CPU + DISK + Network card
+==========================================================================
+Types of Login Method in any Linux Machine ?
+
+1- Local to Local login method         ===> Username + Password 
+2- Remote Login OR Network based login ===> 1- username  2- Password  3- Machine IP address   4- Remote login software EX: putty
+
+==========================================================================
+Linux Machine <====== 1- Local to local 2- Remote Login  <=== terminal  <=== type <=== command <=== Enter  <=== input <=== Process  <== Output
+========================================================================== 
+# useradd amit 
+# clear
+# date
+==========================================================================
+
+How we can downlaod redhat Linux ISO image from direct OS vendor website  ?
+
+
+Condition:- we need to crerate redhat login ID and password on www.redhat.com 
+
+Assume, we have downloaded now RHEL ISO image to install the operating system
+
+In case of virtual machine and Closed based Setup there is no need to create any Bootable OS media.we can direct create VM using ISO image.
+but if you are going to create setup on any physical H/W you need to crerate bootable media using any XYZ software
+
+==========================================================================
+
+OS installation Choice ?
+
+
+Physical machine ?
+
+1- We can boot any physical Machine using Floppy/CD/DVD/PENDRIVE OR bootable Media using ISO Image ==> HOLD
+
+2- we can also install OS using Network based installation method   OR PXE Boot Installation Server OR Kickstart Server ===> HOLD
+
+
+<=== HOLD  ===> 
+
+=========================================================================
+
+Virtual machine ===> we need download and install any XYZ software as per your choice
+
+EX:  Vmware workstation and Virtual BOX
+
+
+=========================================================================
+
+1- How we can downlaod Redhat Linux ISO image
+2- How we can download and Install VMware workstation OR virtual box  ?
+=========================================================================
+Redhat Linux Installation
+=========================================================================
+Step-1 Click on VMware Icon and Create Virtual machine as per required H/W configuration ===> recommended ==> 2GB RAM + 1 VCPU + 30 GB DISKspace
+Step-2  Browse ISO image to start the OS installation 
+Step-3  Power on this virtual machine
+Step-4  select first option  ==> install rhel 9 ===> Installation step ===> next next  ===> Reboot the machine
+
+
+
+   Login:    root
+Password:    redhat
+=========================================================================
+
+How we can switch any machine from GUI to CLI Mode  ?
+
+[root@localhost ~]# systemctl isolate multi-user.target    ===> to switch from GUI to CLI Mode 
+
+
+   Login:    root
+Password:    redhat
+
+
+[root @ localhost ~ ] # systemctl isolate graphical.target   ===> to come back again in GUI mode  
+
+
+=========================================================================
+
+Not listed ===> root  
+password   ===> redhat 
+
+
+=========================================================================
+
+GUI mode  <=====> graphical.target
+CLI Mode  <=====> multi-user.target
+
+========================================================================= 
+using systemctl command we can switch from one target to another target
+=========================================================================
+
+
+================================== FINISH ===============================
+
+
+
+
+
+
+

@@ -1,0 +1,359 @@
+==================================================
+Day-3 Session
+==================================================
+==================================================
+==================================================
+
+
+
+
+==================================================
+
+
+
+Machine[H/W]  <===  Operating System <== Application/Tool/Utility/software
+
+==================================================  
+
+
+Before doing start any work on linux ?
+
+1- Terminal OR interface OR Command prompt
+
+2- Command ==> set of pre defined code which is developed OR configured by developer
+
+3- What is IPO concept ? Input processing Output  
+
+
+
+================================================
+How we can login in this machine ?
+
+1- login with super user  in GUI Mode    ===> not listed ==> username==> root and password ==> redhat
+2- login with normal user in GUI mode    ===> username [Click] with password
+
+================================================
+
+1- Local to local method
+2- Remote Login
+
+================================================
+================================================
+
+
+Task-1  How we can login in my machine with root account in GUI mode local to local method ?
+
+Not Listed  [Click]
+
+username: root
+password: redhat
+
+Short Keys:- how we can manage the terminal window or screen using short keys
+
+How we can open terminal  ?
+
+Method:-1  Activities  ==> Terminal
+Method:-2  Alt+F2   => to get run application window  ==> gnome-terminal   ==> enter
+
+
+Alt + F10  ==> to maximize the Terminal window size
+Alt + F5   ==> to minimize the Terminal window Size
+
+==================================================
+
+ctrl + shift  ++++   ==> to increase font size
+
+ctrl + ----          ==> to decrease font size
+
+===============================================
+===============================================
+
+
+   
+
+Ctrl + shift + t   ==> to open sub terminal in existing terminal
+
+Ctrl Page up/Page down ==> to switch between these TABs
+
+Ctrl + shift + n  ==> to open new terminal window
+
+Ctrl + d OR  #exit ==>   to logout from the current user account
+   OR
+Alt + F4  => to close all the Terminals
+
+# clear OR Ctrl + l    ==> to clear screen 
+
+Ctrl + c    ==> to close the command or to terminate the command
+
+
+=============================================
+
+Task-2
+
+
+How we can switch GUI to CLI and CLI to GUI but as a TEMP Basis ?
+
+[root@servera ~]# systemctl isolate  multi-user.target   === to switch GUI to CLI Mode 
+
+login: root
+password: redhat 
+
+[root @ localhost ~ ] #
+
+
+How we can again come back in GUI  mode
+
+
+[root@servera ~]# systemctl isolate   graphical.target   === to switch CLI to GUI Mode 
+
+not listed 
+
+username:root
+password:redhat
+
+=========================================== 
+Task-3
+
+How we can switch GUI to CLI and CLI to GUI but as a PERMANTLY ?
+
+
+[root@servera ~]# systemctl get-default 
+graphical.target
+[root@servera ~]# 
+[root@servera ~]# systemctl set-default multi-user.target 
+
+[root@servera ~]# systemctl reboot     OR  # reboot 
+
+After reboot now this machine will load with Fully CLI mode  
+
+
+
+login: root
+password: redhat 
+
+[root @ localhost ~ ] # systemctl  get-default 
+ 
+[root@servera ~]# systemctl set-default graphical.target 
+
+[root@servera ~]# systemctl get-default 
+graphical.target
+[root@servera ~]# systemctl reboot
+                 OR
+                # reboot
+
+Now this machine again come back in GUI mode  
+
+
+login: root
+password: redhat 
+======================================================
+
+GUI Mode  ==> switch  ==> CLI mode  <== GUI Mode  ==> YES
+
+only CLI mode  ==> switch ==> GUI  ==> default answer is = NO ==> but yes we can do this if we are having knowledge 
+                                                                  about rpm installation
+
+
+=====================================================
+=====================================================
+During the OS installation 
+
+1- Server with GUI        ==> with GUI + CLI mode  ===> but we have the choices 
+2- Minimal installation   ==> only CLI mode  
+
+
+linux support both types of GUI and CLI. but linux admin can decide the login mode in any machine.
+
+=====================================================
+
+
+Task-4  How we can login in my machine with normal account in GUI mode local to local method ?
+
+
+
+username: student    [Note: user name can b enything ]
+password: redhat
+
+How we can logout the same machine from normal  user account.
+
+===========================================
+
+How we can switch from one user account to another user account using su command ? ==> switch user [su]
+
+
+
+
+
+[root@localhost ~]# useradd  vinit
+[root@localhost ~]# 
+[root@localhost ~]# passwd vinit
+Changing password for user vinit.
+New password: 
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+[root@localhost ~]# 
+
+
+[root@localhost ~]# su -  vinit
+[vinit@localhost ~]$ 
+[vinit@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+
+[root@localhost ~]# su -  vinit
+[vinit@localhost ~]$ 
+[vinit@localhost ~]$ 
+[vinit@localhost ~]$ 
+[vinit@localhost ~]$ su - root 
+Password: 
+[root@localhost ~]# 
+[root@localhost ~]# exit
+logout
+[vinit@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+[root@localhost ~]# su - vinit 
+[vinit@localhost ~]$ 
+[vinit@localhost ~]$ 
+[vinit@localhost ~]$ su - 
+Password: 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# exit
+logout
+[vinit@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+==================================================
+
+Who is User ?     ====> Username  <====> UID
+
+Who is Group ?    ====> Groupname <====> GID 
+
+==================================================
+
+What is User ID and Process ID concept  ?
+
+[root@localhost ~]# id root 
+uid=0(root) gid=0(root) groups=0(root)
+[root@localhost ~]# 
+
+
+
+Types of Users in linux ?
+
+
+1- Super user  ===> root    ===> UID  ==>  0
+
+
+2- system defined users OR application Managing users  ===> FTP,DNS,HTTP,DHCP.....nagios,zabbix......so on
+
+  UID Range  ==> 1 to  999
+
+
+3- Normal users  ===> deepak,sumit,rajeev  ===> UID range  === 1000 to 60000
+
+=====================================================
+=====================================================
+
+
+Short Keys:- how we can manage the command on the terminal screen using short keys
+
+
+[root@localhost ~]# systemctl restart crond
+
+
+ctrl + a   OR  HOME    ==> to move cursor in begining of the command
+ctrl + e   OR  END     ==> to move cursor in end of the command 
+ctrl + <=== back arrow
+ctrl + ====> forward arrow
+ctrl + u ==> delete command before the cursor
+ctrl + k ==> delete command after the cursor
+
+
+up arrow  ==> to recall  any command from the history
+
+==============================================
+
+[root@serverb ~]# date 
+Sun Jan 28 10:37:51 AM IST 2024
+[root@serverb ~]# 
+[root@serverb ~]# !!    ==> just recall the last command from the history
+date 
+Sun Jan 28 10:38:00 AM IST 2024
+[root@serverb ~]# 
+[root@serverb ~]# 
+[root@serverb ~]# !41    ==> from the top
+
+[root@serverb ~]# !-41    ==> from the Bottom 
+
+
+
+=====================================================
+
+Ctrl + r    ==> to search and execute any command from the history
+
+=====================================================
+=====================================================
+
+What is the use of 
+
+Single Tab    ?
+
+Duble Tab key ?
+
+=====================================================
+=====================================================  
+
+Command prompt ?
+
+Command Formula ? OR syntax ?
+
+=====================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+

@@ -1,0 +1,656 @@
+=============================================================================
+                   Day-5 Session
+=============================================================================
+
+
+Day-1 to Day-4   ===> basic Linux  ===> Terms  
+
+=============================================================================
+1- How data store in windows and Linux and how we can see the complete data of windows and Linux OS ?
+2- Types of data  
+2- Types of login mode 
+4- Types of Login user
+5- Types of login method 
+6- How we can login with root account and normal user account and what is the use of su command ?
+7- How we can switch any machine from GUI to CLI mode and again CLI to GUI mode ?
+8- Example of pwd command ?
+9- Example of ls command ?
+10- Examples of cd command ?   cd  + cd .. + cd .. + cd  ../..   + cd ~   + cd  /   cd .    + cd  -  cd directoryname  
+11- Example of touch command ?
+12- Example of mkdir command  ?
+13- Example of mkdir -p command ?
+14- Example of ls -R command ?
+15- Example of tree command  ?
+=============================================================================
+Linux  ===> data store  ===>  / ====> types of data ===> 1- system defined data  2- Custom data 
+=============================================================================
+/             ===> it is parent directory of linux OS which contains all the top level directory.
+/root         ===> root's home directory 
+root          ===> it is a super user name
+=============================================================================
+====> / ====> super user  + normal user  ===> 1- Private place OR home directory   2- Public data OR out side of the home directory
+=============================================================================
+cat    ===> It is used to read the content of any file on the terminal OR screen.
+
+Syntax:-
+
+# cat     <location of the file or Filename>
+             OR
+#  cat    <options>      <location of the file or Filename>
+
+
+    8  ls  /
+    9  date 
+   10  cal  
+   11  touch abc  
+   12  touch /tmp/abc  
+   13  ls 
+   14  ls /tmp 
+   15  mkdir  /linux 
+   16  ls /
+   17  touch  /linux/abc 
+   18  ls /linux
+   19  cat  /linux/abc 
+   20  ls /
+   21  cat  /etc/crontab 
+   22  cat   /etc/passwd 
+   23  useradd  user1
+   24  useradd  user2
+   25  useradd  user3
+   26  useradd  user4
+   27  useradd  user5
+   28  cat   /etc/passwd 
+   29  cat  -n   /etc/passwd 
+   30  cat   /etc/passwd 
+   31  cat  -n   /etc/passwd 
+   32  cat  /etc/crontab 
+   33  cat -n  /etc/crontab 
+   34  cat   /etc/crontab    /etc/passwd  
+   35  cat  -n    /etc/crontab    /etc/passwd  
+   36  cat  /etc/crontab 
+   37  tac   /etc/crontab 
+   38  cat /etc/passwd
+   39  tac  /etc/passwd
+   40  cat -n /etc/crontab 
+   41  cat -b  /etc/crontab 
+   42  cat -n  /etc/passwd
+   43  cat -b    /etc/passwd
+   44  pwd
+   45  ls 
+   46  cat  anaconda-ks.cfg 
+   47  cat -n    anaconda-ks.cfg 
+   48  ls /home 
+   49  cd /etc/kernel
+   50  ls
+   51  cd install.d
+   52  ls
+   53  cd ..
+   54  cd  ../..
+   55  cd
+   56  cd  /etc/NetworkManager/system-connections
+   57  ls
+   58  cat  ens160.nmconnection 
+   59  cd
+   60  cat  /etc/NetworkManager/system-connections/ens160.nmconnection 
+   61  ls
+   62  cd Documents 
+   63  cd
+   64  cd ~/Documents
+   65  cd
+   66  cd /root/Documents
+   67  cd
+
+=============================================================================
+
+How we craeate naming space in any directory OR filename  ?
+
+Method:-1
+
+[root@localhost ~]# mkdir old\ movie 
+[root@localhost ~]# 
+[root@localhost ~]# ls
+ abc               Desktop     Downloads  'old movie'   Public      Videos
+ anaconda-ks.cfg   Documents   Music       Pictures     Templates
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cd old\ movie  
+[root@localhost old movie]# cd
+[root@localhost ~]# 
+[root@localhost ~]# mkdir  kr\ network\ cloud
+[root@localhost ~]# 
+[root@localhost ~]# ls
+ abc               Desktop     Downloads           Music        Pictures   Templates
+ anaconda-ks.cfg   Documents  'kr network cloud'  'old movie'   Public     Videos
+[root@localhost ~]# 
+[root@localhost ~]# cd  kr\ network\ cloud
+[root@localhost kr network cloud]# 
+[root@localhost kr network cloud]# cd
+[root@localhost ~]# 
+
+method:-2 -3
+
+[root@localhost ~]# mkdir "new songs"
+[root@localhost ~]# 
+[root@localhost ~]# ls
+ abc               Documents           Music        Pictures    Videos
+ anaconda-ks.cfg   Downloads          'new songs'   Public
+ Desktop          'kr network cloud'  'old movie'   Templates
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mkdir 'sajan movie'
+[root@localhost ~]# 
+[root@localhost ~]# ls
+ abc               Documents           Music        Pictures       Templates
+ anaconda-ks.cfg   Downloads          'new songs'   Public         Videos
+ Desktop          'kr network cloud'  'old movie'  'sajan movie'
+[root@localhost ~]# 
+[root@localhost ~]# mkdir  alok\ sharma
+[root@localhost ~]# 
+
+[root@localhost ~]# cd old\ movie
+[root@localhost old movie]# cd
+[root@localhost ~]# 
+[root@localhost ~]# cd "old movie"
+[root@localhost old movie]# cd
+[root@localhost ~]# 
+[root@localhost ~]# cd 'old movie'
+[root@localhost old movie]# cd
+[root@localhost ~]# 
+[root@localhost ~]# touch old\ movie/abc
+[root@localhost ~]# 
+[root@localhost ~]# ls  old\ movie
+abc
+[root@localhost ~]# 
+[root@localhost ~]# mkdir rajat-sharma
+[root@localhost ~]# 
+[root@localhost ~]# ls
+ abc               Desktop    'kr network cloud'  'old movie'   rajat-sharma   Videos
+'alok sharma'      Documents   Music               Pictures    'sajan movie'
+ anaconda-ks.cfg   Downloads  'new songs'          Public       Templates
+[root@localhost ~]# 
+[root@localhost ~]# cd rajat-sharma
+[root@localhost rajat-sharma]# cd
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cd /etc/kernel/install.d
+[root@localhost install.d]# ls
+[root@localhost install.d]# 
+[root@localhost install.d]# ls /root 
+ abc               Desktop    'kr network cloud'  'old movie'   rajat-sharma   Videos
+'alok sharma'      Documents   Music               Pictures    'sajan movie'
+ anaconda-ks.cfg   Downloads  'new songs'          Public       Templates
+[root@localhost install.d]# 
+[root@localhost install.d]# ls ~
+ abc               Desktop    'kr network cloud'  'old movie'   rajat-sharma   Videos
+'alok sharma'      Documents   Music               Pictures    'sajan movie'
+ anaconda-ks.cfg   Downloads  'new songs'          Public       Templates
+[root@localhost install.d]# cd
+[root@localhost ~]# 
+
+=============================================================================
+
+How we can create file and how we can edit the file and save the file ?
+=============================================================================
+
+1- gedit        ===> Windows  ==> notepad ===> Support only in GUI mode + support in Local to local login method   
+
+2- VI and VIM   ===> Support in GUI + CLI mode Both  ===> Visual Interface   and VI improved
+
+
+============================================================================
+
+Example of gedit command 
+
+
+[root@localhost ~]# ls  /linux
+abc
+[root@localhost ~]# 
+[root@localhost ~]# cat  /linux/abc 
+[root@localhost ~]# 
+[root@localhost ~]# gedit  /linux/abc
+
+save this file 
+
+[root@localhost ~]# ls /linux
+abc
+[root@localhost ~]# cat  /linux/abc 
+Hello India
+hello krishna
+hello world
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# gedit  /linux/abc
+[root@localhost ~]# gedit  /linux/xyz 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cat  /linux/xyz 
+Hello rkishna  
+sdfsdfsdfsdf
+sdfsd
+fsdf
+sdfsd
+fsd
+[root@localhost ~]# cd /tmp 
+[root@localhost tmp]# 
+[root@localhost tmp]# cat  crontab 
+cat: crontab: No such file or directory
+[root@localhost tmp]# 
+[root@localhost tmp]# cat /etc/crontab 
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+
+# For details see man 4 crontabs
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+
+[root@localhost tmp]# 
+[root@localhost tmp]# cd /etc 
+[root@localhost etc]# 
+[root@localhost etc]# cat crontab 
+
+============================================================================
+
+[root@localhost ~]# systemctl isolate multi-user.target 
+
+Login: root
+Password:redhat
+
+
+# gedit  ===> will give you the error mesg  
+
+
+[root@localhost ~]# systemctl isolate  graphical.target 
+
+
+
+[root@localhost ~]# ls /
+afs  boot  etc   lib    linux  mnt  proc  run   srv  tmp  var
+bin  dev   home  lib64  media  opt  root  sbin  sys  usr
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# which gedit
+/usr/bin/gedit
+[root@localhost ~]# 
+[root@localhost ~]# which tree
+/usr/bin/tree
+[root@localhost ~]# 
+[root@localhost ~]# which mkdir
+/usr/bin/mkdir
+[root@localhost ~]# which vi
+/usr/bin/vi
+[root@localhost ~]# which vim 
+/usr/bin/vim
+[root@localhost ~]# 
+
+
+[root@localhost ~]# which useradd 
+/usr/sbin/useradd
+[root@localhost ~]# 
+[root@localhost ~]# su - student 
+[student@localhost ~]$ 
+[student@localhost ~]$ useradd raju
+useradd: Permission denied.
+useradd: cannot lock /etc/passwd; try again later.
+[student@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+====================================================================
+
+How we can create and save any file using VI OR vim command  ?
+
+
+[root@localhost ~]# vim   /tmp/india 
+
+Press i  ==> to insert text
+
+Hello India
+
+Press ESC key  to exit from the insert mode 
+
+:wq    ===> press enter 
+
+====================================================================
+Live Example:
+
+[root@localhost ~]# 
+[root@localhost ~]# useradd deepak  
+[root@localhost ~]# 
+[root@localhost ~]# ls /home  
+deepak  student  user1  user2  user3  user4  user5
+[root@localhost ~]# 
+[root@localhost ~]# ls /
+afs  boot  etc     home  lib64  media  opt   root  sbin  sys  usr
+bin  dev   fedora  lib   linux  mnt    proc  run   srv   tmp  var
+[root@localhost ~]# 
+[root@localhost ~]# cat  /etc/default/useradd 
+# useradd defaults file
+GROUP=100
+HOME=/home
+INACTIVE=-1
+EXPIRE=
+SHELL=/bin/bash
+SKEL=/etc/skel
+CREATE_MAIL_SPOOL=yes
+
+[root@localhost ~]# 
+
+[root@localhost ~]# mkdir  /test 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# mkdir  /test 
+[root@localhost ~]# 
+[root@localhost ~]# useradd  -d   /home/amit   amit   
+[root@localhost ~]# 
+[root@localhost ~]# ls /home
+amit  deepak  student  user1  user2  user3  user4  user5
+[root@localhost ~]# 
+[root@localhost ~]# useradd  -d   /test/neeraj   neeraj
+[root@localhost ~]# 
+[root@localhost ~]# ls  /test 
+neeraj
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# useradd sumit 
+[root@localhost ~]# 
+[root@localhost ~]# ls /home
+amit  deepak  student  sumit  user1  user2  user3  user4  user5
+
+
+[root@localhost ~]# vim /etc/default/useradd 
+
+HOME=/test
+
+:wq!
+
+[root@localhost ~]# useradd user10
+[root@localhost ~]# 
+[root@localhost ~]# ls /home
+amit  deepak  student  sumit  user1  user2  user3  user4  user5
+[root@localhost ~]# 
+[root@localhost ~]# ls /test  
+neeraj  user10
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+[root@localhost ~]# vim /etc/default/useradd 
+
+HOME=/home
+
+
+:wq!
+
+[root@localhost ~]# useradd user11
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls /test 
+neeraj  user10
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls /home  
+amit  deepak  student  sumit  user1  user11  user2  user3  user4  user5
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+====================================================================
+
+Which package is required to run gedit comamnd ?  ===> gedit
+Which package is required to run vi comamnd ?     ===> vim-minimal
+Which package is required to run vim  comamnd ?   ===> vim-enahnced
+
+
+  184  which gedit 
+  185  which  vi
+  186  which  vim 
+  187  rpm  -q  -f     /usr/bin/gedit
+  188  rpm -qf   /usr/bin/vi
+  189  rpm -qf   /usr/bin/vim
+  190  which useradd 
+  191  rpm -qf  /usr/sbin/useradd
+  192  which tree
+  193  rpm -qf  /usr/bin/tree
+  194  rpm  -q  -a  vim-enhanced 
+  195  rpm  -qa  vim-enhanced 
+  196  rpm  -qa 
+  197  rpm  -qa  vim-enhanced 
+[root@localhost ~]# which usermod 
+/usr/sbin/usermod
+[root@localhost ~]# which useradd 
+/usr/sbin/useradd
+[root@localhost ~]# 
+[root@localhost ~]# which userdel
+/usr/sbin/userdel
+[root@localhost ~]# rpm -qf  /usr/sbin/usermod
+shadow-utils-4.9-3.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qf  /usr/sbin/useradd
+shadow-utils-4.9-3.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qf  /usr/sbin/userdel  
+shadow-utils-4.9-3.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# which tree
+/usr/bin/tree
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qf  /usr/bin/tree
+tree-1.8.0-10.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa  tree 
+tree-1.8.0-10.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -ql    tree 
+
+====================================================================
+
+
+[root@localhost ~]# view   /etc/crontab 
+
+
+
+
+
+[root@localhost ~]# 
+[root@localhost ~]# ls
+ abc               Desktop     india               network      Pictures      'sajan movie'
+'alok sharma'      Documents  'kr network cloud'  'new songs'   Public         Templates
+ anaconda-ks.cfg   Downloads   Music              'old movie'   rajat-sharma   Videos
+[root@localhost ~]# 
+[root@localhost ~]# file abc 
+abc: empty
+[root@localhost ~]# 
+[root@localhost ~]# file india 
+india: ASCII text
+[root@localhost ~]# 
+[root@localhost ~]# echo  hello india 
+hello india
+[root@localhost ~]# 
+[root@localhost ~]# echo  hello india  >  abc
+[root@localhost ~]# 
+[root@localhost ~]# cat abc 
+hello india
+[root@localhost ~]# file abc 
+abc: ASCII text
+[root@localhost ~]# file  /etc 
+/etc: directory
+[root@localhost ~]# file  /home 
+/home: directory
+[root@localhost ~]# file  /usr
+/usr: directory
+[root@localhost ~]# 
+[root@localhost ~]# file  /bin
+/bin: symbolic link to usr/bin
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# file  /sbin
+/sbin: symbolic link to usr/sbin
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# file  /lib
+/lib: symbolic link to usr/lib
+[root@localhost ~]# 
+[root@localhost ~]# file  /lib64
+/lib64: symbolic link to usr/lib64
+[root@localhost ~]# 
+
+
+
+[root@localhost ~]# cat  /etc/redhat-release 
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cat  /etc/system-release 
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# ls  -l    /etc/system-release 
+lrwxrwxrwx. 1 root root 14 Apr  6  2022 /etc/system-release -> redhat-release
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls  -l  /etc/redhat-release 
+-rw-r--r--. 1 root root 44 Apr  6  2022 /etc/redhat-release
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# ls -l  -d  /etc  
+drwxr-xr-x. 132 root root 8192 Feb 15 10:55 /etc
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /etc  
+drwxr-xr-x. 132 root root 8192 Feb 15 10:55 /etc
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld   /bin
+lrwxrwxrwx. 1 root root 7 Aug 10  2021 /bin -> usr/bin
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld   /sbin
+lrwxrwxrwx. 1 root root 8 Aug 10  2021 /sbin -> usr/sbin
+[root@localhost ~]# 
+[root@localhost ~]# ls  /
+afs  boot  etc     home  lib64  media  opt   root  sbin  sys   tmp  var
+bin  dev   fedora  lib   linux  mnt    proc  run   srv   test  usr
+[root@localhost ~]# 
+
+[root@localhost ~]# cat /etc/redhat-release 
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# cat /etc/system-release
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# ls  -l /etc/system-release
+lrwxrwxrwx. 1 root root 14 Apr  6  2022 /etc/system-release -> redhat-release
+[root@localhost ~]# 
+[root@localhost ~]# ls  -l /etc/redhat-release 
+-rw-r--r--. 1 root root 44 Apr  6  2022 /etc/redhat-release
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# useradd  user12
+[root@localhost ~]# 
+[root@localhost ~]# adduser  user13
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# useradd  user12
+[root@localhost ~]# 
+[root@localhost ~]# adduser  user13
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# which useradd 
+/usr/sbin/useradd
+[root@localhost ~]# 
+[root@localhost ~]# which adduser 
+/usr/sbin/adduser
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /usr/sbin/adduser
+lrwxrwxrwx. 1 root root 7 Dec  3  2021 /usr/sbin/adduser -> useradd
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /usr/sbin/useradd 
+-rwxr-xr-x. 1 root root 142376 Dec  3  2021 /usr/sbin/useradd
+[root@localhost ~]# 
+
+[root@localhost ~]# ls /
+ afs   boot   etc      home         lib     linux   mnt   proc   run    srv   test   usr
+ bin   dev    fedora  'home     '   lib64   media   opt   root   sbin   sys   tmp    var
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls  -ld /bin 
+lrwxrwxrwx. 1 root root 7 Aug 10  2021 /bin -> usr/bin
+[root@localhost ~]# 
+[root@localhost ~]# file  /bin  
+/bin: symbolic link to usr/bin
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# touch  red.tar.gz 
+[root@localhost ~]# 
+[root@localhost ~]# ls 
+ abc               Desktop     india               network      Pictures       red.tar.gz     Videos
+'alok sharma'      Documents  'kr network cloud'  'new songs'   Public        'sajan movie'
+ anaconda-ks.cfg   Downloads   Music              'old movie'   rajat-sharma   Templates
+[root@localhost ~]# 
+[root@localhost ~]# file red.tar.gz 
+red.tar.gz: empty
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# touch  red.tar.gz 
+[root@localhost ~]# 
+[root@localhost ~]# ls 
+ abc               Desktop     india               network      Pictures       red.tar.gz     Videos
+'alok sharma'      Documents  'kr network cloud'  'new songs'   Public        'sajan movie'
+ anaconda-ks.cfg   Downloads   Music              'old movie'   rajat-sharma   Templates
+[root@localhost ~]# 
+[root@localhost ~]# file red.tar.gz 
+red.tar.gz: empty
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# vim  /etc/DIR_COLORS
+
+
+
+:q!
+
+
+[root@localhost ~]# echo   "hello india"
+hello india
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# echo   -e   "\033[31m  hello india"
+  hello india
+[root@localhost ~]# 
+[root@localhost ~]# echo   -e   "\033[31m  hello india   \033[0m"
+  hello india   
+[root@localhost ~]# 
+[root@localhost ~]# echo   -e   "\033[32m  hello india   \033[0m"
+  hello india   
+[root@localhost ~]# 
+[root@localhost ~]# echo   -e   "\033[01;32m  hello india   \033[0m"
+  hello india   
+[root@localhost ~]# echo   -e   "\033[01;31m  hello india   \033[0m"
+  hello india   
+
+
+==============================================================================
+VIM ----->basic part  ===> Covered  ===> VIM ===> advance  Operations
+==============================================================================
+
+
+
+
+
+
+

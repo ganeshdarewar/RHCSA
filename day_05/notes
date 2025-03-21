@@ -1,0 +1,33 @@
+   40  cat -n /etc/crontab # line number 
+   41  cat -b  /etc/crontab # line number without empty line
+
+
+=============================================================================
+
+How we craeate naming space in any directory OR filename  ?
+   
+  345  mkdir old\ movies
+  347  cd old\ movies/
+  349  mkdir "new songs"
+  351  mkdir 'new comedy'
+
+
+useradd -d /linux/ramesh ramesh # to change the home directory for ramesh user
+
+
+vim /etc/default/useradd  # default settings for useraddd
+
+
+[root@localhost ~]# cat /etc/default/useradd
+# useradd defaults file
+GROUP=100
+HOME=/home
+INACTIVE=-1
+EXPIRE=
+SHELL=/bin/bash
+SKEL=/etc/skel
+CREATE_MAIL_SPOOL=yes
+
+
+
+

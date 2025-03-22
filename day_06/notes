@@ -1,0 +1,76 @@
+wc  ===> WORD Count ===> it is used count number of lines, Number of word and number of chracters from any file output  OR command Output
+
+
+[root@localhost ~]# wc -c -l -w /etc/passwd 
+  42   94 2323 /etc/passwd
+
+  # -l ===> no of line
+  # -w ===> no of worrds
+  # -w ===> no of characters
+
+
+=======================================================================================================
+
+1- what is the use of semicolon    ====>    ;    ===> it is used to run more then one command in a Sequencing order
+2- What is the use of pipe symbol  ====>    |    ===> It is to join multiple command to get any customised output OR Filer Output
+    
+
+
+===================================================================
+How we can store the output of any command into any file if it is required ? OR Output Redirection Symbols
+
+
+
+>        ===> used to store output of any xyz command into any file OR overwrite symbol
+
+
+>>       ===> Append Symbol  wihtout data overwrite ===> it is also used to store output of any command into any existing file.
+              Will append the output in bottom always 
+
+
+
+[root@localhost ~]# lsblk > /tmp/abc  
+[root@localhost ~]# date >> /tmp/abc
+[root@localhost ~]# cat /tmp/abc
+NAME          MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda             8:0    0   30G  0 disk
+├─sda1          8:1    0  600M  0 part /boot/efi
+├─sda2          8:2    0    1G  0 part /boot
+└─sda3          8:3    0 28.4G  0 part
+  ├─rhel-root 253:0    0 25.4G  0 lvm  /
+  └─rhel-swap 253:1    0    3G  0 lvm  [SWAP]
+sr0            11:0    1  7.9G  0 rom
+Sat Mar 22 03:02:48 PM IST 2025
+[root@localhost ~]#
+
+
+ > /tmp/mydata/abc # empty file without deletion
+
+
+
+=========================================================================================
+
+
+  script /tmp/information-day-16-02-2025 # used to save the  output as well as input, if want to stop record the outptu then use exit command 
+
+
+
+
+=========================================================================================
+
+echo   -e   "\n\n"    >>  /tmp/myinfo  # new line
+
+
+=========================================================================================
+
+>  OR  tee # without append
+>> OR  tee -a  # append
+
+
+cat /etc/passwd  | tee /tmp/abc
+cat /etc/passwd  | tee -a /tmp/abc
+
+
+
+
+

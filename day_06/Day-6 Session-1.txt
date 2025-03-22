@@ -1,0 +1,770 @@
+============================================================
+           Day-6 Session
+============================================================
+
+Task-1
+
+symbols:-
+
+1- what is the use of semicolon    ====>    ;
+2- What is the use of pipe symbol  ====>    |
+
+============================================================
+============================================================
+============================================================
+Task-2
+
+Output Redirection Symbol ?
+
+>       ===> it is used to store output of any XYZ command  into any file on any location.  OR Over write symbol
+
+>>      ===> It is used to append or ADD  the output of any xyz command into any existing file. but not overwrite 
+
+============================================================
+
+Examples of semicolon symbol ?
+
+it is used to run multiple command in single line as a time in a sequencing order.
+
+============================================================
+Examples of cat command ?
+Examples of tac command ?
+Examples of echo command ?
+Examples of wc command ?
+============================================================
+Examples of head Command ?
+Examples of tail command ?
+Examples of sed command ?
+============================================================
+
+echo  ===> it is used to print any mesg on the therminal OR screen ?
+
+
+[root@localhost ~]# echo  
+
+[root@localhost ~]# echo   hello india
+hello india
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# echo   "Hello krishna how are you ?"
+Hello krishna how are you ?
+[root@localhost ~]# 
+[root@localhost ~]# echo   Hello krishna how are you ?
+Hello krishna how are you ?
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+============================================================
+wc  ===> WORD Count ===> it is used count number of lines, Number of word and number of chracters from any file output  OR command Output
+
+
+#  cat   <options>   <filename>
+#  wc    <options>   <filename>
+
+============================================================
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# wc  /etc/passwd 
+  37   88 2098 /etc/passwd
+[root@localhost ~]# 
+[root@localhost ~]# wc  -l   /etc/passwd 
+37 /etc/passwd
+[root@localhost ~]# 
+[root@localhost ~]# wc  -w   /etc/passwd 
+88 /etc/passwd
+[root@localhost ~]# 
+[root@localhost ~]# wc  -c   /etc/passwd 
+2098 /etc/passwd
+[root@localhost ~]# 
+[root@localhost ~]# wc  /etc/passwd 
+  37   88 2098 /etc/passwd
+[root@localhost ~]# 
+[root@localhost ~]# wc  -l  -w     /etc/passwd 
+  37   88 /etc/passwd
+[root@localhost ~]# 
+[root@localhost ~]# wc  -l  /etc/passwd    /etc/group  
+  37 /etc/passwd
+  59 /etc/group
+  96 total
+[root@localhost ~]# 
+
+
+==========================================================
+Task-1
+
+symbols:-
+
+1- what is the use of semicolon    ====>    ;    ===> it is used to run more then one command in a Sequencing order
+2- What is the use of pipe symbol  ====>    |    ===> It is to join multiple command to get any customised output OR Filer Output
+
+=========================================================
+
+[root@localhost ~]# date 
+Sun Feb 16 09:33:19 AM IST 2025
+[root@localhost ~]# 
+[root@localhost ~]# cal 
+    February 2025   
+Su Mo Tu We Th Fr Sa
+                   1
+ 2  3  4  5  6  7  8
+ 9 10 11 12 13 14 15
+16 17 18 19 20 21 22
+23 24 25 26 27 28   
+                    
+[root@localhost ~]# date  cal 
+date: invalid date ‘cal’
+[root@localhost ~]# 
+[root@localhost ~]# date  ; cal 
+Sun Feb 16 09:34:56 AM IST 2025
+    February 2025   
+Su Mo Tu We Th Fr Sa
+                   1
+ 2  3  4  5  6  7  8
+ 9 10 11 12 13 14 15
+16 17 18 19 20 21 22
+23 24 25 26 27 28   
+                    
+[root@localhost ~]# 
+
+
+[root@localhost ~]# systemctl restart crond ; date ; echo hello india ; systemctl enable crond 
+Sun Feb 16 09:36:08 AM IST 2025
+hello india
+[root@localhost ~]# 
+[root@localhost ~]# useradd deepak ; passwd deepak
+Changing password for user deepak.
+New password: 
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# dates ; cal  
+bash: dates: command not found...
+Similar command is: 'date'
+    February 2025   
+Su Mo Tu We Th Fr Sa
+                   1
+ 2  3  4  5  6  7  8
+ 9 10 11 12 13 14 15
+16 17 18 19 20 21 22
+23 24 25 26 27 28   
+                    
+[root@localhost ~]# 
+
+[root@localhost ~]# 
+[root@localhost ~]# date
+Sun Feb 16 09:39:17 AM IST 2025
+[root@localhost ~]# 
+[root@localhost ~]# cal 
+    February 2025   
+Su Mo Tu We Th Fr Sa
+                   1
+ 2  3  4  5  6  7  8
+ 9 10 11 12 13 14 15
+16 17 18 19 20 21 22
+23 24 25 26 27 28   
+                    
+[root@localhost ~]# 
+[root@localhost ~]# echo  hello india
+hello india
+[root@localhost ~]# 
+[root@localhost ~]# free -h; lsblk ; date
+               total        used        free      shared  buff/cache   available
+Mem:           7.5Gi       1.1Gi       5.8Gi        31Mi       588Mi       6.1Gi
+Swap:          2.0Gi          0B       2.0Gi
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1 1024M  0 rom  
+Sun Feb 16 09:39:41 AM IST 2025
+
+
+========================================================
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1 1024M  0 rom  
+[root@localhost ~]# cat -n /etc/crontab ; lsblk 
+
+[root@localhost ~]# lsblk ; cat -n /etc/crontab 
+
+[root@localhost ~]# lsblk | cat -n 
+     1	NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+     2	sda      8:0    0   30G  0 disk 
+     3	├─sda1   8:1    0    1G  0 part /boot
+     4	├─sda2   8:2    0 14.6G  0 part /
+     5	└─sda3   8:3    0    2G  0 part [SWAP]
+     6	sdb      8:16   0    5G  0 disk 
+     7	sr0     11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk | cat -n 
+     1	NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+     2	sda      8:0    0   30G  0 disk 
+     3	├─sda1   8:1    0    1G  0 part /boot
+     4	├─sda2   8:2    0 14.6G  0 part /
+     5	└─sda3   8:3    0    2G  0 part [SWAP]
+     6	sdb      8:16   0    5G  0 disk 
+     7	sr0     11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# lsblk | wc  -l  
+7
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa 
+
+[root@localhost ~]# rpm -qa | cat -n  
+
+ 47  lsblk 
+   48  lsblk  | cat -n 
+   49  lsblk  | cat -n  | head -n 3 
+   50  lsblk  | cat -n  | tail  -n 2
+   51  lsblk  | cat -n  
+   52  lsblk  | cat -n  | head  -n 6 
+   53  lsblk  | cat -n  | head  -n 6  | grep  boot  
+   54  lsblk | grep boot 
+   55  lsblk  | cat -n  | head  -n 6  | grep  boot  
+   56  lsblk  | head  -n 6  | grep  boot  
+[root@localhost ~]# lscpu  | head -n 4 
+[root@localhost ~]# lscpu  | head -n 4 
+Architecture:                    x86_64
+CPU op-mode(s):                  32-bit, 64-bit
+Address sizes:                   45 bits physical, 48 bits virtual
+Byte Order:                      Little Endian
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lscpu  | head -n 4  | cat -n  
+     1	Architecture:                    x86_64
+     2	CPU op-mode(s):                  32-bit, 64-bit
+     3	Address sizes:                   45 bits physical, 48 bits virtual
+     4	Byte Order:                      Little Endian
+[root@localhost ~]# 
+[root@localhost ~]# lscpu  | head -n 4  
+Architecture:                    x86_64
+CPU op-mode(s):                  32-bit, 64-bit
+Address sizes:                   45 bits physical, 48 bits virtual
+Byte Order:                      Little Endian
+[root@localhost ~]# 
+[root@localhost ~]# lscpu  | head -n 4   | wc -l  
+4
+[root@localhost ~]# 
+[root@localhost ~]# date ; cal  
+Sun Feb 16 10:03:58 AM IST 2025
+    February 2025   
+Su Mo Tu We Th Fr Sa
+                   1
+ 2  3  4  5  6  7  8
+ 9 10 11 12 13 14 15
+16 17 18 19 20 21 22
+23 24 25 26 27 28   
+                    
+[root@localhost ~]# 
+   64  cat -n  /etc/crontab 
+   65  head  -n 3  /etc/crontab 
+   66  tail   -n 3  /etc/crontab 
+   67  grep  root /etc/crontab 
+   68  wc  /etc/crontab 
+
+[root@localhost ~]# 
+[root@localhost ~]# lsblk | wc -l 
+7
+[root@localhost ~]# lsblk | cat -n 
+     1	NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+     2	sda      8:0    0   30G  0 disk 
+     3	├─sda1   8:1    0    1G  0 part /boot
+     4	├─sda2   8:2    0 14.6G  0 part /
+     5	└─sda3   8:3    0    2G  0 part [SWAP]
+     6	sdb      8:16   0    5G  0 disk 
+     7	sr0     11:0    1 1024M  0 rom  
+[root@localhost ~]# lsblk | head  -n 3 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+[root@localhost ~]# 
+[root@localhost ~]# lsblk | tail   -n 3 
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lscpu 
+Architecture:            x86_64
+  CPU op-mode(s):        32-bit, 64-bit
+  Address sizes:         45 bits physical, 48 bits virtual
+  Byte Order:            Little Endian
+CPU(s):                  2
+  On-line CPU(s) list:   0,1
+[root@localhost ~]# lsblk ; lscpu 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk | head  -n 3 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lscpu |  head  -n 3 
+Architecture:                    x86_64
+CPU op-mode(s):                  32-bit, 64-bit
+Address sizes:                   45 bits physical, 48 bits virtual
+[root@localhost ~]# 
+[root@localhost ~]# lsblk | head  -n 3 ;  lscpu |  head  -n 3
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+Architecture:                    x86_64
+CPU op-mode(s):                  32-bit, 64-bit
+Address sizes:                   45 bits physical, 48 bits virtual
+[root@localhost ~]# 
+[root@localhost ~]# ls 
+anaconda-ks.cfg  Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# ls  | wc -l  
+9
+[root@localhost ~]# ls  /etc | wc -l  
+237
+[root@localhost ~]# 
+   70  lsblk | wc -l 
+   71  lsblk | cat -n 
+   72  lsblk | head  -n 3 
+   73  lsblk | tail   -n 3 
+   74  lsblk 
+   75  lscpu 
+   76  lsblk ; lscpu 
+   77  lsblk | head  -n 3 
+   78  lscpu |  head  -n 3 
+   79  lsblk | head  -n 3 ;  lscpu |  head  -n 3
+   80  ls 
+   81  ls  | wc -l  
+   82  ls  /etc | wc -l  
+   83  free -h
+   84  free -h | tail -n 1  
+   85  free -h | grep swap
+   86  free -h | grep -i  swap
+   87  free -h | tail -n 1  
+   88  head -n 1  /etc/passwd
+   89  tail  -n 1  /etc/passwd
+   90  head -n 1  /etc/passwd ; tail -n 1  /etc/passwd
+   91  ifconfig 
+   92  ifconfig | grep inet 
+   93  ifconfig | grep -w  inet 
+   94  ifconfig | grep -w  inet  | head -n 1 
+   95  ifconfig | grep -w  inet  | tail -n 1 
+   96  ifconfig 
+   97  ifconfig | head  -n  8
+   98  ifconfig | head  -n  2  
+   99  ifconfig | head  -n  2   |  grep  inet  
+  100  ifconfig | head  -n  2   |  tail -n 1  
+  101  ifconfig | grep -w  inet 
+  102  ifconfig | grep -w  inet  | head -n 1 
+  103  ifconfig | grep -w  inet  | head -n 1 |  awk '{print $1,$2}'
+  104  ifconfig | grep -w  inet  | head -n 1 |  awk '{print $2,$4}'
+  105  lsblk 
+  106  lsblk | grep  part 
+  107  lsblk | head  -n 4  
+  108  lsblk | head  -n 4   | grep part  
+[root@localhost ~]# cat  /etc/passwd |  grep   root
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# grep  root  /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# grep  -n  root  /etc/passwd
+1:root:x:0:0:root:/root:/bin/bash
+10:operator:x:11:0:operator:/root:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1 1024M  0 rom  
+[root@localhost ~]# lsblk  | grep disk  
+sda      8:0    0   30G  0 disk 
+sdb      8:16   0    5G  0 disk 
+[root@localhost ~]# 
+[root@localhost ~]# who 
+root     tty2         2024-12-22 11:43 (tty2)
+[root@localhost ~]# 
+[root@localhost ~]# who  | wc -l  
+1
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+===================================================================
+How we can store the output of any command into any file if it is required ? OR Output Redirection Symbols
+
+
+
+>        ===> used to store output of any xyz command into any file OR overwrite symbol
+
+
+>>       ===> Append Symbol  wihtout data overwrite ===> it is also used to store output of any command into any existing file.
+              Will append the output in bottom always 
+
+===================================================================
+
+First Example:-
+
+[root@localhost ~]# mkdir /tmp/mydata 
+[root@localhost ~]# 
+[root@localhost ~]# ls  /tmp/mydata
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# lsblk  >  /tmp/mydata/abc 
+[root@localhost ~]# 
+[root@localhost ~]# cat  /tmp/mydata/abc 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# date >>  /tmp/mydata/abc 
+[root@localhost ~]# 
+[root@localhost ~]# cat  /tmp/mydata/abc 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1 1024M  0 rom  
+Sun Feb 16 10:35:30 AM IST 2025
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# echo This is my final report >>  /tmp/mydata/abc 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cat  /tmp/mydata/abc 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1 1024M  0 rom  
+Sun Feb 16 10:35:30 AM IST 2025
+This is my final report
+ 131  cat  /tmp/mydata/abc 
+  132  cat  /tmp/mydata/abc  >  /tmp/mydata/newabc 
+  133  cat /tmp/mydata/abc 
+  134  cat  /tmp/mydata/newabc 
+  135  echo  >  /tmp/mydata/abc 
+  136  cat  /tmp/mydata/abc 
+  137  > /tmp/mydata/abc
+  138  cat  /tmp/mydata/abc 
+  139  rm -f  /tmp/mydata/abc
+  140  ls /tmp/mydata
+  141  cat  /tmp/mydata/newabc 
+  142  history 
+
+
+Seocond Example:
+
+[root@localhost ~]# date >  /tmp/myinfo  ; cal  >>  /tmp/myinfo 
+[root@localhost ~]# 
+[root@localhost ~]# cat  /tmp/myinfo 
+Sun Feb 16 10:45:03 AM IST 2025
+    February 2025   
+Su Mo Tu We Th Fr Sa
+                   1
+ 2  3  4  5  6  7  8
+ 9 10 11 12 13 14 15
+16 17 18 19 20 21 22
+23 24 25 26 27 28   
+                    
+[root@localhost ~]# 
+
+Third Example:-
+
+[root@localhost ~]# history 
+    1  date >  /tmp/myinfo  ; cal  >>  /tmp/myinfo 
+    2  cat  /tmp/myinfo 
+    3  lsblk | cat -n | head  -n 3 
+    4  lscpu | cat -n | head  -n 3 
+    5  lsblk | cat -n | head  -n 3  ;  lscpu | cat -n | head  -n 3
+    6  lsblk | cat -n | head  -n 3  >  /tmp/info  ;  lscpu | cat -n | head  -n 3  >>  /tmp/info 
+    7  cat  /tmp/info 
+    8  history 
+
+Forth Example:
+
+    9  echo  Hello Team-1  >  /tmp/test-1 
+   10  cat  /tmp/test-1 
+   11  echo  Hello Team-2  >  /tmp/test-2
+   12  cat  /tmp/test-2
+   13  cat  /tmp/test-1   /tmp/test-2 
+   14  cat  /tmp/test-1   /tmp/test-2  >  /tmp/backup
+   15  cat /tmp/backup 
+   16  echo  Hello Team-3  >  /tmp/test-3
+   17  cat  /tmp/test-3
+   18  cat  /tmp/test-3  >>  /tmp/backup
+   19  cat  /tmp/backup 
+   20  >  /test-1
+   21  >  /test-2
+   22  >  /test-3
+   23  cat /test-1
+   24  cat /test-2
+   25  cat /test-3
+   26  ls /
+   27  rm -f  /test-1   /test-2  /test-3  
+   28  ls /
+   29  touch /abc  
+   30  rm  /abc 
+   31  ls  /
+   32  rm  -f  /abc 
+   33  ls  /
+   34  history 
+[root@localhost ~]# date >>  /tmp/info
+[root@localhost ~]# 
+[root@localhost ~]# cal  >> /tmp/info 
+[root@localhost ~]# 
+[root@localhost ~]# cat /tmp/info 
+     1	NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+     2	sda      8:0    0   30G  0 disk 
+     3	├─sda1   8:1    0    1G  0 part /boot
+     1	Architecture:                    x86_64
+     2	CPU op-mode(s):                  32-bit, 64-bit
+     3	Address sizes:                   45 bits physical, 48 bits virtual
+Sun Feb 16 10:55:26 AM IST 2025
+    February 2025   
+Su Mo Tu We Th Fr Sa
+                   1
+ 2  3  4  5  6  7  8
+ 9 10 11 12 13 14 15
+16 17 18 19 20 21 22
+23 24 25 26 27 28   
+                    
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# script /tmp/information-day-16-02-2025
+Script started, output log file is '/tmp/information-day-16-02-2025'.
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# date
+Sun Feb 16 10:57:58 AM IST 2025
+[root@localhost ~]# cal
+    February 2025   
+Su Mo Tu We Th Fr Sa
+                   1
+ 2  3  4  5  6  7  8
+ 9 10 11 12 13 14 15
+16 17 18 19 20 21 22
+23 24 25 26 27 28   
+                    
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# free -h 
+               total        used        free      shared  buff/cache   available
+Mem:           7.5Gi       1.1Gi       5.8Gi        31Mi       590Mi       6.1Gi
+Swap:          2.0Gi          0B       2.0Gi
+[root@localhost ~]# 
+[root@localhost ~]# who 
+root     tty2         2024-12-22 11:43 (tty2)
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# pinky 
+Login    Name                 TTY      Idle   When             Where
+
+root     root                 tty2     55d    2024-12-22 11:43 tty2
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# exit
+exit
+Script done.
+[root@localhost ~]# 
+
+
+[root@localhost ~]# cat  /tmp/information-day-16-02-2025 
+
+===============================================================================
+
+
+[root@localhost ~]# 
+[root@localhost ~]# lsblk >  /tmp/info
+[root@localhost ~]# 
+[root@localhost ~]# cat /tmp/info
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# free -h >>  /tmp/info
+[root@localhost ~]# 
+[root@localhost ~]# cat /tmp/info
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1 1024M  0 rom  
+               total        used        free      shared  buff/cache   available
+Mem:           7.5Gi       1.1Gi       5.8Gi        31Mi       590Mi       6.1Gi
+Swap:          2.0Gi          0B       2.0Gi
+[root@localhost ~]# 
+
+
+================================================================================
+
+   47  echo "######## output of lsblk ##########"  >  /tmp/myinfo 
+   48  cat  /tmp/myinfo 
+   49  echo   -e   "\n\n"    >>  /tmp/myinfo 
+   50  cat  /tmp/myinfo 
+   51  lsblk  >>  /tmp/myinfo 
+   52  cat  /tmp/myinfo 
+   53  echo   -e   "\n\n"    >>  /tmp/myinfo 
+   54  cat  /tmp/myinfo 
+   55  echo "######## output of free  ##########"  >>  /tmp/myinfo 
+   56  cat  /tmp/myinfo 
+   57  echo   -e   "\n\n"    >>  /tmp/myinfo 
+   58  cat  /tmp/myinfo 
+   59  free  -h   >> /tmp/myinfo 
+   60  cat  /tmp/myinfo 
+   61  echo   -e   "\n\n"    >>  /tmp/myinfo 
+   62  cat  /tmp/myinfo 
+   63  echo "######## FINAL Report  ##########"  >>  /tmp/myinfo 
+   64  cat  /tmp/myinfo 
+
+
+=================================================================================
+>  OR  tee
+>> OR  tee -a 
+=================================================================================
+[root@localhost ~]# 
+[root@localhost ~]# lsblk | tee  /tmp/info 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# free -h | tee -a /tmp/info
+               total        used        free      shared  buff/cache   available
+Mem:           7.5Gi       1.1Gi       5.8Gi        31Mi       591Mi       6.1Gi
+Swap:          2.0Gi          0B       2.0Gi
+[root@localhost ~]# 
+[root@localhost ~]# cat /tmp/info
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1 1024M  0 rom  
+               total        used        free      shared  buff/cache   available
+Mem:           7.5Gi       1.1Gi       5.8Gi        31Mi       591Mi       6.1Gi
+Swap:          2.0Gi          0B       2.0Gi
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# echo this ismy final report |  tee  -a  /tmp/info
+this ismy final report
+[root@localhost ~]# 
+[root@localhost ~]# lsblk | cat -n  | head  -n 3 > /tmp/info ;   lscpu | cat -n | head  -n 3 >>  /tmp/info 
+[root@localhost ~]# 
+[root@localhost ~]# cat /tmp/info
+     1	NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+     2	sda      8:0    0   30G  0 disk 
+     3	├─sda1   8:1    0    1G  0 part /boot
+     1	Architecture:                    x86_64
+     2	CPU op-mode(s):                  32-bit, 64-bit
+     3	Address sizes:                   45 bits physical, 48 bits virtual
+
+[root@localhost ~]# lsblk | cat -n  | head  -n 3 | tee /tmp/info ;   lscpu | cat -n | head  -n 3 | tee -a  /tmp/info 
+     1	NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+     2	sda      8:0    0   30G  0 disk 
+     3	├─sda1   8:1    0    1G  0 part /boot
+     1	Architecture:                    x86_64
+     2	CPU op-mode(s):                  32-bit, 64-bit
+     3	Address sizes:                   45 bits physical, 48 bits virtual
+[root@localhost ~]# 
+[root@localhost ~]# cat /tmp/info
+     1	NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+     2	sda      8:0    0   30G  0 disk 
+     3	├─sda1   8:1    0    1G  0 part /boot
+     1	Architecture:                    x86_64
+     2	CPU op-mode(s):                  32-bit, 64-bit
+     3	Address sizes:                   45 bits physical, 48 bits virtual
+
+[root@localhost ~]# >  /tmp/info
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cat /tmp/info
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# rm -f  /tmp/info
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+>
+>>
+tee
+tee -a 
+
+<
+=============================================================================
+   86  cat /etc/crontab 
+   87  cat < /etc/crontab 
+   88  cat < /etc/crontab >  /tmp/mycron 
+   89  cat  /etc/crontab >  /tmp/mycron 
+   90  history 
+
+=============================================================================
+Examples head
+Examples tail
+Exmaples grep
+Examples........so on
+=============================================================================
+

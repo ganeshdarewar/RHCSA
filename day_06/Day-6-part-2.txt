@@ -1,0 +1,106 @@
+[root@localhost ~]# ls  
+anaconda-ks.cfg  Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls -a  
+.   anaconda-ks.cfg  .bash_logout   .bashrc  .config  Desktop    Downloads  Music     Public   Templates  .viminfo
+..  .bash_history    .bash_profile  .cache   .cshrc   Documents  .local     Pictures  .tcshrc  Videos
+[root@localhost ~]# 
+[root@localhost ~]# l.
+.  ..  .bash_history  .bash_logout  .bash_profile  .bashrc  .cache  .config  .cshrc  .local  .tcshrc  .viminfo
+[root@localhost ~]# 
+[root@localhost ~]# touch rajat  
+[root@localhost ~]# 
+[root@localhost ~]# ls 
+anaconda-ks.cfg  Desktop  Documents  Downloads  Music  Pictures  Public  rajat  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mv  rajat   .rajat  
+[root@localhost ~]# 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# l.
+.  ..  .bash_history  .bash_logout  .bash_profile  .bashrc  .cache  .config  .cshrc  .local  .rajat  .tcshrc  .viminfo
+[root@localhost ~]# 
+[root@localhost ~]# mv  .raj
+
+
+
+
+at   rajat  
+[root@localhost ~]# 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  Music  Pictures  Public  rajat  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mkdir  .tcs  
+[root@localhost ~]# 
+[root@localhost ~]# ls  
+anaconda-ks.cfg  Desktop  Documents  Downloads  Music  Pictures  Public  rajat  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# l.
+.  ..  .bash_history  .bash_logout  .bash_profile  .bashrc  .cache  .config  .cshrc  .local  .tcs  .tcshrc  .viminfo
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cd tcs  
+bash: cd: tcs: No such file or directory
+[root@localhost ~]# 
+[root@localhost ~]# cd .tcs  
+[root@localhost .tcs]# 
+[root@localhost .tcs]# touch abc 
+[root@localhost .tcs]# ls
+abc
+[root@localhost .tcs]# cd
+[root@localhost ~]# 
+[root@localhost ~]# mv  .tcs   tcs  
+[root@localhost ~]# 
+[root@localhost ~]# ls  
+anaconda-ks.cfg  Desktop  Documents  Downloads  Music  Pictures  Public  rajat  tcs  Templates  Videos
+[root@localhost ~]# 
+
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mkdir /rajat  
+[root@localhost ~]# 
+[root@localhost ~]# cd /rajat
+[root@localhost rajat]# ls 
+[root@localhost rajat]# 
+[root@localhost rajat]# ls -a  
+.  ..
+[root@localhost rajat]# 
+[root@localhost rajat]# cd
+[root@localhost ~]# 
+[root@localhost ~]# ls -a  
+.   anaconda-ks.cfg  .bash_logout   .bashrc  .config  Desktop    Downloads  Music     Public  tcs      Templates  .viminfo
+..  .bash_history    .bash_profile  .cache   .cshrc   Documents  .local     Pictures  rajat   .tcshrc  Videos
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# l.
+.  ..  .bash_history  .bash_logout  .bash_profile  .bashrc  .cache  .config  .cshrc  .local  .tcshrc  .viminfo
+[root@localhost ~]# 
+[root@localhost ~]# l. | wc -l  
+12
+[root@localhost ~]# ls |  wc -l 
+11
+[root@localhost ~]# ls 
+anaconda-ks.cfg  Desktop  Documents  Downloads  Music  Pictures  Public  rajat  tcs  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# ls -a  | wc -l 
+23
+[root@localhost ~]# 
+[root@localhost ~]# ls -a  
+.   anaconda-ks.cfg  .bash_logout   .bashrc  .config  Desktop    Downloads  Music     Public  tcs      Templates  .viminfo
+..  .bash_history    .bash_profile  .cache   .cshrc   Documents  .local     Pictures  rajat   .tcshrc  Videos
+[root@localhost ~]# 
+
+
+======================================================================================
+
+
+
+
+

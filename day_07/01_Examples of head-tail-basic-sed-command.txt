@@ -1,0 +1,319 @@
+=========================================================
+Examples of head and tail command 
+=========================================================
+
+[root@localhost ~]# history 
+    1  cat /etc/crontab 
+    2  cat /etc/passwd 
+    3  cat -n  /etc/passwd 
+    4  head  /etc/passwd 
+    5  tail /etc/passwd
+    6  head  -n 5 /etc/passwd
+    7  head  -n 1  /etc/passwd
+    8  head  -5 /etc/passwd
+    9  tail -n 5  /etc/passwd
+   10  tail -5  /etc/passwd
+   11  head  -n 5 /etc/passwd
+   12  head  -n 5 /etc/passwd  >  /tmp/info 
+   13  cat /tmp/info 
+   14  useradd user1
+   15  useradd user2
+   16  useradd user3
+   17  useradd user4
+   18  useradd user5
+   19  cat  /etc/passwd 
+   20  tail  /etc/passwd
+   21  tail -n 5    /etc/passwd
+   22  head -n 1  /etc/passwd
+   23  tail  -n 1  /etc/passwd
+   24  head -n 1  /etc/passwd ; tail  -n 1  /etc/passwd
+   25  head /etc/passwd
+   26  head /etc/passwd  | cat -n  
+   27  head /etc/passwd  | wc -l 
+   28  cat  -n  /etc/passwd  | head  
+   29  cat -n  /etc/crontab 
+   30  cat -n  /etc/crontab  | head -n 3 
+   31  cat  -n  /etc/passwd  | head  
+   32  cat /etc/passwd  | head  
+   33  cat /etc/passwd  | head   | cat -n 
+   34  cat -n  /etc/passwd  | head  
+   35  lsblk 
+   36  lsblk  | head -n 1  
+   37  lsblk  | head -n 3
+   38  lsblk  | tail -n 3
+   39  lsblk  | head -n 3
+   40  lsblk  | head -n 3 | cat -n  
+   41  lsblk  | cat -n 
+   42  lsblk  | cat -n  | head -n 3 
+   43  lsblk  | cat -n  | tail -n 3 
+   44  lsblk  | tail -n 3 
+   45  lsblk  | tail -n 3  | cat -n  
+   46  cat  -n /etc/passwd
+   47  cat -n  /etc/passwd
+   48  cat -n  /etc/passwd | head -n 25 
+   49  cat -n  /etc/passwd | head -n 25 | tail -n 5 
+   50  cat -n  /etc/passwd | head -n 25 | tail -n 5  >  /tmp/mysave
+   51  car /tmp/mysave 
+   52  cat /tmp/mysave 
+   53  cat -n  /etc/passwd | head -n 25 | tail -n 5 
+   54  head -n 25  /etc/passwd
+   55  head -n 25  /etc/passwd | tail -n 5  
+   56  head -n 25  /etc/passwd | tail -n 5  | cat -n 
+   57  cat -n  /etc/passwd | head -n 25 | tail -n 5 
+   58  lsblk 
+   59  lsblk | cat -n 
+   60  lsblk | cat -n | head -n 5
+   61  lsblk | cat -n | head -n 5 | tail -n 3 
+   62  lsblk | head -n 5 | tail -n 3 
+   63  lsblk | head -n 5 | tail -n 3   >  /tmp/diskinfo  
+   64  cat /tmp/diskinfo 
+   65  lsblk | head -n 3  >   /tmp/save
+   66  cat /tmp/save 
+   67  grep  root  /etc/passwd
+   68  cat -n /etc/passwd  | head -n 25  | tail -n 5 
+   69  cat -n /etc/passwd  | head -n 25  | tail -n 5  | grep sssd
+   70  grep sssd  /etc/passwd
+   71  lsblk 
+   72  lsblk  | grep part  
+   73  lsblk | head -n 4  | tail -n 2 
+   74  lsblk | head -n 4  | tail -n 2  | grep part  
+   75  cat  /etc/crontab 
+   76  grep  bash    /etc/crontab 
+   77  head -n 1 /etc/crontab 
+   78  cat /var/log/secure 
+   79  tail /var/log/secure 
+   80  grep   "Feb 22"   /var/log/secure 
+   81  grep   "Feb 22"   /var/log/secure  | grep  user1
+   82  cat -n  /var/log/secure  |  grep   "Feb 22"
+   83  free -h 
+   84  free -h  | tail -n 1 
+   85  df  -h 
+   86  df  -h  | cat -n  
+   87  df  -h  | cat -n   | head -n 6
+   88  df  -h  | cat -n   | head -n 6 | tail -n 2  
+   89  df  -h | head -n 6 | tail -n 2  
+   90  df  -h | head -n 6 | tail -n 2   | cat -n 
+   91  history 
+
+==================================================================
+   92  sed   '1p'    /etc/crontab  
+   93  sed  -n   '1p'    /etc/crontab  
+   94  sed  -n   '1,3p'    /etc/crontab  
+   95  sed  -n   '1p;3p'    /etc/crontab  
+   96  sed  -n  '1p'  /etc/passwd
+   97  cat -n  /etc/passwd | sed  -n  '1p'
+   98  cat -n  /etc/passwd | sed  -n  '5p'
+   99  cat -n  /etc/passwd | sed  -n  '1p;5p'
+  100  cat -n  /etc/passwd | sed  -n  '1,5p'
+  101  cat -n  /etc/passwd | sed  -n  '1p'
+  102  cat -n  /etc/passwd | sed  -n  '$p'
+  103  cat -n  /etc/passwd | sed  -n  '1p;$p'
+  104  cat -n /etc/passwd  | head -n 25  | tail -n 1 
+  105  cat -n  /etc/passwd | sed  -n  '25p'
+  106  cat -n  /etc/passwd | sed  -n  '21,25p'
+  107  cat -n  /etc/passwd | sed  -n  '1p;5p;21,25p;31p;38,$p'
+  108  lsblk 
+  109  lsblk | cat -n 
+  110  lsblk | cat -n  |  head  -n 3 | tail -n1  
+  111  lsblk | cat -n  |  head  -n 5 | tail -n1  
+  112  lsblk | cat -n  |  head  -n 3 | tail -n 1 ; lsblk | cat -n  |  head  -n 5 | tail -n 1 
+  113  lsblk | cat -n  |  sed -n  '3p;5p'
+  114  lsblk 
+  115  lsblk  | cat -n 
+  116  lsblk  | cat -n  | head -n 5
+  117  lsblk  | cat -n  | head -n 5 | tail -n 3
+  118  lsblk  | head -n 5 | tail -n 3
+  119  lsblk  | head -n 5 | tail -n 3   > /tmp/info 
+  120  cat  /tmp/info 
+  121  df  -h
+  122  lsblk  | head -n 1 
+  123  lsblk  | head -n 1  > /tmp/info 
+  124  cat  /tmp/info 
+  125  lsblk  | head -n 5 | tail -n 3   >> /tmp/info 
+  126  cat /tmp/info 
+  127  lsblk  | cat -n  | sed  -n  '1p;3,6p'
+  128  lsblk  | cat -n  | sed  -n  '1p;3,5p'
+  129  lsblk | sed  -n  '1p;3,5p'
+  130  lsblk | sed  -n  '1p;3,5p'  >  /tmp/info 
+  131  cat /tmp/info 
+  132  sed  -n  '21,25p'  /etc/passwd
+  133  sed  -n  '21,25p'  /etc/passwd |  grep sssd 
+
+==================================================================
+
+How we can read the updated log files on the screen using tail command  ?
+
+[root@localhost ~]# tail  -f    /var/log/secure 
+
+Press CTRL+C  to quit  
+
+
+[root@localhost ~]# tail -f /var/log/secure    /var/log/messages 
+
+
+[root@localhost ~]# head -f  /var/log/secure 
+head: invalid option -- 'f'
+Try 'head --help' for more information.
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# tail  -f    /var/log/secure 
+Feb 22 10:04:25 localhost useradd[5173]: new group: name=soniya, GID=1006
+Feb 22 10:04:25 localhost useradd[5173]: new user: name=soniya, UID=1006, GID=1006, home=/home/soniya, shell=/bin/bash, from=/dev/pts/1
+Feb 22 10:04:37 localhost userdel[5189]: delete user 'soniya'
+Feb 22 10:04:37 localhost userdel[5189]: removed group 'soniya' owned by 'soniya'
+Feb 22 10:04:37 localhost userdel[5189]: removed shadow group 'soniya' owned by 'soniya'
+Feb 22 10:04:48 localhost useradd[5201]: new group: name=soniya, GID=1006
+Feb 22 10:04:48 localhost useradd[5201]: new user: name=soniya, UID=1006, GID=1006, home=/home/soniya, shell=/bin/bash, from=/dev/pts/1
+Feb 22 10:04:51 localhost userdel[5216]: delete user 'soniya'
+Feb 22 10:04:51 localhost userdel[5216]: removed group 'soniya' owned by 'soniya'
+Feb 22 10:04:51 localhost userdel[5216]: removed shadow group 'soniya' owned by 'soniya'
+^C
+[root@localhost ~]# 
+  141  ifconfig 
+  142  ifconfig  |  grep inet 
+  149  ifconfig  |  grep  -w  inet   | head  -n 1  | awk  '{print $1,$2}' 
+
+
+ 151  ifconfig  |  grep  -w  inet   | head  -n 1 
+  152  ifconfig  |  grep  -w  inet   | head  -n 1  | awk  '{print $1,$2}' 
+  153  ifconfig  |  grep  -w  inet   | head  -n 1  | awk  '{print $1,$2}'  | sed    's/inet/IP Address is = /'
+  154  ifconfig  |  grep  -w  inet   | head  -n 1  | awk  '{print $1,$2}'  | sed    's/inet/IP Address is = /'   >   /tmp/information  
+  155  cat /tmp/information 
+  156  ifconfig 
+  157  ifconfig  | grep ether  
+
+[root@localhost ~]# ifconfig  | grep ether   |  awk  '{print $1,$2}'
+ether 00:0c:29:e1:00:90
+[root@localhost ~]# 
+[root@localhost ~]# ifconfig  | grep ether   |  awk  '{print $1,$2}'  | sed  's/ether/MAC address is = /'
+MAC address is =  00:0c:29:e1:00:90
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ifconfig  |  grep  -w  inet   | head  -n 1  | awk  '{print $1,$2}'  | sed    's/inet/IP Address is = /'
+IP Address is =  192.168.40.144
+
+==================================================================
+Variable  ===> it is used to store any value into any variable name 
+
+# x=10
+
+
+# echo  $x 
+
+$ ===> it is used to print any variable values
+
+
+=================================================================
+#a=10          ==> normal variable example
+#b=$(date)     ==> command examples 
+
+
+# echo $a
+# echo $b 
+=================================================================
+[root@localhost ~]# x=10
+[root@localhost ~]# 
+[root@localhost ~]# echo $x
+10
+[root@localhost ~]# 
+[root@localhost ~]# echo x
+x
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+=================================================================
+
+[root@localhost ~]# x=10
+[root@localhost ~]# 
+[root@localhost ~]# echo $x
+10
+[root@localhost ~]# 
+[root@localhost ~]# x=krishna
+[root@localhost ~]# 
+[root@localhost ~]# echo $x
+krishna
+[root@localhost ~]# 
+[root@localhost ~]# echo   date
+date
+[root@localhost ~]# 
+[root@localhost ~]# echo   $(date)
+Sat Feb 22 10:21:57 AM IST 2025
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# echo   $(date +%A)
+Saturday
+
+
+[root@localhost ~]# 
+[root@localhost ~]# ifconfig  |  grep  -w  inet   | head  -n 1  | awk  '{print $1,$2}'  | sed    's/inet/IP Address is = /'
+IP Address is =  192.168.40.144
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ifconfig  | grep ether   |  awk  '{print $1,$2}'  | sed  's/ether/MAC address is = /'
+MAC address is =  00:0c:29:e1:00:90
+[root@localhost ~]# 
+[root@localhost ~]# a=$(ifconfig  |  grep  -w  inet   | head  -n 1  | awk  '{print $1,$2}'  | sed    's/inet/IP Address is = /')
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# b=$(ifconfig  | grep ether   |  awk  '{print $1,$2}'  | sed  's/ether/MAC address is = /')
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# echo $a and $b
+IP Address is = 192.168.40.144 and MAC address is = 00:0c:29:e1:00:90
+[root@localhost ~]# 
+
+
+========================================================================= 
+set of command  ===> file  OR script file 
+
+How we can script file in linux  ?  and How we can run this file ?
+
+[root@localhost ~]# vim  /tmp/dailyuse.sh 
+
+Press i to insert text  
+
+a=$(ifconfig  |  grep  -w  inet   | head  -n 1  | awk  '{print $1,$2}'  | sed    's/inet/IP Address is = /')
+b=$(ifconfig  | grep ether   |  awk  '{print $1,$2}'  | sed  's/ether/MAC address is = /')
+echo $a and $b 
+
+
+:wq!
+
+[root@localhost ~]# sh   /tmp/dailyuse.sh 
+
+[root@localhost ~]# sh  /tmp/dailyuse.sh 
+IP Address is = 192.168.40.144 and MAC address is = 00:0c:29:e1:00:90
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# sh  /tmp/dailyuse.sh 
+IP Address is = 192.168.40.144 and MAC address is = 00:0c:29:e1:00:90
+[root@localhost ~]# 
+[root@localhost ~]# sh  /tmp/dailyuse.sh 
+IP Address is = 192.168.40.144 and MAC address is = 00:0c:29:e1:00:90
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# echo   "today is $(date +%A)"
+today is Saturday
+[root@localhost ~]# 
+[root@localhost ~]# echo   "today is date +%A"
+today is date +%A
+[root@localhost ~]# 
+[root@localhost ~]# echo   "today is $(date +%A)"
+today is Saturday
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+=========================================================================
+
+
+
+
+
+
+
+
+
+
+
+

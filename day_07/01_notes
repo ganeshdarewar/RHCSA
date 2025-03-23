@@ -1,0 +1,46 @@
+
+    4  head  /etc/passwd  # default 10 line from top
+    5  tail /etc/passwd  # default 10 line from bottom
+
+    6  head  -n 5 /etc/passwd # 5 line from top
+    7  tail  -n 5  /etc/passwd # 5 lines from bottom
+
+==================================================================
+
+   93  sed  -n   '1p'    /etc/crontab  # only 1st line
+   94  sed  -n   '1,3p'    /etc/crontab  # 1 to 3 line
+   95  sed  -n   '1p;3p'    /etc/crontab  # 1st and 3rd line
+
+
+   ==================================================================
+
+How we can read the updated log files on the screen using tail command  ?
+
+[root@localhost ~]# tail  -f    /var/log/secure 
+
+
+
+
+   ==================================================================
+
+
+
+[root@localhost ~]# ifconfig | grep -w inet | head -n 1 | awk {'print "IP Address is=", $2'}
+IP Address is= 192.168.211.128
+
+
+[root@localhost ~]# ifconfig | grep -w inet | head -n 1 | awk {'print $1, $2'} | sed 's/inet/IP Adresss is =/'
+IP Adresss is = 192.168.211.128
+
+
+
+   ==================================================================
+
+[root@localhost ~]# a=$(ifconfig | grep -w inet | head -n 1 | awk {'print $1, $2'} | sed 's/inet/IP Adresss is =/')
+[root@localhost ~]# b=$(ifconfig | grep ether | awk {'print $1, $2'} | sed 's/ether/Mac address =/')
+
+[root@localhost ~]# echo -e $a "\n"$b
+IP Adresss is = 192.168.211.128
+Mac address = 00:0c:29:ec:13:04
+
+

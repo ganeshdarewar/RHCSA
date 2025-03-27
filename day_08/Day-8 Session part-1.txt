@@ -1,0 +1,659 @@
+=================================================================
+                         Day-8 Session
+=================================================================
+Types of working style  OR working choices in linux ?
+
+1- using command  ===> TERMINAL ==> Command-1 ==> TYPE ==> ENTER  ===> INPUT ===> Processing ==> OUTPUT
+                  ===> TERMINAL ==> Command-2 ==> TYPE ==> ENTER  ===> INPUT ===> Processing ==> OUTPUT
+                  ===> TERMINAL ==> Command-3 ==> TYPE ==> ENTER  ===> INPUT ===> Processing ==> OUTPUT
+
+
+2- using script ==> set of command ===> line by line ===> save   ===> Script ===> RUN ===> set of command  ===> one short ===> Execute
+
+
+3- using GUI console 
+
+=================================================================
+=================================================================
+Script file OR shell script file  
+=================================================================
+
+
+Examples of echo Command 
+
+
+1- It is used to print any mesg on the terminal
+
+2- We can also print value of any variables also. ===> 1- SDV   2- UDV 
+3- We can also print any output of any Linux based commands             ====>      $(command)    OR  `linuxbasedcommand`
+4- We can use this command terminal and also in any script file.
+5- We can also print mesg in color formats if we want.
+
+=======================================================================================================
+
+Examples of Single Quotes and double quotes,Back Quotes 
+
+=======================================================================================================
+Types of Quotes in Linux ?
+=======================================================================================================
+
+
+1-  "   "  OR Double Quotes        ===>  use to print any mesg and variable values also. because it perform the meaning of $ and \ symbol.
+
+2-  '   '  OR Single Quotes        ===>  print as it is.
+ 
+3-  `   `  OR Back Quotes  OR  $() ===> it can print only output of Linux based command only. nothing else.
+
+     OR 
+     
+    $()
+
+=======================================================================================================
+
+Examples of echo command  ?
+
+[root@localhost ~]# echo 
+
+[root@localhost ~]# echo hello india 
+hello india
+[root@localhost ~]# echo hello krishna, How are you ? 
+hello krishna, How are you ?
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# vim hello.sh 
+
+echo  hello krishna, how are you ?
+echo  hello india
+
+:wq!
+
+[root@localhost ~]# sh   hello.sh 
+hello krishna, how are you ?
+hello india
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+Variable ?  ===> it is used to store any value into any variable name.  this value can be print with the help of $ symbol.
+
+
+#variablename=value 
+
+$variablename
+
+
+[root@localhost ~]# hi=krishna
+[root@localhost ~]# 
+[root@localhost ~]# echo hi
+hi
+[root@localhost ~]# echo $hi
+krishna
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# vim hello.sh 
+
+echo  hello krishna, how are you ?
+echo  hello india
+hi=krishna
+echo $hi
+
+
+:wq!
+
+[root@localhost ~]# sh  hello.sh 
+hello krishna, how are you ?
+hello india
+krishna
+[root@localhost ~]# 
+
+[root@localhost ~]# a=10
+[root@localhost ~]# 
+[root@localhost ~]# echo $a
+10
+[root@localhost ~]# echo $a
+10
+[root@localhost ~]# echo $a
+10
+[root@localhost ~]# echo $a
+10
+[root@localhost ~]# unset a  
+[root@localhost ~]# 
+[root@localhost ~]# echo $a
+
+
+Types of Variables ?
+
+1- SDV             ===> system defined variable  ===> already defined in our machine ====> always store in capital letters
+
+2- UDV             ===> user defined variable ===> can be create by any user on terminal OR with in the script  ===> we can use in capital letter and small letters but recommended practise is we shoud go with in small letters always 
+
+=======================================================================================================
+[root@localhost ~]# 
+[root@localhost ~]# a=krishna
+[root@localhost ~]# 
+[root@localhost ~]# echo $a
+krishna
+[root@localhost ~]# 
+[root@localhost ~]# echo $UID
+0
+[root@localhost ~]# echo $USER
+root
+[root@localhost ~]# 
+[root@localhost ~]# echo $HISTSIZE
+1000
+
+[root@localhost ~]# echo $SHELL
+
+[root@localhost ~]# set  
+
+[root@localhost ~]# set |  grep krishna  
+
+
+[root@localhost ~]# abc=linuxfedora
+[root@localhost ~]# 
+[root@localhost ~]# echo $abc
+linuxfedora
+[root@localhost ~]# 
+[root@localhost ~]# ls -a 
+.                .bash_logout   .config    Downloads  Pictures   Videos
+..               .bash_profile  .cshrc     hello.sh   Public     .viminfo
+anaconda-ks.cfg  .bashrc        Desktop    .local     .tcshrc
+.bash_history    .cache         Documents  Music      Templates
+[root@localhost ~]# 
+[root@localhost ~]# vim .bashrc 
+abc=linuxfedora
+
+:wq!
+
+[root@localhost ~]# echo $abc
+linuxfedora
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# useradd soniya 
+[root@localhost ~]# 
+[root@localhost ~]# su - soniya  
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls -a  
+.  ..  .bash_logout  .bash_profile  .bashrc  .cache  .mozilla
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ env
+[soniya@localhost ~]$ exit
+
+
+=======================================================================================================
+
+What is the use of  .bashrc file  ? OR How we can configure auto execute command in any user account ?
+
+
+
+1- Super user  ====>  .bashrc  
+
+2- Normal user ====>  .bashrc 
+
+=======================================================================================================
+.bashrc [Personal settings customization] and  /etc/bashrc [Global settings for the all users]
+
+.bashrc and crontab difference ?
+=======================================================================================================
+
+[root@localhost ~]# ls -a 
+.                .bash_history  .bashrc  .cshrc     Downloads  Music     .tcshrc    .viminfo
+..               .bash_logout   .cache   Desktop    hello.sh   Pictures  Templates
+anaconda-ks.cfg  .bash_profile  .config  Documents  .local     Public    Videos
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# su - soniya 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls -a 
+.  ..  .bash_history  .bash_logout  .bash_profile  .bashrc  .cache  .mozilla
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+
+[root@localhost ~]# vim  .bashrc 
+
+echo  "welcome"
+date
+cal
+free -h
+echo  "start your work now"
+
+:wq!
+
+
+Note:  These command will execute on every login prompt 
+
+
+[root@localhost ~]# su - soniya 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ vim  .bashrc 
+
+date
+cal
+
+:wq!
+
+[soniya@localhost ~]$ 
+logout
+[root@localhost ~]# su - soniya 
+Sun Feb 23 09:48:36 AM IST 2025
+    February 2025   
+Su Mo Tu We Th Fr Sa
+                   1
+ 2  3  4  5  6  7  8
+ 9 10 11 12 13 14 15
+16 17 18 19 20 21 22
+23 24 25 26 27 28   
+                    
+[soniya@localhost ~]$ exit
+
+=============================================================
+[root@localhost ~]# crontab -l  
+no crontab for root
+[root@localhost ~]# 
+=============================================================
+
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cat /etc/default/useradd 
+# useradd defaults file
+GROUP=100
+HOME=/home
+INACTIVE=-1
+EXPIRE=
+SHELL=/bin/bash
+SKEL=/etc/skel
+CREATE_MAIL_SPOOL=yes
+
+[root@localhost ~]# 
+[root@localhost ~]# cd  /etc/skel
+[root@localhost skel]# ls -a 
+.  ..  .bash_logout  .bash_profile  .bashrc  .mozilla
+[root@localhost skel]# 
+[root@localhost skel]# touch abc{1..5}.sh
+[root@localhost skel]# 
+[root@localhost skel]# ls
+abc1.sh  abc2.sh  abc3.sh  abc4.sh  abc5.sh
+[root@localhost skel]# cd
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# useradd monika  
+[root@localhost ~]# 
+[root@localhost ~]# su - monika  
+[monika@localhost ~]$ ls 
+abc1.sh  abc2.sh  abc3.sh  abc4.sh  abc5.sh
+[monika@localhost ~]$ 
+[monika@localhost ~]$ ls -a  
+.  ..  abc1.sh  abc2.sh  abc3.sh  abc4.sh  abc5.sh  .bash_logout  .bash_profile  .bashrc  .cache  .mozilla
+[monika@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+================================================================
+
+[root@localhost ~]# su - soniya  
+Sun Feb 23 09:56:54 AM IST 2025
+    February 2025   
+Su Mo Tu We Th Fr Sa
+                   1
+ 2  3  4  5  6  7  8
+ 9 10 11 12 13 14 15
+16 17 18 19 20 21 22
+23 24 25 26 27 28   
+                    
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls -a  
+.  ..  .bash_history  .bash_logout  .bash_profile  .bashrc  .cache  .mozilla  .viminfo
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ rm -rf .bashrc 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ cd /etc/skel
+[soniya@localhost skel]$ ls -a  
+.  ..  abc1.sh  abc2.sh  abc3.sh  abc4.sh  abc5.sh  .bash_logout  .bash_profile  .bashrc  .mozilla
+[soniya@localhost skel]$ 
+[soniya@localhost skel]$ cp -rf  .bashrc    /home/soniya
+[soniya@localhost skel]$ cd
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls -a  
+.  ..  .bash_history  .bash_logout  .bash_profile  .bashrc  .cache  .mozilla  .viminfo
+[soniya@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+=======================================================================
+
+[root@localhost ~]# vim /etc/rc.local     ===> to run any commands during the machine booting time  
+
+:q!
+
+=======================================================================
+
+Difference between crontab and at commnad in linux  ?
+
+=======================================================================
+[root@localhost ~]# vim  /etc/motd     ===> we can set the login banner for the all upcoming user on server machine 
+
+
+##################################
+#                                #
+#   Happy New Year 2025          #
+#                                #
+##################################
+
+
+:wq!
+
+[root@localhost ~]# systemctl isolate multi-user.target 
+
+
+Login: root
+Password: redhat
+
+
+
+##################################
+#                                #
+#   Happy New Year 2025          #
+#                                #
+##################################
+
+[root@localhost ] #systemctl isolate  graphical.target
+
+[root@localhost ~]# echo date 
+date
+[root@localhost ~]# echo $(date) 
+Sun Feb 23 10:24:53 AM IST 2025
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# echo $(whoami) 
+root
+[root@localhost ~]# 
+
+[root@localhost ~]# a=abc
+[root@localhost ~]# b=date
+[root@localhost ~]# 
+[root@localhost ~]# echo $a
+abc
+[root@localhost ~]# echo $b
+date
+[root@localhost ~]# b=$(date)
+[root@localhost ~]# 
+[root@localhost ~]# echo $b
+Sun Feb 23 10:26:07 AM IST 2025
+[root@localhost ~]# 
+[root@localhost ~]# echo  $(date)
+Sun Feb 23 10:26:37 AM IST 2025
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# expr 10 + 20 
+30
+[root@localhost ~]# expr 100 - 20 
+80
+[root@localhost ~]# 
+[root@localhost ~]# expr 100 / 20 
+5
+[root@localhost ~]# expr 100 * 20 
+expr: syntax error: unexpected argument ‘anaconda-ks.cfg’
+[root@localhost ~]# 
+[root@localhost ~]# expr 100 \* 20 
+2000
+
+[root@localhost ~]# a=10
+[root@localhost ~]# b=20
+[root@localhost ~]# 
+[root@localhost ~]# expr $a + $b
+30
+[root@localhost ~]# 
+
+[root@localhost ~]# vim  adding.sh
+
+a=10
+b=20
+expr $a + $b
+
+:wq
+
+[root@localhost ~]# sh   adding.sh
+30
+[root@localhost ~]# 
+
+=================================================================================
+read  ===> it is used to take input directlty from the keyboard and store it into any variable.
+
+
+read variablename
+
+=================================================================================
+
+[root@localhost ~]# vim hello.sh 
+
+
+hello=krishna
+echo $hello
+
+
+:wq!
+
+[root@localhost ~]# sh   hello.sh 
+krishna
+[root@localhost ~]# vim   hello.sh
+
+
+echo  "what is your name please"
+read a
+echo  "Your name is = $a "
+
+
+:wq
+[root@localhost ~]# sh hello.sh 
+what is your name please
+rajesh
+Your name is = rajesh 
+[root@localhost ~]# vim hello.sh
+
+read  -p  "what is your name please: " a
+echo  "Your name is = $a "
+
+
+:wq!
+
+[root@localhost ~]# sh   hello.sh 
+what is your name please: krishna
+Your name is = krishna 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# vim adding.sh 
+
+read -p  "give any first number: " a
+read -p  "give any second number: " b
+sum=$(expr $a + $b)
+echo "add of $a and $b is  = $sum"
+
+
+:wq!
+
+
+[root@localhost ~]# sh  adding.sh 
+give any first number: 300
+give any second number: 50000
+add of 300 and 50000 is  = 50300
+[root@localhost ~]# 
+[root@localhost ~]# sh  adding.sh 
+give any first number: 300
+give any second number: 400
+add of 300 and 400 is  = 700
+[root@localhost ~]# 
+
+[root@localhost ~]# vim adding.sh 
+read -p  "give any first number: " a
+read -p  "give any second number: " b 
+echo "add of $a and $b is  = $(expr $a + $b)"
+:wq!
+
+[root@localhost ~]# sh  adding.sh 
+give any first number: 400
+give any second number: 300
+add of 400 and 300 is  = 700
+[root@localhost ~]# 
+
+[root@localhost ~]# echo $(date)
+Sun Feb 23 10:40:20 AM IST 2025
+[root@localhost ~]# 
+[root@localhost ~]# echo `date`
+Sun Feb 23 10:40:33 AM IST 2025
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# echo   "KR network Cloud"
+KR network Cloud
+[root@localhost ~]# 
+
+[root@localhost ~]# cat  /etc/DIR_COLORS  ===> we can read the color coding 
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# echo    -e   "\033[31m KR Network Cloud"
+ KR Network Cloud
+[root@localhost ~]# 
+[root@localhost ~]# echo    -e   "\033[32m KR Network Cloud"
+ KR Network Cloud
+[root@localhost ~]# 
+[root@localhost ~]# echo    -e   "\033[33m KR Network Cloud"
+ KR Network Cloud
+[root@localhost ~]# echo    -e   "\033[33m KR Network Cloud \033[0m"
+ KR Network Cloud 
+[root@localhost ~]# 
+[root@localhost ~]# echo    -e   "\033[31m KR Network Cloud \033[0m"
+ KR Network Cloud 
+[root@localhost ~]# 
+[root@localhost ~]# echo    -e   "\033[01;31m KR Network Cloud \033[0m"
+ KR Network Cloud 
+[root@localhost ~]# 
+[root@localhost ~]# echo   "KR network Cloud"
+KR network Cloud
+[root@localhost ~]# 
+[root@localhost ~]# echo    -e   "\033[01;31m KR Network Cloud"
+ KR Network Cloud
+[root@localhost ~]# 
+[root@localhost ~]# echo    -e   "\033[01;31m KR Network Cloud \033[0m"
+ KR Network Cloud 
+[root@localhost ~]# 
+[root@localhost ~]# echo    -e   "\033[01;32m KR Network Cloud \033[0m"
+ KR Network Cloud 
+[root@localhost ~]# 
+[root@localhost ~]# echo      "KR Network Cloud"
+KR Network Cloud
+[root@localhost ~]# 
+
+=========================================================================================
+Examples of Single Quotes and double quotes,Back Quotes 
+
+=======================================================================================================
+Types of Quotes in Linux ?
+=======================================================================================================
+
+
+1-  "   "  OR Double Quotes        ===>  use to print any mesg and variable values also. because it perform the meaning of $ and \ symbol.
+
+2-  '   '  OR Single Quotes        ===>  print as it is.
+ 
+3-  `   `  OR Back Quotes  OR  $() ===> it can print only output of Linux based command only. nothing else.
+
+     OR 
+     
+    $()
+
+========================================================================================================
+
+[root@localhost ~]# echo  hello india
+hello india
+[root@localhost ~]# 
+[root@localhost ~]# echo  "hello india"
+hello india
+[root@localhost ~]# echo  'hello india'
+hello india
+[root@localhost ~]# 
+[root@localhost ~]# echo  hello india
+hello india
+[root@localhost ~]# 
+
+  137  echo  "hello india"
+  138  echo  'hello india'
+  139  echo  `hello india`
+  140  echo  `date +%A`
+  141  echo  $(date +%A)
+  142  echo  '$(date +%A)'
+  143  echo  "$(date +%A)"
+  144  echo  '`date +%A`'
+  145  echo  "today is = `date +%A`"
+  146  echo  "today is = $(date +%A)"
+  147  echo  'today is = $(date +%A)'
+  148  a=10
+  149  echo $a
+  150  echo "$a"
+  151  echo '$a'
+  152  echo `$a`
+  153  echo     '$$$$$$$$ hello India $$$$$$$'
+  154  echo "hello india"
+  155  echo 'hello india'
+  156  echo hello india
+  157  hostname
+  158  echo  "my machine name is = $(hostname)"
+  159  echo  'my machine name is = $(hostname)'
+  160  echo  "my machine name is = `hostname`"
+  161  echo  "my machine name is = $HOSTNAME"
+  162  env  |  grep -i hostname
+  163  echo  "my machine name is = $(hostname)"
+  164  echo  "my machine name is = `hostname`"
+  165  free -h
+  166  echo  $(free -h)
+  167  echo  "$(free -h)"
+  168  history 
+  169  uptime 
+  170  echo  $(uptime)
+  171  echo  "$(uptime)"
+  172  echo  '$(uptime)'
+  173  echo  `uptime`
+  174  echo  "`uptime`"
+
+[root@localhost ~]# grep "DHCP and DNS"  /etc/passwd
+dnsmasq:x:985:980:Dnsmasq DHCP and DNS server:/var/lib/dnsmasq:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# grep 'DHCP and DNS'  /etc/passwd
+dnsmasq:x:985:980:Dnsmasq DHCP and DNS server:/var/lib/dnsmasq:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# echo  "hello"
+hello
+[root@localhost ~]# 
+[root@localhost ~]# echo  '"hello"'
+"hello"
+[root@localhost ~]# 
+
+=====================================================================================
+[root@localhost ~]# echo  "\n\n"
+\n\n
+[root@localhost ~]# 
+[root@localhost ~]# echo  -e  "\n\n"
+
+
+
+[root@localhost ~]# echo  -e  "hello krishna\n\n"
+hello krishna
+
+
+[root@localhost ~]# echo "hello krishna"
+hello krishna
+[root@localhost ~]# 
+[root@localhost ~]# echo  -e  "hello \t krishna\n\n"
+hello 	 krishna
+
+
+[root@localhost ~]# 
+
+========================================================================================

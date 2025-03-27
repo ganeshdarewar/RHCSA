@@ -1,0 +1,285 @@
+==============================================================
+    Aliases 
+==============================================================
+
+It is used to create short name of any Linux based commands.
+
+
+1- default aliases
+
+2- custom aliases 
+
+
+# alias    ===> will display all the current working aliases
+
+[root@localhost ~]# alias 
+
+
+Syntax:-
+
+#alias   aliasname='actual complete command'
+
+
+Method:-1  How we can aliases as a TEMPORARY means after logout these aliases will not work
+
+[root@localhost ~]# alias   diskinfo='lsblk | grep disk'
+[root@localhost ~]# 
+[root@localhost ~]# diskinfo 
+sda      8:0    0    5G  0 disk 
+sdb      8:16   0   30G  0 disk 
+[root@localhost ~]# 
+[root@localhost ~]# alias  ipdekho='ifconfig'
+[root@localhost ~]# 
+[root@localhost ~]# ipdekho
+ 
+[root@localhost ~]# alias  c='clear'
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# c
+
+Method:-2  How we can aliases as a PERMANENT 
+
+
+[root@localhost ~]# vim .bashrc 
+
+alias c='clear'
+alias ipdekho='ifconfig'
+alias diskinfo='lsblk | grep disk'
+
+:wq!
+
+
+[root@localhost ~]# alias 
+alias c='clear'
+alias diskinfo='lsblk | grep disk'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias grep='grep --color=auto'
+alias ipdekho='ifconfig'
+alias l.='ls -d .* --color=auto'
+
+
+After logout these all aliases will perform on every login prompt
+
+============================================================
+
+How we can aliases directly in .bashrc file  ?
+
+
+[root@localhost ~]# vim  .bashrc 
+
+alias c='clear'
+alias ipdekho='ifconfig'
+alias diskinfo='lsblk | grep disk'
+alias machineuptime='uptime'
+
+:wq!
+
+[root@localhost ~]# 
+[root@localhost ~]# machineuptime
+bash: machineuptime: command not found...
+[root@localhost ~]# 
+
+Choice-1  we can run the  # bash   command  without logout to run  .bashrc file
+
+Choice-2  we can close this terminal and again we can open new terminal  
+
+[root@localhost ~]# machineuptime
+ 11:34:00 up  1:27,  2 users,  load average: 0.00, 0.00, 0.03
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+===========================================================
+[root@localhost ~]# unalias  c
+[root@localhost ~]# 
+[root@localhost ~]# unalias  ipdekho  
+[root@localhost ~]# 
+[root@localhost ~]# c
+bash: c: command not found...
+[root@localhost ~]# 
+[root@localhost ~]# ipdekho 
+bash: ipdekho: command not found...
+[root@localhost ~]# 
+
+==========================================================
+[root@localhost ~]# vim  .bashrc 
+
+delete all the new aliases
+
+
+:wq!
+
+[root@localhost ~]# bash
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# c
+bash: c: command not found...
+[root@localhost ~]# 
+[root@localhost ~]# ipdekho
+bash: ipdekho: command not found...
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# unalias  -a  
+[root@localhost ~]# 
+[root@localhost ~]# alias 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls  
+adding.sh  anaconda-ks.cfg  Desktop  Documents	Downloads  hello.sh  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls  --color  
+adding.sh  anaconda-ks.cfg  Desktop  Documents  Downloads  hello.sh  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# grep root  /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# grep  --color   root  /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+[root@localhost ~]# 
+
+
+====================================================================
+How we can create custom binary OR custom command ?
+[root@localhost ~]# date
+Sun Feb 23 11:40:19 AM IST 2025
+[root@localhost ~]# cal
+    February 2025   
+Su Mo Tu We Th Fr Sa
+                   1
+ 2  3  4  5  6  7  8
+ 9 10 11 12 13 14 15
+16 17 18 19 20 21 22
+23 24 25 26 27 28   
+                    
+[root@localhost ~]# uptime
+ 11:40:22 up  1:33,  2 users,  load average: 0.01, 0.03, 0.02
+[root@localhost ~]# 
+
+[root@localhost ~]# vim /usr/local/bin/startup
+
+date
+cal
+free -h
+echo welcome
+
+:wq!
+
+[root@localhost ~]# ls  -l  /usr/local/bin/startup
+-rw-r--r--. 1 root root 30 Feb 23 11:42 /usr/local/bin/startup
+[root@localhost ~]# 
+[root@localhost ~]# chmod  +x  /usr/local/bin/startup
+[root@localhost ~]# 
+[root@localhost ~]# ls  -l  /usr/local/bin/startup
+-rwxr-xr-x. 1 root root 30 Feb 23 11:42 /usr/local/bin/startup
+[root@localhost ~]# 
+[root@localhost ~]# 
+/usr/sbin/useradd
+[root@localhost ~]# which userdel
+/usr/sbin/userdel
+[root@localhost ~]# 
+[root@localhost ~]# which startup
+/usr/local/bin/startup
+[root@localhost ~]# 
+[root@localhost ~]# cat /usr/local/bin/startup
+date
+cal
+free -h
+echo welcome
+[root@localhost ~]# 
+[root@localhost ~]# startup 
+Sun Feb 23 11:44:09 AM IST 2025
+    February 2025   
+Su Mo Tu We Th Fr Sa
+                   1
+ 2  3  4  5  6  7  8
+ 9 10 11 12 13 14 15
+16 17 18 19 20 21 22
+23 24 25 26 27 28   
+                    
+               total        used        free      shared  buff/cache   available
+Mem:           7.5Gi       1.1Gi       5.8Gi        25Mi       564Mi       6.1Gi
+Swap:          2.0Gi          0B       2.0Gi
+welcome
+[root@localhost ~]# 
+
+
+
+[root@localhost ~]# su - soniya 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ startup
+Sun Feb 23 11:44:55 AM IST 2025
+    February 2025   
+Su Mo Tu We Th Fr Sa
+                   1
+ 2  3  4  5  6  7  8
+ 9 10 11 12 13 14 15
+16 17 18 19 20 21 22
+23 24 25 26 27 28   
+                    
+               total        used        free      shared  buff/cache   available
+Mem:           7.5Gi       1.1Gi       5.8Gi        25Mi       565Mi       6.1Gi
+Swap:          2.0Gi          0B       2.0Gi
+welcome
+[soniya@localhost ~]$ exit
+
+[root@localhost ~]# useradd mac
+[root@localhost ~]# 
+[root@localhost ~]# su - mac  
+[mac@localhost ~]$ 
+[mac@localhost ~]$ 
+[mac@localhost ~]$ vim  .bashrc 
+
+startup
+
+:wq!
+
+
+[root@localhost ~]# su - mac  
+Sun Feb 23 11:46:37 AM IST 2025
+    February 2025   
+Su Mo Tu We Th Fr Sa
+                   1
+ 2  3  4  5  6  7  8
+ 9 10 11 12 13 14 15
+16 17 18 19 20 21 22
+23 24 25 26 27 28   
+                    
+               total        used        free      shared  buff/cache   available
+Mem:           7.5Gi       1.1Gi       5.8Gi        25Mi       565Mi       6.1Gi
+Swap:          2.0Gi          0B       2.0Gi
+welcome
+[mac@localhost ~]$ 
+[mac@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+
+[root@localhost ~]# ls  /usr/local/bin
+startup
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf /usr/local/bin/startup 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# su - mac  
+bash: startup: command not found...
+[mac@localhost ~]$ 
+
+==================================================================== 
+[root@localhost ~]# echo $PATH
+/root/.local/bin:/root/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin
+[root@localhost ~]# 
+
+
+
+
+

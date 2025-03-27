@@ -1,0 +1,296 @@
+# grep   <options>     <string or word>    <filename or location of the file>                 ==> Example of File 
+
+                         OR
+
+# <any-xyz-command>   | grep  <options>   <word or string>                                        ==> Example of any commands output
+
+=========================================
+
+# grep root /etc/passwd     ===> Example on any file
+# grep  -n root /etc/passwd
+
+=========================================
+
+# lsblk | grep disk
+# lsblk | grep -n disk      ===> Example on any command 
+
+=========================================
+
+-n  ==> with line number 
+-c  ==> line count only but will not print the output
+-i  ==> ignore case sensitive
+-o  ==> only pattern
+-v  ==> invert maching lines
+-w  ==> exact word matching
+-A  ==> -A2 ==> after
+-B  ==> Before
+-C  ==> Common 
+^   ==> Beginneing of the line
+$   ==> end of the line
+-R  ==> Recursive  ==> to search any pattern inside the directory if don't know about the file location or filename 
+==================================================
+Examples of grep-egrep-and-fgrep command 
+==================================================
+
+  195  cat  /etc/passwd 
+  196  grep    root   /etc/passwd
+  197  grep   ftp    /etc/passwd
+  198  grep  --color root   /etc/passwd
+  199  grep  root   /etc/passwd
+  200  alias 
+  201  grep  -n root  /etc/passwd
+  202  grep  -n  ftp    /etc/passwd
+  203  grep  -c  root  /etc/passwd
+  204  grep  root    /etc/passwd | wc -l 
+  205  grep ROOT  /etc/passwd
+  206  grep -i  ROOT  /etc/passwd
+  207  grep   dhcp  /etc/passwd
+  208  grep -i     dhcp  /etc/passwd
+  209  grep -i  -n       dhcp  /etc/passwd
+  210  grep  -n  -i        dhcp  /etc/passwd
+  211  grep  -in          dhcp  /etc/passwd
+  212  grep  -i  -n          dhcp  /etc/passwd
+  213  grep -n  root  /etc/passwd
+  214  grep -c    root  /etc/passwd
+  215  grep  -n  -c    root  /etc/passwd
+  216  grep root  /etc/passwd
+  217  grep -o  root  /etc/passwd
+  218  grep -o  root  /etc/passwd  >  /tmp/string.txt 
+  219  cat  /tmp/string.txt 
+  220  grep root  /etc/passwd
+  221  grep -o root  /etc/passwd
+  222  grep -o -n -i  root  /etc/passwd
+  223  grep -o -n -i  ROOT  /etc/passwd
+  224  grep root  /etc/passwd
+  225  grep -v  root  /etc/passwd
+  226  grep -v -i    root  /etc/passwd
+  227  grep root  /etc/passwd
+  228  grep root  /etc/passwd  >  /tmp/matching-lines.txt  
+  229  grep -v   root  /etc/passwd  >  /tmp/non-matching-lines.txt  
+  230  cat  /tmp/matching-lines.txt 
+  231  cat /tmp/non-matching-lines.txt 
+  232  grep -c   root  /etc/passwd
+  233  grep -c  -v     root  /etc/passwd
+  234  grep root  /etc/passwd  | wc -l  
+  235  grep -v  root  /etc/passwd  | wc -l  
+
+
+  237  useradd manish
+  238  useradd manisha
+  239  grep  manisha  /etc/passwd
+  240  grep  manish   /etc/passwd
+  241  grep  -w manish   /etc/passwd
+  242  cat /etc/services  | wc -l  
+  243  grep rsync    /etc/services  
+  244  grep -w   rsync    /etc/services  
+  245  grep   873     /etc/services  
+  246  grep   -w   873     /etc/services  
+
+
+  248  grep manisha  /etc/passwd
+  249  grep -o   manisha  /etc/passwd
+  250  grep  manish  /etc/passwd
+  251  grep -o   manish  /etc/passwd
+  252  grep -o   -w  manish  /etc/passwd
+  253  grep  -w  manish  /etc/passwd
+
+  255  grep -n ftp /etc/passwd
+  256  grep -n -A2   ftp /etc/passwd
+  257  grep -A2   ftp /etc/passwd
+  258  grep -n  -A3   ftp /etc/passwd
+  259  grep -n  -B2   ftp /etc/passwd
+  260  grep -n  -C2   ftp /etc/passwd
+  261  lsblk 
+  262  lsblk | grep boot  
+  263  lsblk | grep -n -A1  boot  
+  264  lsblk | grep -n -B1  boot  
+  265  lsblk | grep -n -C1  boot  
+  266  history 
+
+
+
+[root@localhost ~]# grep -n -A2 root  /etc/passwd
+1:root:x:0:0:root:/root:/bin/bash
+2-bin:x:1:1:bin:/bin:/sbin/nologin
+3-daemon:x:2:2:daemon:/sbin:/sbin/nologin
+--
+10:operator:x:11:0:operator:/root:/sbin/nologin
+11-games:x:12:100:games:/usr/games:/sbin/nologin
+12-ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# grep  root    /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# grep  "root"    /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# grep  'root'    /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# grep  root    /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+[root@localhost ~]# 
+
+[root@localhost ~]# grep  "DNS server"  /etc/passwd
+dnsmasq:x:985:980:Dnsmasq DHCP and DNS server:/var/lib/dnsmasq:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# grep  'DNS server'  /etc/passwd
+dnsmasq:x:985:980:Dnsmasq DHCP and DNS server:/var/lib/dnsmasq:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# grep -i  'dns server'  /etc/passwd
+dnsmasq:x:985:980:Dnsmasq DHCP and DNS server:/var/lib/dnsmasq:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+  276  grep  root  /etc/passwd
+  277  grep  '^root'  /etc/passwd
+  278  grep  '^ftp'  /etc/passwd
+  279  grep  'bash$'  /etc/passwd
+  280  grep  -c   'bash$'  /etc/passwd
+  281  grep    'nologin$'  /etc/passwd
+  282  grep    'bash$'  /etc/passwd
+  283  grep    '^root'  /etc/passwd
+  284  cat  /etc/selinux/config 
+  285  grep -i selinux   /etc/selinux/config 
+  286  l
+  287  grep -i  '^selinux'   /etc/selinux/config 
+  288  cat   /etc/selinux/config 
+  289  grep -i  '^selinux'   /etc/selinux/config 
+  290  grep -i  '^selinux'   /etc/selinux/config   >  /tmp/selinux-info  
+  291  cat  /tmp/selinux-info 
+  292  cat  /etc/crontab 
+  293  grep    '^[#]'  /etc/crontab 
+  294  grep    '^#'  /etc/crontab 
+  295  grep    '^[#]'  /etc/crontab 
+  296  grep    '^[^#]'  /etc/crontab 
+  297  grep    '^[^#]'  /etc/crontab   >   /tmp/non-commented-lines
+  298  cat  /tmp/non-commented-lines 
+  299  grep    '^[#]'  /etc/crontab 
+  300  grep    '^[#]'  /etc/crontab   >  /tmp/commented-lines.txt  
+  301  cat  /tmp/commented-lines.txt 
+  302  grep    ^#  /etc/crontab 
+  303  grep    '^#'  /etc/crontab 
+  304  grep    '^[#]'  /etc/crontab 
+  305  grep    '^[^#]'  /etc/crontab 
+  306  grep -v  ^#   /etc/crontab 
+  307  grep  '^[#]'   /etc/crontab 
+  308  grep  '^[^#]'   /etc/crontab 
+  309  history 
+
+
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1 1024M  0 rom  
+[root@localhost ~]# lsblk  |  grep boot  
+├─sda1   8:1    0    1G  0 part /boot
+[root@localhost ~]# 
+[root@localhost ~]# lsblk  |  grep -i  swap
+└─sda3   8:3    0    2G  0 part [SWAP]
+[root@localhost ~]# 
+
+[root@localhost ~]# lscpu  |  grep "Hypervisor vendor"
+Hypervisor vendor:               VMware
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# netstat -tunlp 
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      917/sshd: /usr/sbin 
+tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN      914/cupsd           
+tcp6       0      0 :::22                   :::*                    LISTEN      917/sshd: /usr/sbin 
+tcp6       0      0 ::1:631                 :::*                    LISTEN      914/cupsd           
+udp        0      0 0.0.0.0:59829           0.0.0.0:*                           771/avahi-daemon: r 
+udp        0      0 127.0.0.1:323           0.0.0.0:*                           797/chronyd         
+udp        0      0 0.0.0.0:5353            0.0.0.0:*                           771/avahi-daemon: r 
+udp6       0      0 :::56452                :::*                                771/avahi-daemon: r 
+udp6       0      0 ::1:323                 :::*                                797/chronyd         
+udp6       0      0 :::5353                 :::*                                771/avahi-daemon: r 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# netstat -tunlp  |  grep sshd 
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      917/sshd: /usr/sbin 
+tcp6       0      0 :::22                   :::*                    LISTEN      917/sshd: /usr/sbin 
+[root@localhost ~]# 
+[root@localhost ~]# grep  root  /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# grep  ftp  /etc/passwd
+ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# grep  games  /etc/passwd
+games:x:12:100:games:/usr/games:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# grep  root ftp games  /etc/passwd
+grep: ftp: No such file or directory
+grep: games: No such file or directory
+/etc/passwd:root:x:0:0:root:/root:/bin/bash
+/etc/passwd:operator:x:11:0:operator:/root:/sbin/nologin
+[root@localhost ~]# 
+
+
+  317  grep  root  /etc/passwd
+  318  grep  ftp  /etc/passwd
+  319  grep  games  /etc/passwd
+  320  grep  root ftp games  /etc/passwd
+  321  grep  -e root -e  ftp -e  games  /etc/passwd
+  322  grep -n  -i    -e root -e  ftp -e  games  /etc/passwd
+  323  egrep -n  -i   'root|ftp|games'   /etc/passwd
+  324  grep  -E   -n  -i   'root|ftp|games'   /etc/passwd
+  325  lsblk 
+  326  lsblk  |  grep -e boot -e disk 
+  327  lsblk  |  egrep 'boot|disk'
+  328  lsblk  |  grep -E   'boot|disk'
+  329  ifconfig 
+  330  ifconfig |  grep inet  
+  331  ifconfig |  grep -w  inet  
+  332  ifconfig |  grep  ether
+  333  ifconfig |  grep -e  ether -e  inet
+  334  ifconfig |  grep -w   -e  ether -e  inet
+  335  ifconfig |  egrep -w   'ether|inet'
+  336  ifconfig |  grep -E   -w   'ether|inet'
+  337  ifconfig |  grep -E   -w   'ether|inet' | head  -n 2 
+
+  339  fgrep  root  /etc/passwd   /etc/crontab 
+  340  grep -F    root  /etc/passwd   /etc/crontab 
+  341  grep     root  /etc/passwd   /etc/crontab 
+  342  fgrep     'root|games|ftp'   /etc/passwd   /etc/crontab 
+  343  egrep     'root|games|ftp'   /etc/passwd   /etc/crontab 
+
+
+# vim /tmp/example
+
+
+Hi, @re you usin.g geeks*forgeeks for learni\ng computer ^hello science con/cepts. Geeks*forgeeks is best for learni\ng. 
+
+:wq!
+
+
+
+
+[root@localhost ~]# fgrep  '^hello'   /tmp/example 
+
+  356  grep  -o   root  /etc/passwd
+  357  grep  -o   root  /etc/passwd |  uniq  
+  358  grep  -o   root  /etc/passwd |  uniq  -c  
+  359  grep  -o  -E    'root|ftp|games'  /etc/passwd 
+  360  grep  -o  -E    'root|ftp|games'  /etc/passwd  | uniq  
+
+
+======================================================================================
+
+[root@localhost ~]# ls -a  |  grep  "^[.]"

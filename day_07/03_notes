@@ -1,0 +1,61 @@
+[root@localhost ~]# grep -o root /etc/passwd # only pattern #RHCSA
+root
+root
+root
+root
+
+
+[root@localhost ~]# grep -v root /etc/passwd  # non matching line # invert match
+
+
+[root@localhost ~]# ifconfig | grep -w inet # exact word
+inet 192.168.211.128  netmask 255.255.255.0  broadcast 192.168.211.255
+inet 127.0.0.1  netmask 255.0.0.0
+
+
+
+[root@localhost ~]# grep '^root' /etc/passwd   # begiing of the line
+[root@localhost ~]# grep '^ftp' /etc/passwd
+ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
+
+
+root@localhost ~]# grep 'bash$' /etc/passwd   # ends with bash
+root:x:0:0:root:/root:/bin/bash
+gdarewar:x:1000:1000:Ganeshr Darewar:/home/gdarewar:/bin/bash
+student:x:1001:1001::/home/student:/bin/bash
+student1:x:1002:1002::/home/student1:/bin/bash
+amit:x:1003:1003::/home/amit:/bin/bash
+ganu:x:1004:1004::/linux/ganu:/bin/bash
+ramesh:x:1005:1005::/linux/ramesh:/bin/bash
+[root@localhost ~]#
+
+
+
+[root@localhost ~]# grep -i '^selinux' /etc/selinux/config   # RHCSA
+SELINUX=enforcing
+SELINUXTYPE=targeted
+[root@localhost ~]#
+
+
+
+
+[root@localhost ~]# grep '^[#]' /etc/crontab # starts with commented
+# For details see man 4 crontabs
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+
+
+[root@localhost ~]# grep '^[^#]' /etc/crontab # non commented
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+[root@localhost ~]#
+
+
+

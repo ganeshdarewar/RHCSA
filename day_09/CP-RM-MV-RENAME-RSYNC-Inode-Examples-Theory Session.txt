@@ -1,0 +1,80 @@
+===================================================================================================
+Examples of cp-rm-mv-rename-and-rsync commands - Theory 
+===================================================================================================
+
+Task-1  How to copy any file and directory from one place to another place with in the machine ?  
+
+Task-2  How to remove any file and directory from any place ?   
+
+Task-3  How to move any file and directory from one place to another place ?  
+
+Task-4  How we can perform rename operation with the help of rename command ?   
+
+===================================================================================================
+
+How to copy any files and directory from one place to another place ?
+
+# cp  <options>   <source>   <Destination>
+
+-i   ==> Interactive   ==> y or n ==>  by default or inbuilt ==> to copy only file  
+-r   ==> Recursively   ==> to copy directory and file both   ==> r is the mandatory option to copy any directory data  
+-v   ==> Verbose       ==> Optional ==> will display the copy operation on the screen  
+-f   ==> Forcefully    ==> Optional  
+
+===================================================================================================
+
+-p   ==> with permission or preserve mode    [ optional ]
+
+
+===================================================================================================
+
+How to remove any file and directory from any place ?
+
+#  rm  <options>  <source>
+
+options:-
+
+-i   ==> Interactive   ==> y or n ==>  by default  
+-r   ==> Recursively   ==> to remove any directory and file both 
+-v   ==> Verbose       ==> will display remove  operation  
+-f   ==> Forcefully    or without interactive mode   
+
+===================================================================================================
+rmdir   ==> it can remove only blank directory but not a file.
+===================================================================================================
+
+How to move any file or directory from one place to another place ?
+
+# mv <options>  <source>   <destination>
+
+-i  ==>Interactive  ==> y or n ==>  by default
+-v  ==>Verbose  [optional]
+-f  ==> Forcefully [optional]
+
+it can move files and directory both without -r option.
+
+===================================================================================================
+
+Note:  mv command is also use for rename any file and directory name
+
+# mv  oldname newname 
+
+===================================================================================================
+
+# rename  oldname newname oldname 
+
+=================================================================================================== 
+
+How to copy incremental data from one place to another place ?
+
+rsync       ==> local to local  OR with in the machine
+            ==> network to network  OR  between the machine
+
+# rsync -av  <source>  <destination>   ==> with in the machine 
+
+
+1- with in the machine
+2- between the machine
+
+
+===================================================================================================

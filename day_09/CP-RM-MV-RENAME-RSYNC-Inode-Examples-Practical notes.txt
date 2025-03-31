@@ -1,0 +1,504 @@
+===================================================================================================
+Examples of cp-rm-mv-rename-and-rsync command- Notes
+===================================================================================================
+
+Examples of CP Command  
+
+===================================================================================================
+
+[root@localhost ~]# history 
+    1  ls 
+    2  ls  /
+    3  ls /root 
+    4  ls  
+    5  touch abc
+    6  mkdir /data 
+    7  ls
+    8  ls  /
+    9  ls /data
+   10  ls
+   11  cp  abc   /data 
+   12  ls  
+   13  ls /data
+   14  touch abc1
+   15  touch abc2
+   16  touch abc3
+   17  ls
+   18  cp abc   /data
+   19  cp -i  abc   /data
+   20  cp -i  abc1   /data
+   21  ls /data
+   22  cp  ~/abc2   /data
+   23  ls /data
+   24  cp /root/abc3  /data
+   25  ls /data
+   26  cp   /etc/crontab    /tmp  
+   27  ls /tmp 
+   28  mkdir /fedora
+   29  touch /fedora/abc{1..5}
+   30  ls /fedora
+   31  cp  /fedora   /data  
+   32  cp  /fedora/abc1  /tmp 
+   33  cp -r   /fedora   /data  
+   34  ls /data
+   35  ls /data/fedora 
+   36  ls  /
+   37  cp  -rf   /etc   /data 
+   38  ls /data
+   39  ls /etc 
+   40  ls /data/etc 
+   41  mkdir  /data-1
+   42  mkdir  /data-2
+   43  mkdir -p   /kr/network/cloud 
+   44  tree  /kr 
+   45  cp -rf /kr   /data-1  
+   46  tree  /data-1
+   47  cp -rvf   /kr   /data-2
+   48  mkdir  /data-3
+   49  ls
+   50  cp -rf   *    /data-3 
+   51  ls /data-3
+   52  mkdir  /data-4
+   53  mkdir  /data-5
+   54  ls
+   55  cp -rf   abc*     /data-4 
+   56  ls /data-4
+   57  cp -rf   *.cfg      /data-5
+   58  ls /data-5
+   59  mkdir   /data-6
+   60  cp -rf    *ks*   /data-6
+   61  ls /data-6
+   62  mkdir   /data-7
+   63  ls
+   64  cp -rf   ana*.cfg   /data-7 
+   65  ls /data-7
+   66  ls 
+   67  ls   abc*
+   68  ls   *.cfg 
+   69  mkdir /tmp/conf-data 
+   70  ls /etc 
+   71  ls /etc/*.conf  
+   72  ls -l  /etc/yum.conf
+   73  ls -l  /etc/dnf/dnf.conf 
+   74  cp -rf   /etc/*.conf    /tmp/conf-data 
+   75  ls /tmp/conf-data
+   76  mkdir  /tmp/data-1
+   77  mkdir  /tmp/data-2
+   78  cp -rf   /etc/a*.conf   /tmp/data-1
+   79  ls /tmp/data-1
+   80  cp -rf   /etc/*dump*.conf   /tmp/data-2
+   81  ls /tmp/data-2 
+   82  mkdir /tmp/data-3
+   83  mkdir /tmp/data-4
+   84  cp -rf   /etc   /tmp/data-3  
+   85  ls /tmp/data-3
+   86  cp -rf   /etc/*    /tmp/data-4 
+   87  ls /tmp/data-4 
+   88  mkdir /tmp/data-5
+   89  cd /etc  
+   90  cp -rf  *    /tmp/data-5 
+   91  ls /tmp/data-5 
+   92  cd
+   93  touch manish  
+   94  cp  ./manish   /tmp
+   95  touch manish1  
+   96  touch ~/manish1   /tmp
+   97  touch manish2
+   98  cp   manish2   /tmp
+   99  ls /tmp 
+  100  touch .tcs  
+  101  ls 
+  102  l.
+  103  cp -rf  .tcs  /data 
+  104  cd /dat
+  105  cd /data
+  106  ls 
+  107  l.
+  108  cd
+  109  l.
+  110  mv  .tcs   tcs  
+  111  ls
+  112  mkdir  /tmp/backup  
+  113  cp -rf  /etc   /home  /tmp/backup  
+  114  ls /tmp/backup
+  115  cp /etc/crontab    /etc/passwd   /etc/group   /data  
+  116  ls /data
+  117  cp /etc/crontab 
+  118  cp /etc/crontab  .
+  119  ls
+  120  cp /etc/crontab  mycrontab 
+  121  ls
+  122  cat  /etc/crontab  >   pricrontab  
+  123  cat  pricrontab 
+  124  lsblk > /tmp/diskinfo 
+  125  cat /tmp/diskinfo 
+  126  cp /etc/crontab  /root ;  cp  /etc/crontab   /fedora  
+  127  mkdir /tmp/mydir-1
+  128  cp -rf  /etc  /tmp/mydir-1 
+  129  ls /tmp/mydir-1
+  130  ls /tmp/mydir-1/etc
+  131  cp -rf  /etc  /tmp/mydir-2
+  132  ls  /tmp/mydir-2 
+  133  mkdir  /tmp/mydir-3
+  134  cp -rf  /etc  /tmp/mydir-3
+  135  ls /tmp/mydir-3
+  136  ls /tmp/mydir-3/etc 
+  137  history 
+  138  touch rajeev 
+  139  cp rajeev  /network 
+  140  ls /
+  141  mkdir  /cloud 
+  142  cp rajeev  /cloud 
+  143  ls /cloud
+  144  mkdir /tmp/perm-1
+  145  mkdir /tmp/perm-2
+  146  ls 
+  147  ls -l abc  
+  149  cp  abc   /tmp/perm-1 
+  150  ls -l /tmp/perm-1/abc 
+  151  cp  -p  abc   /tmp/perm-2
+  152  ls -l  /tmp/perm-2/abc 
+  153  history 
+
+  154  touch  neeraj 
+  155  cp   ./neeraj   /tmp 
+  156  ls /tmp
+  157  touch /.neeraj  
+  158  cp -rf  /.neeraj   /kr  
+  159  cd /
+  160  l.
+  161  cd
+
+===================================================================================================
+Examples of rm command  
+
+  164  ls  
+  165  rm abc
+  166  rm -i   abc
+  167  ls
+  168  rm -f  abc1  abc2  abc3
+  169  ls  
+  170  ls /data
+  171  rm  /data
+  172  rm -rf   /data
+  173  ls /
+  174  rm -rvf  /kr
+  175  ls 
+  176  rm -rf  manish*    mycrontab  neeraj  pricrontab tcs rajeev crontab 
+  177  ls  
+  178  ls  /
+  179  rm -rf /perm-1 
+  180  ls /
+  181  rm -rf  /data-*
+  182  ls /
+  183  rm -rf  /fedora  /network 
+  184  ls /
+  185  rm -rvf  /cloud  
+  186  ls  /
+  187  ls /tmp
+  188  rm -rf  /tmp/perm-*  
+  189  ls  /tmp  
+  190  rm -rf  /tmp/mydir-*    /tmp/data-*   
+  191  ls /tmp 
+  192  mkdir  /data
+  193  touch /data/abc{1..5}
+  194  ls /data
+  195  rm -rf /data/abc5 
+  196  ls /data
+  197  rm -rf /data/*
+  198  ls /data
+  199  rm -rf /data
+  200  ls /
+  201  mkdir /linux  
+  202  touch  /abc
+  203  touch abc
+  204  ls 
+  205  rm -rf   /abc  
+  206  ls /
+  207  rm -rf   / 
+  208  rm -rf   /abc  
+  209   
+  210  mkdir /data
+  211  touch /data/abc{1..5}
+  212  rm -rf  /data/* 
+  213  ls /data
+  214  touch /data/abc{1..5}
+  215  rm -rvf  /data/* 
+  218  mkdir /data
+  219  cd /data
+  220  ls
+  221  touch abc{1..5}
+  222  ls
+  223  rm -rf  *  
+  224  ls
+  225  cd
+[root@localhost ~]# mkdir  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# rmdir  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mkdir  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# touch /redhat/abc{1..5}
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# rmdir  /redhat
+rmdir: failed to remove '/redhat': Directory not empty
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf  /redhat
+[root@localhost ~]# 
+
+===================================================================================================
+Examples of mv and rename command  
+===================================================================================================
+  234  touch abc  
+  235  mkdir /network  
+  236  ls 
+  237  mv abc  /network
+  238  ls
+  239  ls /network
+  240  mv   /network/abc   /root 
+  241  ls 
+  242  mkdir linux 
+  243  mv linux   /network
+  244  ls 
+  245  ls /network
+  246  mv  /network/linux   /root 
+  247  ls  
+  248  touch xyz  
+  249  mkdir  /tmp/data 
+  250  mv abc xyz /tmp/data
+  251  ls /tmp/data
+  252  touch abc
+  253  touch xyz 
+  254  ls
+  255  mv abc xyz  /tmp/newdata
+  256  mkdir   /tmp/newdata
+  257  mv abc xyz  /tmp/newdata
+  258  ls /tmp/newdata
+  259  ls
+  260  touch xyz 
+  261  ls 
+  262  mv  xyz  newxyz   
+  263  ls
+  264  mv newxyz  xyz 
+  265  ls 
+  266  mkdir newdir  
+  267  ls
+  268  mv  xyz newdir 
+  269  ls
+  270  ls newdir  
+  271  mv  newdir/xyz    .
+  272  ls
+  273  mv  newdir   olddir 
+  274  ls
+  275  touch tcs  
+  276  ls
+  277  rename tcs  newtcs tcs 
+  278  ls
+  279  mv newtcs tcs  
+  280  ls
+  281  rename  tcs  hcl  tcs  
+  282  ls
+  283  history 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Documents  hcl    Music   Pictures  Templates  xyz
+Desktop          Downloads  linux  olddir  Public    Videos
+[root@localhost ~]# 
+[root@localhost ~]# mv hcl  .hcl  
+[root@localhost ~]# 
+[root@localhost ~]# ls 
+anaconda-ks.cfg  Documents  linux  olddir    Public     Videos
+Desktop          Downloads  Music  Pictures  Templates  xyz
+[root@localhost ~]# 
+[root@localhost ~]# l.
+.   .bash_logout   .bashrc  .config  .hcl    .tcshrc
+..  .bash_profile  .cache   .cshrc   .local
+[root@localhost ~]# 
+[root@localhost ~]# mv .hcl   hcl  
+[root@localhost ~]# ls
+anaconda-ks.cfg  Documents  hcl    Music   Pictures  Templates  xyz
+Desktop          Downloads  linux  olddir  Public    Videos
+[root@localhost ~]# 
+
+[root@localhost ~]# mkdir /newdir  
+[root@localhost ~]# 
+[root@localhost ~]# touch  /newdir/abc
+[root@localhost ~]# touch  /newdir/.xyz
+[root@localhost ~]# 
+[root@localhost ~]# mkdir  /tmp/back
+[root@localhost ~]# 
+[root@localhost ~]# cp -rf   /newdir   /tmp/back
+[root@localhost ~]# 
+[root@localhost ~]# cd /tmp/back
+[root@localhost back]# 
+[root@localhost back]# ls 
+newdir
+[root@localhost back]# ls newdir
+abc
+[root@localhost back]# ls  -a  newdir
+.  ..  abc  .xyz
+[root@localhost back]# 
+[root@localhost back]# cd
+[root@localhost ~]# 
+
+===================================================================================================
+Difference between cp and rsync command ?
+
+  305  mkdir  /sqldata  
+  306  mkdir /backup  
+  307  ls /sqldata
+  308  ls /backup
+  309  touch /sqldata/abc{1..3}
+  310  rsync   -av   /sqldata   /backup  
+  311  ls /sqldata
+  312  ls /backup
+  313  ls /backup/sqldata 
+  314  touch /sqldata/abc4 
+  315  rsync   -av   /sqldata   /backup  
+  316  ls /sqldata
+  317  ls /backup/sqldata
+  318  touch /sqldata/abc5
+  319  rsync   -av   /sqldata   /backup  
+  320  ls /sqldata
+  321  ls /backup/sqldata
+  322  echo hello india >  /sqldata/abc1 
+  323  cat /sqldata/abc1
+  324  cat  /backup/sqldata/abc1 
+  325  rsync   -av   /sqldata   /backup  
+  326  cat /sqldata/abc1
+  327  cat  /backup/sqldata/abc1 
+  328  cp /etc/crontab  /sqldata
+  329  ls /sqldata
+  330  rsync   -av   /sqldata   /backup   --dry-run 
+  331  ls /sqldata
+  332  ls /backup/sqldata
+  333  rsync   -av   /sqldata   /backup 
+  334  ls /backup/sqldata
+  335  ls /sqldata
+
+===================================================================================================
+How we can use this concept with CRONTAB utility ?
+
+[root@localhost ~]# crontab -l  
+no crontab for root
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# crontab -e  
+
+*/2     *       *       *       *       rsync -av  /sqldata     /backup 
+
+
+:wq!
+
+[root@localhost ~]# crontab -l  
+*/2	*	*	*	*	rsync -av  /sqldata     /backup 
+[root@localhost ~]# 
+
+[root@localhost ~]# touch  /sqldata/xyz{1..5}
+[root@localhost ~]# 
+[root@localhost ~]# ls /sqldata
+abc1  abc2  abc3  abc4  abc5  crontab  xyz1  xyz2  xyz3  xyz4  xyz5
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls /backup/sqldata
+abc1  abc2  abc3  abc4  abc5  crontab
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# tail  -f  /var/log/cron 
+
+Press CTRL + C  
+
+
+[root@localhost ~]# ls /sqldata
+abc1  abc2  abc3  abc4  abc5  crontab  xyz1  xyz2  xyz3  xyz4  xyz5
+[root@localhost ~]# 
+[root@localhost ~]# ls /backup/sqldata
+abc1  abc2  abc3  abc4  abc5  crontab  xyz1  xyz2  xyz3  xyz4  xyz5
+[root@localhost ~]# 
+
+[root@localhost ~]# crontab  -r 
+[root@localhost ~]# 
+[root@localhost ~]# crontab  -l  
+no crontab for root
+[root@localhost ~]# 
+
+===================================================================================================
+
+Difference between cp and mv command ?
+
+Inode Number  ===> have uniq number for every files or directory in linux 
+
+===================================================================================================
+[root@localhost ~]# touch abc  
+[root@localhost ~]# 
+[root@localhost ~]# ls 
+abc              Desktop    Downloads  linux  olddir    Public     Videos
+anaconda-ks.cfg  Documents  hcl        Music  Pictures  Templates  xyz
+[root@localhost ~]# 
+[root@localhost ~]# ls -i  abc  
+26442619 abc
+[root@localhost ~]# 
+[root@localhost ~]# touch /tmp/abc
+[root@localhost ~]# 
+[root@localhost ~]# ls -i  /tmp/abc
+8629428 /tmp/abc
+[root@localhost ~]# 
+
+[root@localhost ~]# 
+[root@localhost ~]# find  /   -name    abc  
+/tmp/abc
+/tmp/data/abc
+/tmp/newdata/abc
+/tmp/back/newdir/abc
+/root/abc
+/newdir/abc
+[root@localhost ~]# 
+[root@localhost ~]# ls -i  abc  
+26442619 abc
+[root@localhost ~]# 
+[root@localhost ~]# find  /   -inum  26442619      
+/root/abc
+[root@localhost ~]# 
+
+[root@localhost ~]# 
+[root@localhost ~]# mkdir /data-1
+[root@localhost ~]# mkdir /data-2
+[root@localhost ~]# 
+[root@localhost ~]# ls
+abc              Desktop    Downloads  linux  olddir    Public     Videos
+anaconda-ks.cfg  Documents  hcl        Music  Pictures  Templates  xyz
+[root@localhost ~]# 
+[root@localhost ~]# ls -i abc 
+26442619 abc
+[root@localhost ~]# 
+[root@localhost ~]# cp   abc  /data-1
+[root@localhost ~]# 
+[root@localhost ~]# ls -i  /data-1/abc 
+2535108 /data-1/abc
+[root@localhost ~]# 
+[root@localhost ~]# mv abc  /data-2
+[root@localhost ~]# 
+[root@localhost ~]# ls -i /data-2/abc 
+26442619 /data-2/abc
+[root@localhost ~]# 
+
+========================================================================================
+[root@localhost ~]# grep -i   skel  /etc/default
+grep: /etc/default: Is a directory
+[root@localhost ~]# 
+[root@localhost ~]# grep -i  -R   skel  /etc/default
+/etc/default/useradd:SKEL=/etc/skel
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# grep -i -n    -R   skel  /etc/default
+/etc/default/useradd:7:SKEL=/etc/skel
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+=======================================================================================
+
+
+

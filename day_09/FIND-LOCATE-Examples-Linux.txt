@@ -1,0 +1,210 @@
+============================================================
+Locate and Find command examples
+============================================================
+
+
+============================================================
+IN Windows ==> Disk  ==> Partition ==> C:  D:  E: 
+
+In Linux   ==> DISK  ==> Partition ==> partition name ==> different 
+
+Data store  ==>   /  ==> system defined data + custom data  
+
+============================================================
+In Linux systems, find and locate commands are useful and they are used for a 
+similar purpose to search for a file in the system.
+============================================================
+
+Locate Command 
+
+1-  locate command in Linux is used to find the files by name
+2-  The locate utility works better and faster than find command
+3-  Opposite to find, the locate command doesn't search the entire filesystem,
+    but looks through a regularly updated file database [/var/lib/mlocate/mlocate.db] 
+    in the system. Thus, the search completes much faster.
+
+============================================================ 
+
+FIND Command
+
+
+it is use to find out the data [file and directory ] location
+in my machine with respective of different different types options OR Conditions as per demands.
+
+============================================================
+
+# locate   <options>    <name> 
+
+============================================================   
+
+# find    location   options   argument
+                     
+============================================================
+Options:-
+
+-name                          
+-iname             
+-inum             
+-size             
+-type              
+-empty                 
+-perm              
+          
+==================================
+-exec              
+==================================
+-user              
+-group             
+-atime
+-amin
+-ctime
+-cmin
+-mtime
+-mmin
+
+.........   so on  
+==================================
+
+   
+
+==================================
+
+=========================================================================
+Examples of locate command 
+
+[root@localhost ~]# which locate 
+/usr/bin/locate
+[root@localhost ~]# 
+[root@localhost ~]# which find 
+/usr/bin/find
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qf  /usr/bin/locate
+mlocate-0.26-30.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qf  /usr/bin/find 
+findutils-4.8.0-5.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# history 
+    1  locate  useradd
+    2  cat  /etc/default/useradd
+    3  locate  userdel  
+    4  locate  crontab  
+    5  locate  anacrontab  
+    6  locate  CRONTAB  
+    7  locate  -i  CRONTAB  
+    8  locate  -i -n 5   CRONTAB  
+    9  locate  crontab  
+   10  locate  crontab   |  grep  bash 
+   11  locate   shadow 
+   12  locate -n 5     shadow 
+   13  find /   -name crontab 
+   14  find /etc   -name crontab 
+   15  find /usr     -name crontab 
+   16  find /   -name *crontab* 
+   17  locate   crontab 
+   18  find /   -name  crontab
+   19  find /   -name  crontab*
+   20  find /   -name  *crontab*
+   21  locate   crontab 
+   22  touch krnetwork 
+   23  ls  
+   24  locate krnetwork
+   25  find /  -name krnetwork 
+   26  locate  -S  
+   27  updatedb 
+   28  locate  -S  
+   29  locate krnetwork
+   30  touch   japan
+   31  locate japan
+   32  find  / -name   japan
+   33  updatedb 
+   34  locate  -S  
+   35  locate japan
+
+==========================================================================================
+
+[root@localhost ~]# find  /etc  -size  +2M
+/etc/udev/hwdb.bin
+/etc/selinux/targeted/policy/policy.33
+[root@localhost ~]# 
+[root@localhost ~]# du -sh  /etc/udev/hwdb.bin
+12M	/etc/udev/hwdb.bin
+[root@localhost ~]# 
+[root@localhost ~]# du -s -h  /etc/udev/hwdb.bin
+12M	/etc/udev/hwdb.bin
+[root@localhost ~]# 
+[root@localhost ~]# du -s   /etc/udev/hwdb.bin
+11528	/etc/udev/hwdb.bin
+[root@localhost ~]# 
+[root@localhost ~]# du -sh   /etc/udev/hwdb.bin
+12M	/etc/udev/hwdb.bin
+[root@localhost ~]# 
+
+==========================================================================================
+[root@localhost ~]# find  /etc  -size  +2M 
+/etc/udev/hwdb.bin
+/etc/selinux/targeted/policy/policy.33
+[root@localhost ~]# 
+[root@localhost ~]# find  /etc  -size  +2M  -size -15M 
+/etc/udev/hwdb.bin
+/etc/selinux/targeted/policy/policy.33
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cp -rf  /etc/udev/hwdb.bin    /tmp/datasize
+[root@localhost ~]# cp -rf  /etc/selinux/targeted/policy/policy.33   /tmp/datasize 
+[root@localhost ~]# 
+[root@localhost ~]# ls /tmp/datasize
+hwdb.bin  policy.33
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf /tmp/datasize
+[root@localhost ~]# 
+[root@localhost ~]# mkdir /tmp/datasize  
+
+
+[root@localhost ~]# find  /etc  -size  +2M  -size -15M -exec  cp  -rf {}  /tmp/datasize    \;
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls /tmp/datasize
+hwdb.bin  policy.33
+[root@localhost ~]# 
+[root@localhost ~]# find  /tmp/datasize/ -size +2M 
+/tmp/datasize/hwdb.bin
+/tmp/datasize/policy.33
+[root@localhost ~]# 
+[root@localhost ~]# touch  /tmp/datasize/abc{1..5}
+[root@localhost ~]# 
+[root@localhost ~]# ls /tmp/datasize
+abc1  abc2  abc3  abc4  abc5  hwdb.bin  policy.33
+[root@localhost ~]# 
+[root@localhost ~]# find  /tmp/datasize/ -size +2M -exec  rm -rf  {}  \;  
+[root@localhost ~]# 
+[root@localhost ~]# ls /tmp/datasize
+abc1  abc2  abc3  abc4  abc5
+[root@localhost ~]# 
+
+
+[root@localhost ~]# find  /etc  -size +2M
+/etc/udev/hwdb.bin
+/etc/selinux/targeted/policy/policy.33
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# du -sh  /etc/udev/hwdb.bin
+12M	/etc/udev/hwdb.bin
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# du -sh  /etc/selinux/targeted/policy/policy.33
+3.4M	/etc/selinux/targeted/policy/policy.33
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# find  /etc  -size +2M  -exec du -sh  {}   \;
+12M	/etc/udev/hwdb.bin
+3.4M	/etc/selinux/targeted/policy/policy.33
+[root@localhost ~]# 
+[root@localhost ~]# find  /etc  -size +2M  
+/etc/udev/hwdb.bin
+/etc/selinux/targeted/policy/policy.33
+[root@localhost ~]# 
+[root@localhost ~]# find  /etc  -size +2M  -exec ls -i  {}   \;
+17378059 /etc/udev/hwdb.bin
+17922453 /etc/selinux/targeted/policy/policy.33

@@ -1,0 +1,448 @@
+==========================================
+
+Part-1 VI and VIM Basic operations
+
+Part-2 VIM Advance operations OR advance short keys
+
+==========================================
+==========================================
+
+Types of mode in  vim editor ?
+
+1- Insert Mode--->   to insert text into any file.
+
+2- ESC Mode------>   to  perform any types of operation using any available VI and VIM based short keys.
+
+Example:  copy, paste, undo, redo, delete ...etc..
+
+3- Command or  Colon Mode--->  to run any VI and VIM based command.
+
+Example:         :wq   (save and quit) 
+
+========================================
+========================================
+
+[root@localhost ~]# head  -n 20 /etc/passwd  > example  
+[root@localhost ~]# 
+[root@localhost ~]# ls 
+anaconda-ks.cfg  Desktop  Documents  Downloads  example  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# vim example 
+
+========================================
+
+Notes:-
+
+========================================
+
+Example of insert mode 
+
+ i             { to insert text before the cursor }          ===> DONE
+ a             { to insert text after the cursor  }          ===> DONE
+ o             { to insert new line below of the cursor }    ===> DONE
+ shit + o      { to insert line above of the cursor }        ===> DONE
+    
+Example of ESC  mode 
+
+ yy           { to copy any line }                          ==> DONE    ==>  nyy  where n is the number of lines 
+ p            { to paste the content }                      ==> DONE
+ dd           { to delete any line }                        ==> DONE
+ u            { undo }                                      ==> DONE
+ ctrl + r     { redo }                                      ==> DONE
+ cc           { to cut copy any line }                      ==> DONE
+ yw	      { to copy any word }                          ==> DONE
+ dw           { to delete any word }                        ==> DONE
+ cw           { to cut copy word }                          ==> DONE
+ p            { to paste the content}                       ==> DONE
+
+
+ shift + d    { to delete line from the cursor }            ==> DONE
+ x 	      { to delete particular characters in forward side }  ==> DONE   
+ shift + x    { to delete particular characters in backward side } ==> DONE
+ shift + g    { to go in bottom of the file }                      ==> DONE
+ gg	      { to move cursor in top of the file }
+ zero         { to move cursor in begining of the line }{numeric zero }  OR HOME
+ shift + $    { to move cursor in end of the line }   OR END
+ b	      { to move cursor word by word in back side }   
+ w	      { to move cursor word by word in forward side }
+ /root	      { to search and jump cursor any particular pattern OR word OR string } 
+              { press n to jump on next pattern }
+              { press shift + n to jump on back pattern } 
+
+
+Example of command or colon mode 
+
+ :set number
+  
+   OR          { to set the line number }
+
+ :se nu
+
+ :10          { to move cursor directly on any particular line number }
+ :se nonu     { to remove line number }
+ :se ic       { to deactivate the case-sensitive mode }
+ /ROOT        { now it will work }
+ :se noic     { to again activate the case-sensitive mode }
+ :nohl	      { to remove highlight colors }
+ :wq          { save and quit from any file }
+      OR
+ :x           { to save and quit from any file }
+ :q!          { to quit forcefully without save }
+
+
+=================================================
+
+How to set permanent line number for all files ?
+
+
+
+[ root @ localhost ~ ] # vim  .vimrc
+
+                        se nu  
+
+                        :wq
+
+ # vim  example
+
+  note:- you will  get automatically line numbers in every file
+
+
+   :wq
+
+
+[ root @ localhost ~ ] # rm -rf    .vimrc
+
+
+=================================================
+:!date      ==> to run Linux Based command on terminal not in the file 
+:.!date     ==> to run Linux based command in the same file on any cursor position
+=================================================
+=================================================
+
+How to copy some lines from one file to another file using edit command ?
+
+ # vim  example 
+
+ 5yy           { to copy any five lines }
+
+ :edit  /tmp/records   (press enter)
+
+ p             { to paste the content }
+
+ :wq   (press enter)
+
+
+ # cat /tmp/records 
+
+=================================================
+=================================================
+How to search and replace any word  ?  OR find and Replace any word or pattern
+
+
+ # vim  example 
+
+
+ 
+
+ :%s/root/network/g   {to replace root with network in every lines }
+
+ :1s/network/root/g     
+            
+           { to replace network with root only in line number one }
+
+ :1,13s/network/root/gi    
+
+           { to replace network with root from 1 to 13 line number }
+
+ :%s/nologin/bash/gic      { to confirm before replace any word }
+
+
+ :wq     { Now we can save and quit from this file }
+
+=========================================================
+***************KR Network Cloud**************************
+=========================================================
+How we can perform search and Replace operation using SED command in Linux ?
+=========================================================
+
+#  sed option    'action'    <filename>
+
+
+Note:- it will replace the pattern only in comming output on the screen but not in any original file.
+
+
+-i   ====> It will replace the pattern directly in the original file content.
+
+
+
+=========================================================
+
+
+[root@localhost ~]# head  -n 15  /etc/passwd  >  /report  
+[root@localhost ~]# 
+[root@localhost ~]# cat  /report 
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+sync:x:5:0:sync:/sbin:/bin/sync
+shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
+halt:x:7:0:halt:/sbin:/sbin/halt
+mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+operator:x:11:0:operator:/root:/sbin/nologin
+games:x:12:100:games:/usr/games:/sbin/nologin
+ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
+nobody:x:65534:65534:Kernel Overflow User:/:/sbin/nologin
+systemd-coredump:x:999:997:systemd Core Dumper:/:/sbin/nologin
+dbus:x:81:81:System message bus:/:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# grep root  /report 
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+[root@localhost ~]# 
+
+
+   27  cat  /report 
+   28  grep root  /report 
+   29  sed   's/root/japan/'   /report 
+   30  cat -n /report 
+   31  cat -n /report  | sed 
+   32  cat -n /report  | sed  's/root/japan/'
+   33  cat -n /report  | sed  's/root/japan/g'
+   34  cat -n /report  | sed  's/root/japan/2'
+   36  cat -n /report  | sed  's/root/japan/2g'
+   37  cat -n /report  | sed  's/root/japan/g'
+   38  cat -n /report  | sed  's/root/japan/'
+   39  cat -n /report  | sed  's/root/japan/2'
+   40  cat -n /report  | sed  's/root/japan/2g'
+   41  cat -n /report  | sed  's/root/japan/gi'
+   42  cat -n /report  | sed  's/Root/japan/gi'
+   43  cat -n /report  | sed  '1s/root/japan/gi'
+   44  cat -n /report  | sed  '1,11s/root/japan/gi'
+   46  cat -n /report  | sed  's/root/japan/g'
+   47  cat -n /report  | sed  -e  's/root/japan/g'  -e  's/operator/network/g'
+   48  cat -n /report  | sed  's/root/japan/g;s/operator/network/g'
+   49  cat -n /report  | sed  's/root/japan/g;s/operator/network/g' |  grep  -E  'japan|network'
+
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk  |  grep -i -E  'swap|boot'
+├─sda1   8:1    0    1G  0 part /boot
+└─sda3   8:3    0    2G  0 part [SWAP]
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk  |  grep -i -E  'swap|boot' | sed  's/swap/myswap/g;s/boot/bootingfiles/g'
+├─sda1   8:1    0    1G  0 part /bootingfiles
+└─sda3   8:3    0    2G  0 part [SWAP]
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cat /report  | sed  's/root/japan/g'
+japan:x:0:0:japan:/japan:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+sync:x:5:0:sync:/sbin:/bin/sync
+shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
+halt:x:7:0:halt:/sbin:/sbin/halt
+mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+operator:x:11:0:operator:/japan:/sbin/nologin
+games:x:12:100:games:/usr/games:/sbin/nologin
+ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
+nobody:x:65534:65534:Kernel Overflow User:/:/sbin/nologin
+systemd-coredump:x:999:997:systemd Core Dumper:/:/sbin/nologin
+dbus:x:81:81:System message bus:/:/sbin/nologin
+[root@localhost ~]# cat /report  | sed  's/root/japan/g'  >  /tmp/newfile  
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cat /tmp/newfile 
+[root@localhost ~]# sed   's/root/japan/g'  /report 
+[root@localhost ~]# cat /report 
+[root@localhost ~]# sed  -i    's/root/japan/g'  /report 
+[root@localhost ~]# 
+[root@localhost ~]# grep root /report 
+[root@localhost ~]# 
+[root@localhost ~]# grep japan  /report 
+japan:x:0:0:japan:/japan:/bin/bash
+operator:x:11:0:operator:/japan:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# sed  -i    's/japan/root/g'  /report 
+[root@localhost ~]# 
+[root@localhost ~]# grep root /report 
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# 
+==========================================================
+[root@localhost ~]# cat /etc/crontab 
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+
+# For details see man 4 crontabs
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# sed  '1,3s/^/#/' /etc/crontab 
+#SHELL=/bin/bash
+#PATH=/sbin:/bin:/usr/sbin:/usr/bin
+#MAILTO=root
+
+# For details see man 4 crontabs
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+
+[root@localhost ~]# 
+[root@localhost ~]# cat /etc/crontab 
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+
+# For details see man 4 crontabs
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+
+[root@localhost ~]# 
+
+[root@localhost ~]# sed -i  '3s/^/#/' /etc/crontab 
+[root@localhost ~]# 
+[root@localhost ~]# sed  -n  '3p'  /etc/crontab 
+#MAILTO=root
+[root@localhost ~]# 
+[root@localhost ~]# cat -n  /etc/crontab 
+     1	SHELL=/bin/bash
+     2	PATH=/sbin:/bin:/usr/sbin:/usr/bin
+     3	#MAILTO=root
+[root@localhost ~]# sed   '3s/^#//' /etc/crontab 
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+
+# For details see man 4 crontabs
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+
+[root@localhost ~]# sed  -i    '3s/^#//' /etc/crontab 
+[root@localhost ~]# 
+[root@localhost ~]# cat -n  /etc/crontab 
+     1	SHELL=/bin/bash
+     2	PATH=/sbin:/bin:/usr/sbin:/usr/bin
+     3	MAILTO=root
+     4	
+     5	# For details see man 4 crontabs
+     6	
+     7	# Example of job definition:
+     8	# .---------------- minute (0 - 59)
+     9	# |  .------------- hour (0 - 23)
+    10	# |  |  .---------- day of month (1 - 31)
+    11	# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+    12	# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+    13	# |  |  |  |  |
+    14	# *  *  *  *  * user-name  command to be executed
+    15	
+[root@localhost ~]# 
+[root@localhost ~]# locate smb.conf 
+/etc/samba/smb.conf
+/etc/samba/smb.conf.example
+/usr/share/man/man5/smb.conf.5.gz
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+=======================================================================
+
+
+[root@localhost ~]# vimtutor 
+
+
+=======================================================================
+
+[root@localhost ~]# vim  abc1
+hello
+japan
+
+
+:wq!
+
+
+[root@localhost ~]# 
+[root@localhost ~]# vim  abc2
+
+hello
+india
+
+:wq!
+
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cat abc1
+[root@localhost ~]# 
+[root@localhost ~]# cat abc2
+[root@localhost ~]#
+[root@localhost ~]# diff abc1 abc2
+2c2
+< japan
+---
+> india
+
+
+[root@localhost ~]# vimdiff  abc1 abc2  
+
+=======================================================================ON the screen OR STDOUT [Standard Output] 
+
+
+
+   90  cat -n /report 
+   91  sed  '1,5d'  /report 
+   92  sed  '1,5!d'  /report 
+   93  sed  '1d;11d;12,15d'  /report 
+   94  cat  /report 
+   95  sed -i    '1,5d'  /report 
+   96  cat  /report 
+
+
+
+=======================================================================
+
+
+

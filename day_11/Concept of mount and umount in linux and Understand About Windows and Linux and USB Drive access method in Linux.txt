@@ -1,0 +1,617 @@
+=======================================================
+Objective:-1  How data store in windows and Linux ?
+
+Objective:-2 What is the concept of Device mounting and unmounting ?
+
+Objective:-3 How We can Monitor about Disk Details and Disk Usages and Which directory will store the data in which Partition OR Disk ?
+
+Objective:-4  How we can access the USB Device data in Linux ?  CD/DVD/Pendrive 
+
+=======================================================
+Machine [H/W]  <== RAM + CPU + DISK  <=== Operating Systsem  <=== Applications <=== user  <== login
+=======================================================
+What is IPO Concept  ===> TERMINAL  ==> Command type ==> Enter  ===> INPUT ===> Process RUN ==> PID Number ==> RAM + CPU ==> processing  ==> Output 
+=======================================================
+DISK OR hard disk OR hard Drive ===> Data Store ===> Cut  ==> Partitions ==> store ===> Data  ===> file and Folders 
+=======================================================
+
+
+Data Store  ===> HARD DISK OR Hard Drive OR Disk  ===> 
+
+Types of data ===> 
+
+1- OS controlling data  OR application controlling data 
+
+          ===> 1- During the OS installation   2- After the OS installation if you will install any required applications
+
+2- Custom Data which is created by any user  OR user defined data ===> After the OS installation 
+
+
+Hard disk  ==> partitions  ==> store  ==> data ==> files or folders
+
+
+
+
+How data store in windows ?
+
+
+
+How data store in Linux ?
+
+
+
+======================================================
+
+How data store in windows ?
+
+Partiton Naming concept  ====> C:\   D:\   E:\    F:\
+
+Only Mandatory partion  ==> to operate the windows OS  ==> C:\   ===> 1- default data   2- custom data
+
+
+
+But it is not a recommended practise for normal front end USERS
+
+C:\     use only for OS and application related data
+D:\
+E:\
+F:\     We can use these partition to our personal data in these seperate partition area.
+
+
+There is no need to create C D E F and other partitions.
+
+======================================================
+IN linux there is no cencept of C D E F Partition we have only single Parent directory 
+to operate complete linux Operating system which is called  /.
+
+/ ====> Parent Directory OR Parent partition OR ROOT partition 
+
+======================================================
+
+
+
+[root@servera ~]# ls  /
+afs  boot  etc   lib    media  opt   root  sbin  sys  usr
+bin  dev   home  lib64  mnt    proc  run   srv   tmp  var
+[root@servera ~]# 
+
+[root@localhost ~]# du -sh /root 
+4.7M	/root
+[root@localhost ~]# 
+[root@localhost ~]# ls  /
+afs  boot  etc   lib    media  opt   root  sbin  sys  usr
+bin  dev   home  lib64  mnt    proc  run   srv   tmp  var
+[root@localhost ~]# 
+[root@localhost ~]# du -sh /usr  
+3.6G	/usr
+[root@localhost ~]# du -sh /etc
+27M	/etc
+[root@localhost ~]# du -sh /home
+4.3M	/home
+[root@localhost ~]# du -sh /var
+124M	/var
+[root@localhost ~]# du -sh /boot  
+222M	/boot
+[root@localhost ~]# 
+[root@localhost ~]# 
+===============================================================
+
+
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0    2G  0 part [SWAP]
+└─sda3   8:3    0   16G  0 part /
+sr0     11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk   |  grep disk 
+sda      8:0    0   30G  0 disk 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+
+===============================================cd /dev/sda1  ===> NO   # ls /dev/sda1  ===> NO
+
+cos we can not enter into any disk without creating the mount point on any directory.
+
+
+ls  ====> to check data listing of any directory
+cd  ====> to enter into any directory
+
+============================================== 
+
+ 
+
+[root@localhost ~]# lsblk 
+NAME          MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+sda             8:0    0  30G  0 disk 
+├─sda1          8:1    0   1G  0 part /boot
+└─sda2          8:2    0  29G  0 part 
+  ├─rhel-root 253:0    0  26G  0 lvm  /
+  └─rhel-swap 253:1    0   3G  0 lvm  [SWAP]
+sr0            11:0    1   8G  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls /
+afs  boot  etc   lib    media  opt   root  sbin  sys  usr
+bin  dev   home  lib64  mnt    proc  run   srv   tmp  var
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# free -h 
+               total        used        free      shared  buff/cache   available
+Mem:           7.5Gi       1.2Gi       5.6Gi        25Mi       707Mi       6.0Gi
+Swap:          3.0Gi          0B       3.0Gi
+[root@localhost ~]# 
+
+
+
+==============================================
+
+Mouint Point ===> SWAP ===> We can not store data in this mount point, only reserverd for system uses as a secondary memory.
+
+
+Main Memory  ==> RAM OR physical memory OR primary memory
+SWAP  ==> secondary Memory OR addition memory OR supplementary memory
+
+
+=========================================================================
+Except of SWAP partition  ===> we have all the data storage related mounting points
+=========================================================================
+
+
+/  =====>  space  ===>   /  ===> respective  ==> Partitions
+
+we can create another directory to create custom mount points if we want otherwise all directory will take the space from / partitions.
+
+=========================================================================
+
+We can create the mount point only on any Directory which is always exist in inside the /.
+ 
+=========================================================================
+
+mount point  ==> 
+
+types of choices ?
+
+1-  Standard Partition creation Method     ===> Normal Partition or STANDARD PARTITION or FIXED SIZE PARTITIONS
+
+2-  Logical Volume based Management Method ===> LVM always recommend concept  ==> scalable ==> can be increase/deacrese on run time
+
+
+==========================================================================
+du -sh   ===> to check the space uuage of any particular file or directory
+df  -h   ===> to check disk space utitlization 
+lsblk  
+==========================================================================
+
+#lsblk 
+
+
+/dev/sda4                part    there is no mount point 
+
+
+==========================================================================
+
+# mkdir  /data
+# mount  /dev/sda4     /data 
+# lsblk
+
+
+/dev/sda4        part     /data  
+    
+# cd #  ===> will not execute  
+
+# cd /data    ==> yes this command will execute  OR  we are sitting in  /dev/sda4
+
+
+# umount  /data
+
+# ls  /
+
+# ls /data
+
+Blank 
+
+# mount  /dev/sda4     /storage
+
+# ls /data  ==> blank 
+# ls  /storage ==> data will display
+
+# umount  /storage
+
+# mount  /dev/sda4     /data
+
+# ls /storage
+
+blank
+
+# ls  /data
+
+==========================================================================
+My COMPUTER  ===> Partition display OR working active mount points
+==========================================================================
+
+/dev/sda ====  First Disk 
+
+/dev/sda1 ========> Mount Point  
+
+/dev/sda2 ========> Mount Point  
+ 
+/dev/sda3 ========> Mount Point  
+
+
+/dev/sdb  ===> Second DISK
+
+
+/dev/sdb1      ======> Mount Point
+
+/dev/sdb2      ======> Mount Point
+
+/dev/sdb3      ======> Mount Point
+
+==========================================================================
+
+We can not access the data or partiion or complete disk without creating the mouting point
+
+==========================================================================
+
+Mounting method ?
+
+1- TEMP Mounting       => using mount command     ===> after reboot all the mounting point will disconnect,we need to again mount it manually
+2- Permanent Mounting  => using  /etc/fstab file  ===> after reboot the machine all mount point will acticate automatically
+
+=========================================================Udev program ===> system ===> connect ===> device ===>name ==>
+# lsblk  ===> DISK name ===> Storage Planning 
+
+Types of Disk 
+
+
+1- PATA DISK OR IDE Disk  ===>  /dev/hda    /dev/hdb    /dev/hdc 
+2- SATA and ssd disk      ===>  /dev/sda    /dev/sdb    /dev/sdc
+3- Virtual DISK           ===>  /dev/vda    /dev/vdb    /dev/vdc
+
+==========================================================================
+# mount   devicename    mountpoint
+==========================================================================
+Difference formatting and data delete ?
+==========================================================================
+
+How we can access USB Drive in Linux  ?
+
+CD/DVD/Pendrive/Portabledisk ?
+
+==========================================================================
+IN windows  ==> pendrive OR dvd write ==> auto matically detect ===> name ==> double click ==> data display
+==========================================================================
+
+IN linux 
+
+# lsblk 
+
+
+
+Devicename                1               MountPoint 
+
+
+
+
+
+=========================================================================
+USB Drive Access Method ?
+
+1- Automatic OR default mount point concept  ===>  /media/devicename  [Till RHEL-6] ==> by rhel-7-8-9   ===>  /run/media/username/devicename
+2- Manual Mounting Method 
+
+=========================================================================
+ 
+
+# cd  /media/devicename
+# ls 
+
+Support till only in RHEL-6
+
+=========================================================================
+
+# cd  /run/media/username/devicename
+# ls 
+
+Support till only in RHEL-7+8+8
+
+=========================================================================
+
+USB Drive Access Method ?
+
+1- Automatic OR default mount point concept  ===>  if you are working in GUI mode  
+2- Manual Mounting Method  ===> 1- GUI based  2- CLI based
+
+Note: if we are working in CLI mode  ===> then we need to mount every DVD/pendrive manually on any directory.
+
+=========================================================================
+
+/mnt ====> default directory to create mount for any devices.Note: we can also mount any divice on any custom directory  
+
+=========================================================================
+
+/media   ===> this is default mount point OR automatic mount point for only USB based Devices only.  CD/DVD/Pendrive
+
+/mnt     ===> we can mount any Physical Devices,partitions,network based storarge and USB based Device also.
+
+=========================================================================
+/mnt OR /data
+=========================================================================
+/media OR  /run/media ===> only resevred for USB devices only
+=========================================================================
+
+
+
+
+
+
+Connect ISO image with your Virtual Machine  OR DVD Writter  ===> dvd 
+
+
+First method:   using automatic mount point concept
+
+
+
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sr0     11:0    1    8G  0 rom  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# ls /run/media/root
+RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# ls /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost ~]# 
+[root@localhost ~]# mkdir  /isodata 
+[root@localhost ~]# 
+[root@localhost ~]# cd /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# 
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# ls
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# 
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# cp -rf   media.repo    /isodata
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]#  
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# cd
+
+
+
+[root@localhost ~]# ls /isodata
+media.repo
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sr0     11:0    1    8G  0 rom  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# eject 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sr0     11:0    1    8G  0 rom  
+[root@localhost ~]# 
+
+
+Again we can connect the iso image  
+
+
+
+
+Method:-2 Manual mount point concept on 
+
+1- using  /mnt directory [default directory ]
+
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sr0     11:0    1    8G  0 rom  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# mount  /dev/sr0  /mnt
+mount: /mnt: WARNING: source write-protected, mounted read-only.
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda 
+sr0     11:0    1    8G  0 rom  /mnt
+                                /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# ls /mnt 
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost ~]# 
+[root@localhost ~]# cd /mnt  
+[root@localhost mnt]# 
+[root@localhost mnt]# ls
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost mnt]# 
+[root@localhost mnt]# cp -rf images   /isodata
+[root@localhost mnt]# cd
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sr0     11:0    1    8G  0 rom  /mnt
+                                /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# umount  /mnt
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sr0     11:0    1    8G  0 rom  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# ls /isodata
+images  media.repo
+[root@localhost ~]# 
+[root@localhost ~]# eject 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sr0     11:0    1    8G  0 rom  
+[root@localhost ~]# 
+
+
+
+2- using any custom directory if we want 
+
+
+[root@localhost ~]# mkdir  /mydir 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sr0     11:0    1    8G  0 rom  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# mount /dev/sr0  /mydir
+mount: /mydir: WARNING: source write-protected, mounted read-only.
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sr0     11:0    1    8G  0 rom  /mydir
+                                /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# ls /mydir
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost ~]# 
+[root@localhost ~]# cp -rf  /mydir/isolinux     /isodata
+[root@localhost ~]# 
+[root@localhost ~]# umount /mydir
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf  /mydir
+[root@localhost ~]# 
+[root@localhost ~]# ls /isodata
+images  isolinux  media.repo
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# eject  
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sr0     11:0    1    8G  0 rom  
+
+
+
+
+IF we are working in CLI mode, ====> only manual mounting method will work  
+
+[root@localhost ~]# systemctl isolate multi-user.target 
+
+  51  lsblk 
+   52  mount  /dev/sr0  /mnt  
+   53  lsblk 
+   54  ls /mnt  
+   55  cd /mnt
+   56  ls
+   57  cp -rf  EFI   /isodata
+   58  cd
+   59  lsblk 
+   60  umount /mnt  
+   61  systemctl isolate graphical.target 
+   62  lsblk 
+   63  mount /dev/sr0  /mnt
+   64  lsblk 
+   65  umount  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+
+==============================================================
+HOW we can access the data of any Pendrive in linux ?
+
+Pendrive ===> 1- FAT32   ===> linux ===> default supported 
+              2- NTFS    ===> Linux ===> will not supoorted, we need to install required package for NTFS file system type in Redhat Linux
+==============================================================
+
+ 
+
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0    30G  0 disk 
+├─sda1   8:1    0     1G  0 part /boot
+├─sda2   8:2    0  14.6G  0 part /
+└─sda3   8:3    0     2G  0 part [SWAP]
+sdb      8:16   1 234.4G  0 disk 
+└─sdb1   8:17   1 234.4G  0 part /run/media/root/BA63-C50B
+sr0     11:0    1     8G  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# cd /run/media/root/BA63-C50B
+[root@localhost BA63-C50B]# ls
+'Day-3 Session.txt'  'System Volume Information'
+[root@localhost BA63-C50B]# 
+[root@localhost BA63-C50B]# 
+[root@localhost BA63-C50B]# cp -rf  "Day-3 Session.txt"   /isodata
+[root@localhost BA63-C50B]# 
+[root@localhost BA63-C50B]# cd
+[root@localhost ~]# 
+[root@localhost ~]# ls /isodata
+'Day-3 Session.txt'   EFI   images   isolinux   media.repo
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mkdir /tcs  
+[root@localhost ~]# 
+[root@localhost ~]# touch /tcs/abc{1..5}
+[root@localhost ~]# 
+[root@localhost ~]# cp -rf /tcs   /run/media/root/BA63-C50B
+[root@localhost ~]# 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

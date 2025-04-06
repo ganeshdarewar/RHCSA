@@ -1,0 +1,361 @@
+====================================================================
+                   Examples of FIND Command 
+====================================================================
+Windows  ===> C:    D:    E:
+Linux    ===>   / 
+====================================================================
+
+It is use to find out the data [file and directory ] location
+in my machine with respective of different different types options OR Conditions as per demands.
+
+====================================================================
+
+# locate   <options>    <name> 
+
+====================================================================   
+
+# find    location   options   argument
+                       OR        OR
+                    Condition    Value 
+====================================================================
+Options:-
+
+-name            ===> DONE                  
+-iname           ===> DONE   
+-inum            ===> DONE
+-size            ===> DONE ===> k   M  G
+-type            ===> DONE        
+-empty           ===> DONE               
+-perm            ===>   
+          
+====================================================================
+-exec              
+====================================================================
+-user              ==> DONE    
+-group             ==> DONE
+-atime
+-amin
+-ctime
+-cmin
+-mtime
+-mmin
+
+.........   so on  
+====================================================================
+[root@localhost ~]# ls /
+afs  bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+[root@localhost ~]# 
+[root@localhost ~]# which locate  
+/usr/bin/locate
+[root@localhost ~]# which find 
+/usr/bin/find
+[root@localhost ~]# rpm -qf  /usr/bin/locate
+mlocate-0.26-30.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qf  /usr/bin/find  
+findutils-4.8.0-5.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+
+[root@localhost ~]# history 
+    1  ls /
+    2  ls  
+    3  ls  /
+    4  ls /
+    5  which locate  
+    6  which find 
+    7  rpm -qf  /usr/bin/locate
+    8  rpm -qf  /usr/bin/find  
+    9  find /  -name  crontab  
+   10  cat  /etc/crontab
+   11  find /  -name  useradd 
+   12  find /  -name  useradd  | grep  bash
+   13  which useradd  # it returns binary file
+   14  which usermod
+   15  which userdel 
+   16  whereis userdel # it returns binary file as well as manual file
+   17  ls /usr/share/man 
+   18  man  userdel  # it returns full detail description
+   19  userdel --help # it returns syntax with the options
+   20  man  userdel 
+   21  userdel -h
+   22  userdel --help
+   23  df  -h 
+   24  df  --help 
+   25  df  -h 
+   26  df  --human-readable
+   27  find /  -name useradd
+   28  find /  -name useradd*
+   29  find /  -name *useradd*
+   30  locate useradd
+   31  touch  krnetworkcloud
+   32  locate krnetworkcloud
+   33  find  /  -name  krnetworkcloud
+   34  locate  -S  
+   35  updatedb 
+   36  locate krnetworkcloud
+   37  find  -name  krnetworkcloud
+   38  find  .  -name  krnetworkcloud
+   39  find  ~  -name  krnetworkcloud
+   40  find /root  -name  krnetworkcloud
+   41  find /  -name useradd
+   42  find /etc   -name useradd
+   43  find /usr     -name useradd
+   44  find /usr     -name USERADD
+   45  find /usr     -iname USERADD
+   46  find  /etc   -name PASSWD
+   47  find  /etc   -iname PASSWD
+   48  cd /etc 
+   49  ls
+   50  cd
+   51  find  /etc   -name ".*"
+   52  find  /etc   -name ".*json*"
+   53  find  /etc   -name ".*bash"
+   54  find  /etc   -name ".*bash*"
+   55  find  /etc   -name ".*"
+   56  find  /etc   -name ".*"  | wc -l 
+   57  find  /root    -name ".*"  | wc -l 
+   58  l.
+   59  find  /root    -name ".*"  
+   60  l.
+   61  find  /root    -name ".*"   -type  f  
+   62  find  /root    -name ".*"   -type  d
+   63  l.
+   64  ls /etc
+   65  find   /etc  -type  f  
+   66  find   /etc  -type  d 
+   67  find   /etc  -type l 
+   68  mkdir /data
+   69  touch /data/abc{1..5}
+   70  mkdir  /data/mydata{1..3}
+   71  ls /data
+   72  ls -F  /data
+   73  find /data -type f 
+   74  find /data -type d 
+   75  find /data -type l 
+   76  touch /tmp/abc
+   77  find  /   -name abc 
+   78  touch abc  
+   79  find  /   -name abc 
+   80  ls -i  /tmp/abc 
+   81  find  /  -inum  9358131
+   82  mkdir  /linux-1
+   83  mkdir  /linux-2
+   84  touch /linux-1/abc
+   85  ln  /linux-1/abc    /linux-2/xyz  
+   86  ls -i  /linux-1/abc 
+   87  ls -i  /linux-2/xyz 
+   88  find /  -name abc 
+   89  find /  -name  xyz  
+   90  echo hello india >  /linux-1/abc 
+   91  cat /linux-1/abc 
+   92  cat  /linux-2/xyz 
+   93  echo hello world >>  /linux-2/xyz 
+   94  cat  /linux-2/xyz 
+   95  cat /linux-1/abc 
+   96  du -sh /linux-1/abc 
+   97  du -sh  /linux-2/xyz 
+   98  ls /
+   99  ls -i  /linux-1/abc 
+  100  find /  -inum  27230143
+  101  rm -rf  /linux-1/abc 
+  102  ls /linux-1
+  103  cat  /linux-2/xyz 
+  104  history 
+  105  ls /etc 
+  106  find  /etc -name "*.conf"
+  107  find  /etc -name ".*"
+  108  find  /etc -name "*.conf"
+  109  find  /etc -name "a*.conf"
+  110  find  /etc -name "a*.conf"  >  /tmp/conf-info 
+  111  cat /tmp/conf-info 
+  112  ls /data
+  113  cat /data/abc1
+  114  cat /data/abc2
+  115  cat /data/abc3
+  116  find  /data  -empty
+  117  find  /data  -empty -type f  
+  118  echo  hello India  >  /data/abc1
+  119  find  /data  -empty -type f  
+  120  find  /data  ! -empty -type f  
+  121  find /data -type d
+  122  find /data ! -type d
+  123  find /root  -name ".*"
+  124  find /root  ! -name  ".*"
+  125  find /data -type d
+  126  find /data ! -type d
+  127  find /etc -size  +2M 
+  128  du -sh  /etc/udev/hwdb.bin
+  129  du -sh /etc/selinux/targeted/policy/policy.33
+  130  find /etc -size  -2M 
+  131  find /etc -size  +2M  -size  -15M 
+  132  find /etc -size  +2k  -size  -15k
+  133  find /etc -type f  -size +2M  -size -15M 
+  134  find /etc -perm 000
+  135  ls -l /etc/shadow
+  136  find /etc -perm  777
+
+
+
+Examples of pipe symbol and -exec  operator 
+
+  138  find /  -name passwd
+  139  find /  -name passwd | head  -n 2 
+  140  find /  -name passwd | tail   -n 2 
+  141  find /  -name passwd | grep bash 
+  142  history 
+
+Examples of  -exec operator 
+[root@localhost ~]# find /etc -size +2M -size  -15M
+/etc/udev/hwdb.bin
+/etc/selinux/targeted/policy/policy.33
+[root@localhost ~]# 
+[root@localhost ~]# find /etc -size +2M -size  -15M  
+/etc/udev/hwdb.bin
+/etc/selinux/targeted/policy/policy.33
+[root@localhost ~]# 
+[root@localhost ~]# find /etc -size +2M -size  -15M  -exec  du -sh  {}   \;
+12M	/etc/udev/hwdb.bin
+3.4M	/etc/selinux/targeted/policy/policy.33
+[root@localhost ~]# 
+
+[root@localhost ~]# find /etc -size +2M -size  -15M  -exec  du -sh  {}   \;
+12M	/etc/udev/hwdb.bin
+3.4M	/etc/selinux/targeted/policy/policy.33
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# find /etc -size +2M -size  -15M  -exec  ls -i    {}   \;
+17685131 /etc/udev/hwdb.bin
+17341589 /etc/selinux/targeted/policy/policy.33
+[root@localhost ~]# 
+[root@localhost ~]# find /etc -size +2M -size  -15M  -exec  ls -l     {}   \;
+-r--r--r--. 1 root root 11802668 Jan 17 10:34 /etc/udev/hwdb.bin
+-rw-r--r--. 1 root root 3496608 Jan 17 10:25 /etc/selinux/targeted/policy/policy.33
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+  150  ls /data
+  151  mkdir /tmp/backup  
+  152  find /data -type f  
+  153  find /data -type f  -exec cp -rf  {}   /tmp/backup \;
+  154  ls /tmp/backup
+  155  find /etc -type f   -size +2M -size -15M  -exec cp -rf  {}  /tmp/backup  \;  
+  156  ls  /tmp/backup
+  157  rm -rf  /tmp/backup/hwdb.bin 
+  158  rm -rf  /tmp/backup/policy.33 
+  159  find /etc -type f   -size +2M -size -15M
+  160  cp -rf  /etc/udev/hwdb.bin   /tmp/backup
+  161  cp -rf  /etc/selinux/targeted/policy/policy.33  /tmp/backup
+  162  find /tmp/backup  -size +2M 
+  163  ls /tmp/backup
+  164  find  /tmp/backup -size +2M  -exec rm -rf  {}   \;  
+  165  ls /tmp/backup
+  166  find  /tmp/backup  -empty
+  167  find  /tmp/backup !  -empty
+  168  find  /tmp/backup  -empty -exec  rm -rf  {}  \;
+  169  ls /tmp/backup  
+  170  cat /tmp/backup/abc1 
+  171  history 
+
+
+[root@localhost ~]# useradd natasha 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# su - natasha 
+[natasha@localhost ~]$ 
+[natasha@localhost ~]$ touch abc{1..5}
+[natasha@localhost ~]$ touch  /tmp/india{1..3}
+[natasha@localhost ~]$ 
+[natasha@localhost ~]$ ls -l  
+total 0
+-rw-r--r--. 1 natasha natasha 0 Mar  9 10:02 abc1
+-rw-r--r--. 1 natasha natasha 0 Mar  9 10:02 abc2
+-rw-r--r--. 1 natasha natasha 0 Mar  9 10:02 abc3
+-rw-r--r--. 1 natasha natasha 0 Mar  9 10:02 abc4
+-rw-r--r--. 1 natasha natasha 0 Mar  9 10:02 abc5
+[natasha@localhost ~]$ 
+[natasha@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+174  mkdir /tmp/conf-data
+  175  find  /etc  -name "*.conf"  -exec cp -rf  {}   /tmp/conf-data  \; 
+  176  ls /tmp/conf-data
+  177  find  /etc  -name "*.conf"  > /tmp/myabc  
+  178  cat  /tmp/myabc 
+[root@localhost ~]# mkdir /tmp/exam-user
+[root@localhost ~]# 
+[root@localhost ~]# find  /   -user   natasha -exec cp -rf  {}  /tmp/exam-user  \;  
+
+
+
+[root@localhost ~]# ls /data
+abc1  abc2  abc3  abc4  abc5  mydata1  mydata2  mydata3
+[root@localhost ~]# 
+[root@localhost ~]# find  /data  -type f  -perm 644
+/data/abc1
+/data/abc2
+/data/abc3
+/data/abc4
+/data/abc5
+[root@localhost ~]# ls -l /data/abc1
+-rw-r--r--. 1 root root 12 Mar  9 09:44 /data/abc1
+[root@localhost ~]# 
+[root@localhost ~]# find  /data  -type f  -perm 644 -exec chmod 755 {}  \; 
+[root@localhost ~]# 
+[root@localhost ~]# find  /data  -type f  -perm 644
+[root@localhost ~]# 
+[root@localhost ~]# find  /data  -type f  -perm 755
+/data/abc1
+/data/abc2
+/data/abc3
+/data/abc4
+/data/abc5
+[root@localhost ~]# 
+[root@localhost ~]# date 
+Sun Mar  9 10:27:46 AM IST 2025
+[root@localhost ~]# 
+[root@localhost ~]# echo hello india >  /india 
+[root@localhost ~]# 
+[root@localhost ~]# stat  /india
+  File: /india
+  Size: 12        	Blocks: 8          IO Block: 4096   regular file
+Device: 802h/2050d	Inode: 2549460     Links: 1
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Context: unconfined_u:object_r:etc_runtime_t:s0
+Access: 2025-03-09 10:26:53.229367479 +0530
+Modify: 2025-03-09 10:28:01.042866358 +0530
+Change: 2025-03-09 10:28:01.042866358 +0530
+ Birth: 2025-03-09 10:26:53.228367471 +0530
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cat  /india 
+hello india
+[root@localhost ~]# 
+[root@localhost ~]# stat  /india
+  File: /india
+  Size: 12        	Blocks: 8          IO Block: 4096   regular file
+Device: 802h/2050d	Inode: 2549460     Links: 1
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Context: unconfined_u:object_r:etc_runtime_t:s0
+Access: 2025-03-09 10:28:25.293044756 +0530
+Modify: 2025-03-09 10:28:01.042866358 +0530
+Change: 2025-03-09 10:28:01.042866358 +0530
+ Birth: 2025-03-09 10:26:53.228367471 +0530
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# date 
+Sun Mar  9 10:28:47 AM IST 2025
+===========================================================
+https://www.tecmint.com/35-practical-examples-of-linux-find-command/
+https://medium.com/techtofreedom/mtime-ctime-and-atime-in-linux-whats-the-difference-209f3db0718e
+===========================================================
+
+
+

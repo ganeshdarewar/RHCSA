@@ -1,0 +1,57 @@
+=====================================
+           FHS
+=====================================
+  Linux File Hierarchy Structure
+=====================================
+
+
+1-  /       ==> It is parent Directory of linux Operating System which contains number of sub directory 
+                to manage the OS.
+
+2-  /root   ==> It is home directory of super user or it's a root's home directory
+
+3-  /home   ==> It is a bydefault home directory for all normal users. /home/sachin  /home/deepak  /home/soniya
+
+            ==>  /etc/default/useradd  ==> HOME=/home  
+
+4-  /etc    ==>  It's contains all configuration Files.  # cat /etc/passwd # cat  /etc/crontab  # cat  /etc/group 
+
+
+                     Example:-  NFS  SAMBA  FTP  Apache   NTP crontab DNS SSH ...so on 
+
+5-  /var    ==> variables ==> It Contains all variable types of Records Ex- Log Files
+
+             # tail -f  /var/log/secure     # tail -f  /var/log/cron   # tail -f /var/log/messages 
+
+5-  /dev    ==> it contains all devices Related information.  # fdisk -l  # lsblk    /dev/sda  /dev/sdb  /dev/sda1 /dev/sr0
+
+6-  /boot   ==> It contains all OS booting Related Files. For Example:- Kernel, Bootloader (GRUB2) and other files as well
+
+6-  /media  ==> OR /run/media/username/devicename ==> It is a default mounting point for all USB based Devices.
+
+7-  /mnt    ==> default directory to mount any physical Disk , USB Drive as well and other Network based Drives as well.
+
+8-  /proc   ==> it contains all process and system information related files.
+
+9-  /bin    ==> It contains normal binary or commands OR Regular Commands.
+
+10- /sbin   ==> It contains Super Binary or commands.
+
+11- /usr    ==> It contains all binary and user programs and application related files. 
+
+12- /lib  or /lib64  ==> It contains all library Files   ==>  /usr/lib  and   /usr/lib64  
+
+13- /sys    ==> It contains all system hardware related information files.
+ 
+14- /srv    ==> use to provide data for any services. Example- Apache OR FTP ==> /srv 
+
+15- /tmp    ==> It contains Temorary Files.
+
+16- /opt    ==> Optional Place to install any addon third party application.
+
+============================================================================================
+
+
+============================================================================================
+
+

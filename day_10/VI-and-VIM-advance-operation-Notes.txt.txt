@@ -433,8 +433,8 @@ india
 
 
    90  cat -n /report 
-   91  sed  '1,5d'  /report 
-   92  sed  '1,5!d'  /report 
+   91  sed  '1,5d'  /report # delete line from 1 to 5
+   92  sed  '1,5!d'  /report # delete all line except 1 to 5
    93  sed  '1d;11d;12,15d'  /report 
    94  cat  /report 
    95  sed -i    '1,5d'  /report 

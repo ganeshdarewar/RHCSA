@@ -440,3 +440,18 @@ How we can do this using YUM OR dnf repo file concept ?
 ==================================================================================
 
 
+
+
+
+
+
+Command	Description
+rpm -q <package>	Query if a package is installed.
+rpm -qa	List all installed packages.
+rpm -qi <package>	Show detailed info about a package.
+rpm -ql <package>	List all files installed by a package.
+rpm -qc <package>	List config files installed by a package.
+rpm -qd <package>	List documentation files of a package.
+rpm -qf <file>	Find which package owns a file.
+rpm -qR <package>	List dependencies required by the package.
+rpm -q --changelog <package>	Show changelog for a package.

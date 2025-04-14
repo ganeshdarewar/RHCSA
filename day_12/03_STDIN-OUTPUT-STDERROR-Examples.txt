@@ -15,7 +15,7 @@
 
 STDIN/STDOUT/STDERR
 
-1- STDOUT    ==> > and >> ==> It is only use to store any correct output without any errors OR with out any warning messages on the screen.
+1- STDOUT    ==> > and >> ==> It is only use to store any correct output without any errors OR without any warning messages on the screen.
 2- STDERR    ==> 2> and 2>>  ==> it is use to store errors OR warning messages into any file.
 
 3- STDIN     ==> --stdin  ==> standard Input  ==> it is used to take input from the keyboard automatically on the screen
@@ -24,7 +24,7 @@ STDIN/STDOUT/STDERR
   &>
   &>>      error and output both  ==> as it is 
 
-> /dev/null  ==> Blank ==> Nothing will store in this file 
+> /dev/null  ==> Blank ==> Nothing will store in this file  # empty characters file
 >>  /dev/null
 2>  /dev/null
 2>>  /dev/null 
@@ -71,18 +71,18 @@ Sun Mar  9 10:49:54 AM IST 2025
     1  find /etc -name passwd
     2  exit
     3  find /etc -name passwd
-    4  find /etc -name passwd    >   /tmp/output 
+    4  find /etc -name passwd    >   /tmp/output  # it does not store errors and warnings
     5  cat /tmp/output 
     6  find /etc  -name group
-    7  find /etc  -name group >>  /tmp/output 
+    7  find /etc  -name group >>  /tmp/output # it does not store errors and warnings
     8  cat  /tmp/output 
     9  find /etc -name passwd
-   10  find /etc -name passwd  2>  /tmp/error
+   10  find /etc -name passwd  2>  /tmp/error  # it does store errors and warnings
    11  cat /tmp/error 
    12  find /etc -name group  2>>  /tmp/error
    13  cat /tmp/error 
    14  find /etc  -name passwd 
-   15  find /etc  -name passwd 2>/dev/null
+   15  find /etc  -name passwd 2>/dev/null # it does not store anything
    16  cat  /dev/null
    17  find /etc  -name passwd > /dev/null 
    18  find /etc  -name passwd 
@@ -110,7 +110,7 @@ Sun Mar  9 10:49:54 AM IST 2025
    40  history 
    41  find /  -name passwd 
    42  find /  -name passwd  | less 
-   43  find /  -name passwd  2>&1   | less 
+   43  find /  -name passwd  2>&1   | less # it will return outptu pagewise manner
 
 
 ================================================================================
@@ -156,7 +156,7 @@ echo hello india
 hello india
 [root@localhost ~]# 
 [root@localhost ~]# ./hello.sh
-bash: ./hello.sh: Permission denied
+bash: ./hello.sh: Permission denied # due to no executable Permission
 [root@localhost ~]# 
 [root@localhost ~]# 
 [root@localhost ~]# 
@@ -289,7 +289,7 @@ FOR loop ?
 [root@localhost ~]# for i in {1..5}
 > do
 > date
-> sleep 5
+> sleep 5 # to pause execution for 5 seconds
 > done
 
 

@@ -25,12 +25,12 @@ anaconda-ks.cfg  data  Desktop  Documents  Downloads  Music  Pictures  Public  T
     2  which rpm 
     3  which  yum
     4  which  dnf
-    5  rpm  -qf  /usr/bin/rpm
+    5  rpm  -qf  /usr/bin/rpm # which installed package a file belongs to.
     6  rpm  -qf  /usr/bin/yum
     7  rpm  -qf  /usr/bin/dnf
     8  rpm -qa  tree
-    9  rpm -qi  tree
-   10  rpm -qa tree
+    9  rpm -qi  tree  # Show detailed information about the package
+   10  rpm -qa tree # lists all installed RPM packages
    11  yum install  nagios
    12  yum remove  tree 
    13   
@@ -77,7 +77,7 @@ anaconda-ks.cfg  data  Desktop  Documents  Downloads  Music  Pictures  Public  T
    54  which usermod
    55  which userdel
    56  which fdisk
-   57  rpm -qf  /usr/sbin/useradd
+   57  rpm -qf  /usr/sbin/useradd  # Query the package that provides/owns a file
    58  rpm -qf  /usr/sbin/usermod  
    59  rpm -qf  /usr/sbin/userdel 
    60  rpm -qa | qc -l 
@@ -97,7 +97,7 @@ anaconda-ks.cfg  data  Desktop  Documents  Downloads  Music  Pictures  Public  T
    74  ls /usr/sbin  | wc -l  
    75  rpm -qa  | wc -l  
    76  expr  534 + 1491 
-   77  rpm -ql  tree  
+   77  rpm -ql  tree  # is used to list all the files installed by a specific RPM package
    78  rpm -qa  tree
    79  which tree
    80  rpm -qa shadow-utils 

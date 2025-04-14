@@ -1,0 +1,366 @@
+===========================================
+     RPM Installation OR RPM Management
+                  OR
+           Package Management 
+===========================================
+===========================================
+
+
+
+Machine [H/W] <=== Operating System <== Application/Utility/Tools/Software/Services
+
+
+
+============================================ I P O  
+It is a just collection of programs.
+Program  ==> set of instructions defined by the developer using any programming lang to perform any operations
+============================================
+1- Command prompt OR terminal  ====> 
+2- Command                     ====> set of pre defined action code ==> # clear  # date   # cal  # reboot 
+3- package                     ====> 
+============================================
+Software in windows  ==> supported extension ==>  .exe files  
+
+Software in redhat   ==> supported extension ==>  .rpm files  [redhat package manager] 
+  OR
+Package
+===========================================
+===========================================
+
+RPMS providers Choices ?
+
+1- Direct OS Vendors 
+
+2- Third party OR Global Third Party 
+
+3- Inhouse Application 
+
+===========================================
+===========================================
+
+Machine  ==> Using My ISO image  ==> OS installation  ===> Required RPMS 
+
+1- During the OS Installation ==> default Group  ==> against ==> addon ==> 1- Minimal Installation   2- Server with GUI
+
+2- After the OS installation ==> as per need  ==> RPM installation 
+
+==========================================
+
+ISO image  ==> Folders ==> default RPMS ==> daily uses  
+
+==========================================
+
+/   ==> Types of data  ==> 1- default data   2- custom data  
+
+types of applications
+
+1- default application   2- custom application 
+
+==========================================
+
+1- Physical machine  2- Virtual machine 3- Cloud based machine ==> 
+
+ISO RPM Installation 1- During the OS Installation  2- after the OS Installation [As per my project needs] 
+
+After the OS installation ==> RPM installation Choices ?
+
+1- Using the SAME ISO image we can install remaining's rpms if we required.
+                                 OR
+  we can copy the rpms folders from SAME ISO image and we can install it as per needs
+
+======================================
+
+2- We can download the available rpms from redhat official website ==> www.redhat.com
+
+3- We can also download the rpm from any third party package provider vendor websites
+
+4- We can also build any rpms as per my customer requirement in our inhouse setup using my inhouse developers team.
+
+======================================     
+
+
+
+Objective:-
+
+1- Install                         ===> -i 
+2- Update                          ===> -U
+3- Erase or Uninstall              ===> -e 
+4- Query OR information Find OUT   ===> -q 
+
+===================================== 
+Difference  between  rpm and .rpm ?
+Difference between rpm and yum ===> Both are the package mangement utility
+ 
+=====================================
+Chapter-1 How we can manage the rpms using rpm command ?
+Chapter-2 How we can manage the rpms using YUM command OR YUM utility OR dnf utlility ?
+
+====================================
+RPM Theory Session
+RPM Practical session using rpm
+YUM and dnf Theory
+YUM and dnf ==> Practical Session using yum or dnf 
+=====================================
+Conclusion  ==> rpm and yum or dnf ==> Combined ==> use case  ==> choice-1 using rpm   choice-2 using yum or dnf
+=====================================
+
+[root@localhost ~]# which rpm 
+/usr/bin/rpm
+[root@localhost ~]# which  yum
+/usr/bin/yum
+[root@localhost ~]# which  dnf
+/usr/bin/dnf
+[root@localhost ~]# 
+[root@localhost ~]# rpm  -qf  /usr/bin/rpm
+rpm-4.16.1.3-12.el9_0.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm  -qf  /usr/bin/yum
+yum-4.10.0-5.el9_0.noarch
+[root@localhost ~]# 
+[root@localhost ~]# rpm  -qf  /usr/bin/dnf
+dnf-4.10.0-5.el9_0.noarch
+[root@localhost ~]# 
+
+
+
+
+
+==============================
+RPM Command  
+RPM Application extention ===> pakagename-----------.rpm
+
+===============================
+1- rpm  [Redhat package manager]
+2- yum  [ Yellowdog Updater modifier]
+3- dnf  [ Dandified Yum ]
+
+
+# rpm  -i  packagename----.rpm      =====> EX:  using rpm 
+
+# yum install packagename           =====> EX:  using YUM
+
+Differences ===> Between RPM and YUM
+Differences ===> Between YUM and DNF
+
+=================================================
+=================================================
+
+
+
+Developer  ==> Application or package   ==> Naming formats ==> Follow
+
+Package-name---information-----.rpm
+
+rpm  -i Package-name------information-------.rpm
+
+
+
+RPM naming Syntax:
+
+1-  RPM name-   
+2-  Version  
+3-  Release  ==> el5     el6    el7    el8  el9 
+4-  Architecture ==>  32 Bit  or 64 Bit ===>     x86_64      .noarch
+5-  Extention  ==> .rpm
+
+=====================================
+major
+minor
+====================================
+https://www.redhat.com/en/blog/create-rpm-package
+====================================
+
+RPM Controlling OR RPM Manage ==> Commands OR utility  ==> rpm and yum  [ Command OR Tools or Utility ]
+
+=====================================   
+
+
+===========================================
+Windows ==> software             ==> .exe
+Redhat  ==> software or package  ==> .rpm 
+===========================================
+Vendor  ==> software ==> Remote Desktop Acess  ==> Anydesk Software ==> website  ==> download ==> link ==> 
+
+
+
+Anydesk software download for windows         ==>  .exe
+Anydesk software download for redhat linux    ==>  .rpm 
+
+===========================================
+
+What is the difference between rpm and yum utility ?
+
+What is the difference  between yum and dnf ?
+
+===========================================
+===========================================
+
+.iso image ==> collection of os booting files + packages OR utility 
+.exe       ==> application 
+.rpm       ==> application/package
+
+===========================================
+
+What is RPM  ?
+
+1- RPM basically is a set of instruction defined by the developers
+   to install any application or services or commands .
+                       OR
+   The RPM formerly known as .rpm file, that includes compiled software programs and 
+   libraries needed by the packages.
+
+2- if we have rpm building knowledge we can also build rpm as per needs.
+
+3- it is also called .exe files in windows operating  system. 
+
+===========================================
+
+https://www.redhat.com/en/blog/create-rpm-package
+
+===========================================
+
+There are five basic modes for RPM command
+
+
+Install : It is used to install any RPM package.
+Remove  : It is used to erase, remove or un-install any RPM package from the machine.
+Upgrade : It is used to update the existing RPM package.
+Verify  : It is used to verify an RPM packages.
+Query   : It is used query any RPM package.
+
+===========================================
+===========================================
+
+RHEL-8 ISO Image
+                  
+RHEL-7 ISO Image   ======> Folders ==> Collection of the default rpms OR  number of RPMs
+
+RHEL-9 ISO Image  ==>  Example:-  BaseOS + AppStream
+
+
+
+================================================================
+
+RHEL-8 ==> Folders  ==> around 6500 RPMs ==> 1320 rpms   already installed 
+
+RHEL-9 ==> Folders  ==> around 6500 RPMS ==> 1170 rpms already installed 
+ 
+================================================================
+
+================================================================
+
+How we can Install Remaining RPMs As per needs After the OS installation  ?
+
+
+
+Choice-1  We can Conncet ISO image and we can copy the rpms folder to install any rpm in my machine
+
+Choice-2  Direct redhat official website
+
+Choice-3  Application vendor => Internet web sites which provides the free or paid rpms
+
+Choice-4  we can also install some inhouse rpms which is developed by any developer in office setup.
+
+===============================================================
+
+# wget  ftp://192.168.0.100/rhel-9/image/folder/ftp-------.rpm  [location]
+
+# wget  http://www.nokia.com/data/collection/OSS/Application/inhouse/dsjfkdsjfkdjfkdjfd.rpm  
+
+# ls 
+
+ftp---------------.rpm 
+
+
+ # rpm  -i  ftp---------------.rpm 
+
+Use case
+
+1- using rpm
+2- using yum 
+
+================================================================
+
+RPM installation Tools OR Utility OR Commands ?
+
+
+
+1- rpm    ==> it is use to install any rpms but without automatic depandancies resolution.
+              we need to install manually required rpms or depandancies first before installing
+              any actual application rpms step by step.
+
+2- yum    ==> It is an Smart Utility which is also use to install any rpms with automatic
+              depandancies Resolution from any defined location. basically it is an advance concept of rpm command.
+
+# rpm  -i  <packagename>  ==> we need to define rpms location as well + we need to install first Required dependancies
+
+     OR
+
+~ ] # yum install packagename ===> 
+
+ path ==> /etc/yum.repos.d/  ==> repo file  ==> read  ==> location [one time] ==> grep ==> start ==> installation with depenadacies resolution
+
+
+================================================================
+/etc/yum.repos.d/abc.repo
+
+path  mention   ===> save 
+
+
+# yum install sdfdf
+
+================================================================
+================================================================
+
+
+
+
+================================================================  
+how we can manage the rpms using rpm command ?   
+how we can manage the rpms using yum command OR YUM Utility OR dnf utility ?  
+================================================================
+Package manager or package management  ==>
+
+ 1- rpm    2- yum OR dnf
+================================================================There is no repo  OR package not found
+
+Chapter-1  How we can manage or install rpm using rpm command on any machine  ?
+Chapter-2  How we can manage or install rpm using yum or dnf command on any machine ?
+
+================================================================
+Conclusion ==> using rpm  OR yum 
+================================================================
+
+Chapter-1  How we can manage or install rpm using rpm command on any machine  ?
+
+================================================================
+
+Query                 ===> There is no need to sit on any rpms location  +  Short Name
+Erase OR uninstall    ===> There is no need to sit on any rpms location  +  Short Name
+
+
+
+Installation   ==> Always we need to give actual rpm location  + Complete Name
+Update         ==> Always we need to give actual rpm location  + Complete Name
+
+
+===============================================================
+
+~]# rpm -qa tree
+~]# rpm -e  tree
+
+================================================================
+
+# rpm -i tree---------.rpm
+
+# rpm -U tree --------.rpm
+
+=================================================================
+
+in RPM command there is no need to create repo file in my machine on any location
+
+but in case of yum OR dnf  we always first create repo OR repository file in  /etc/yum.repos.d/ location to defined rpms collection path.
+
+================================================================
+
+

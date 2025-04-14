@@ -104,14 +104,15 @@ findutils-4.8.0-5.el9.x86_64
    42  find /etc   -name useradd
    43  find /usr     -name useradd
    44  find /usr     -name USERADD
-   45  find /usr     -iname USERADD
+   45  find /usr     -iname USERADD # ignore case sencitive
    46  find  /etc   -name PASSWD
    47  find  /etc   -iname PASSWD
    48  cd /etc 
    49  ls
    50  cd
-   51  find  /etc   -name ".*"
+   51  find  /etc   -name ".*" # hidden file
    52  find  /etc   -name ".*json*"
+       find  /etc   -name "*.json*"
    53  find  /etc   -name ".*bash"
    54  find  /etc   -name ".*bash*"
    55  find  /etc   -name ".*"
@@ -179,7 +180,7 @@ findutils-4.8.0-5.el9.x86_64
   117  find  /data  -empty -type f  
   118  echo  hello India  >  /data/abc1
   119  find  /data  -empty -type f  
-  120  find  /data  ! -empty -type f  
+  120  find  /data  ! -empty -type f  # not empty
   121  find /data -type d
   122  find /data ! -type d
   123  find /root  -name ".*"
@@ -190,7 +191,7 @@ findutils-4.8.0-5.el9.x86_64
   128  du -sh  /etc/udev/hwdb.bin
   129  du -sh /etc/selinux/targeted/policy/policy.33
   130  find /etc -size  -2M 
-  131  find /etc -size  +2M  -size  -15M 
+  131  find /etc -size  +2M  -size  -15M # greater than 2MB and less than 15MB 
   132  find /etc -size  +2k  -size  -15k
   133  find /etc -type f  -size +2M  -size -15M 
   134  find /etc -perm 000

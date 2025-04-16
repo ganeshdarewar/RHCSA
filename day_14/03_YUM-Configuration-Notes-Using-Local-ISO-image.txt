@@ -1,0 +1,526 @@
+==============================================================================
+Objective:-1 How we can manage the rpms using rpm command  ?
+Objective:-1 How we can manage the rpms using YUM OR DNF command  ?
+==============================================================================
+
+YUM Theory Session ===> Completed 
+
+
+==============================================================================
+
+Objective:-1 How we can manage the rpms using YUM OR DNF command  ?
+
+Choice-1  Local to Local  ==> Path  ==> mention
+Choice-2  Network based URL ==> Path  ==> Mention
+
+==============================================================================
+Redhat ===> ISO image  ===> Rpms folders  ===> Copy ===> Practise
+==============================================================================
+
+How we can configure YUM repo file using Local RHEL-9 ISO image ?
+
+
+Step-1 connect ISO image with your VM and Copy all required folders into any directory ?
+Step-2 Now configure repo file with available URL path
+Step-3 Now we can install these availanble RPM from these given URLs ===> Using YUM 
+Step-4 How we can create repodata directory if it is not available in OUR rpms collections
+
+==============================================================================
+Step-1 connect ISO image with your VM and Copy all required folders into any directory ?
+
+[root@localhost ~]# cat /etc/redhat-release 
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# which rpm 
+/usr/bin/rpm
+[root@localhost ~]# which yum 
+/usr/bin/yum
+[root@localhost ~]# which dnf
+/usr/bin/dnf
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /usr/bin/yum
+lrwxrwxrwx. 1 root root 5 Mar 21  2022 /usr/bin/yum -> dnf-3
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /usr/bin/dnf
+lrwxrwxrwx. 1 root root 5 Mar 21  2022 /usr/bin/dnf -> dnf-3
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /usr/bin/dnf-3
+-rwxr-xr-x. 1 root root 1942 Mar 21  2022 /usr/bin/dnf-3
+[root@localhost ~]# 
+[root@localhost ~]# yum repolist all 
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+No repositories available
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME          MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda             8:0    0   30G  0 disk 
+├─sda1          8:1    0    1G  0 part /boot
+└─sda2          8:2    0   29G  0 part 
+  ├─rhel-root 253:0    0   26G  0 lvm  /
+  └─rhel-swap 253:1    0    3G  0 lvm  [SWAP]
+sr0            11:0    1  7.9G  0 rom  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# mkdir  /redhatisodata 
+[root@localhost ~]# 
+[root@localhost ~]# ls /redhatisodata
+[root@localhost ~]# cd  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# 
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# 
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# ls
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# 
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# cp -rf  *   /redhatisodata
+
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# 
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# cd
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls /redhatisodata
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost ~]#
+[root@localhost ~]# eject 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME          MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda             8:0    0   30G  0 disk 
+├─sda1          8:1    0    1G  0 part /boot
+└─sda2          8:2    0   29G  0 part 
+  ├─rhel-root 253:0    0   26G  0 lvm  /
+  └─rhel-swap 253:1    0    3G  0 lvm  [SWAP]
+sr0            11:0    1  7.9G  0 rom  
+ 
+[root@localhost ~]# 
+
+[root@localhost ~]# ls /redhatisodata/BaseOS
+Packages  repodata
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls /redhatisodata/AppStream
+Packages  repodata
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+===============================================================
+
+Configure OR Create yum repo file 
+
+[root@localhost ~]# cd /etc/yum.repos.d
+[root@localhost yum.repos.d]# 
+[root@localhost yum.repos.d]# ls
+redhat.repo
+[root@localhost yum.repos.d]# vim rheliso.repo
+
+
+[path-1]
+name=This is my local yum repo file for baseos directory.
+baseurl=file:///redhatisodata/BaseOS
+enabled=1
+gpgcheck=0
+[path-2]
+name=This is my local yum repo file for appstream directory.
+baseurl=file:///redhatisodata/AppStream
+enabled=1
+gpgcheck=0
+
+
+
+:wq!
+
+[root@localhost ~]# yum clean all   # removed all junk file
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+12 files removed
+[root@localhost ~]# 
+
+
+
+[root@localhost ~]# yum repolist all
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+repo id                              repo name                                                                             status
+path-1                               This is my local yum repo file for baseos directory.                                  enabled
+path-2                               This is my local yum repo file for appstream directory.                               enabled
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# yum  list 
+
+
+[root@localhost ~]# yum  list | wc -l  
+6411
+[root@localhost ~]# 
+
+=================================================================== YUM Ready  =====
+
+How we can install these available rpm using YUM OR DNF ? 
+
+[root@localhost ~]# rpm -qa vsftpd  
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# yum list  |  grep vsftpd
+vsftpd.x86_64                                        3.0.3-49.el9                       path-2    
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa targetcli  
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# yum list  |  grep targetcli 
+targetcli.noarch                                     2.1.53-7.el9                       path-2    
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa httpd
+[root@localhost ~]# 
+[root@localhost ~]# yum list  |  grep httpd
+
+
+
+
+[root@localhost ~]# yum install  vsftpd  -y 
+
+
+[root@localhost ~]# rpm -qa vsftpd
+vsftpd-3.0.3-49.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -ql vsftpd | grep service
+/usr/lib/systemd/system/vsftpd.service
+/usr/lib/systemd/system/vsftpd@.service
+[root@localhost ~]# 
+[root@localhost ~]# pstree |  grep vsftpd
+[root@localhost ~]# 
+[root@localhost ~]# which vsftpd
+/usr/sbin/vsftpd
+[root@localhost ~]# pidof   vsftpd
+[root@localhost ~]# 
+[root@localhost ~]# systemctl start  vsftpd 
+[root@localhost ~]# systemctl enable   vsftpd 
+Created symlink /etc/systemd/system/multi-user.target.wants/vsftpd.service → /usr/lib/systemd/system/vsftpd.service.
+[root@localhost ~]# 
+[root@localhost ~]# pidof   vsftpd
+41575
+[root@localhost ~]# pstree |  grep vsftpd
+        |-vsftpd
+[root@localhost ~]# 
+[root@localhost ~]# netstat -tunlp  |  grep vsftpd  
+tcp6       0      0 :::21                   :::*                    LISTEN      41575/vsftpd        
+[root@localhost ~]# 
+
+
+[root@localhost ~]# yum list |  grep targetcli 
+targetcli.noarch                                     2.1.53-7.el9                       path-2    
+[root@localhost ~]# 
+[root@localhost ~]# yum search targetcli  
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+Last metadata expiration check: 0:09:37 ago on Sun 16 Mar 2025 11:35:02 AM IST.
+================================================ Name Exactly Matched: targetcli =================================================
+targetcli.noarch : An administration shell for storage targets
+=================================================== Summary Matched: targetcli ===================================================
+target-restore.noarch : Systemd service for targetcli/rtslib
+[root@localhost ~]# 
+[root@localhost ~]# yum install  targetcli  
+[root@localhost ~]# systemctl start target  
+[root@localhost ~]# systemctl enable   target  
+Created symlink /etc/systemd/system/multi-user.target.wants/target.service → /usr/lib/systemd/system/target.service.
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# yum search httpd
+[root@localhost ~]# yum search nagios
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+Last metadata expiration check: 0:12:54 ago on Sun 16 Mar 2025 11:35:02 AM IST.
+No matches found.
+[root@localhost ~]# 
+[root@localhost ~]# yum search zabbix
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+Last metadata expiration check: 0:13:05 ago on Sun 16 Mar 2025 11:35:02 AM IST.
+========================================================== Name & Summary Matched: zabbix ===========================================================
+pcp-export-pcp2zabbix.x86_64 : Performance Co-Pilot tools for exporting PCP metrics to Zabbix
+pcp-export-zabbix-agent.x86_64 : Module for exporting PCP metrics to Zabbix agent
+[root@localhost ~]# 
+[root@localhost ~]# yum install  httpd  -y 
+[root@localhost ~]# systemctl start  httpd
+[root@localhost ~]# systemctl enable   httpd
+Created symlink /etc/systemd/system/multi-user.target.wants/httpd.service → /usr/lib/systemd/system/httpd.service.
+[root@localhost ~]# 
+[root@localhost ~]# netstat -tunlp  |  grep httpd
+tcp6       0      0 :::80                   :::*                    LISTEN      42427/httpd         
+[root@localhost ~]# 
+[root@localhost ~]# pidof httpd
+42435 42434 42433 42428 42427
+[root@localhost ~]# 
+[root@localhost ~]# yum remove tree  
+[root@localhost ~]# tree
+[root@localhost ~]# yum install  tree  -y
+[root@localhost ~]# yum remove  vsftpd  
+
+=====================================================================================
+Update and Downgrade   ===> HOLD CLasses
+=====================================================================================
+How we can Create Repodata manually in any rpms directory if it is not available OR if it is currupted 
+=====================================================================================
+   96  ls /redhatisodata/BaseOS
+   97  ls /redhatisodata/AppStream
+   98  ls /redhatisodata/BaseOS/repodata
+   99  ls /redhatisodata/AppStream/repodata/
+[root@localhost ~]# which createrepo 
+/usr/bin/which: no createrepo in (/root/.local/bin:/root/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin)
+[root@localhost ~]# 
+[root@localhost ~]# find /redhatisodata   -name  "createrepo*"
+/redhatisodata/AppStream/Packages/createrepo_c-0.17.7-4.el9_0.x86_64.rpm
+/redhatisodata/AppStream/Packages/createrepo_c-libs-0.17.7-4.el9_0.i686.rpm
+/redhatisodata/AppStream/Packages/createrepo_c-libs-0.17.7-4.el9_0.x86_64.rpm
+[root@localhost ~]# 
+[root@localhost ~]# yum install createrepo  -y 
+[root@localhost ~]# which createrepo 
+/usr/bin/createrepo
+[root@localhost ~]# 
+
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf  /redhatisodata/AppStream/repodata
+[root@localhost ~]# rm -rf  /redhatisodata/BaseOS/repodata 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls /redhatisodata/BaseOS
+Packages
+[root@localhost ~]# 
+[root@localhost ~]# ls /redhatisodata/AppStream
+Packages
+[root@localhost ~]# 
+[root@localhost ~]# cat  /etc/yum.repos.d/rheliso.repo 
+[path-1]
+name=This is my local yum repo file for baseos directory.
+baseurl=file:///redhatisodata/BaseOS
+enabled=1
+gpgcheck=0
+[path-2]
+name=This is my local yum repo file for appstream directory.
+baseurl=file:///redhatisodata/AppStream
+enabled=1
+gpgcheck=0
+[root@localhost ~]# 
+
+[root@localhost ~]# yum repolist all
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+repo id                             repo name                                                                            status
+path-1                              This is my local yum repo file for baseos directory.                                 enabled
+path-2                              This is my local yum repo file for appstream directory.                              enabled
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# yum install samba
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+This is my local yum repo file for baseos directory.                                            0.0  B/s |   0  B     00:00    
+Errors during downloading metadata for repository 'path-1':
+  - Curl error (37): Couldn't read a file:// file for file:///redhatisodata/BaseOS/repodata/repomd.xml [Couldn't open file /redhatisodata/BaseOS/repodata/repomd.xml]
+Error: Failed to download metadata for repo 'path-1': Cannot download repomd.xml: Cannot download repodata/repomd.xml: All mirrors were tried
+[root@localhost ~]# 
+
+
+=====================================================================================
+  113  createrepo -v  /redhatisodata/BaseOS
+  114  ls  /redhatisodata/BaseOS
+  115  ls  /redhatisodata/AppStream
+  116  createrepo  -v   /redhatisodata/AppStream
+
+[root@localhost ~]# ls /redhatisodata/BaseOS
+Packages  repodata
+[root@localhost ~]# 
+[root@localhost ~]# ls /redhatisodata/AppStream
+Packages  repodata
+[root@localhost ~]# 
+[root@localhost ~]# yum clean all
+
+[root@localhost ~]# yum install samba 
+
+=====================================================================================
+
+How we can merge these repodata with in single repodata in same directory
+
+
+
+[root@localhost ~]# rm -rf  /redhatisodata/BaseOS/repodata/
+[root@localhost ~]# rm -rf  /redhatisodata/AppStream/repodata
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls   /redhatisodata/BaseOS
+Packages
+[root@localhost ~]# 
+[root@localhost ~]# ls   /redhatisodata/AppStream
+Packages
+[root@localhost ~]# 
+[root@localhost ~]# createrepo -v  /redhatisodata  
+
+[root@localhost ~]# ls /redhatisodata
+AppStream  BaseOS  EFI  EULA  extra_files.json  GPL  images  isolinux  media.repo  repodata  RPM-GPG-KEY-redhat-beta  RPM-GPG-KEY-redhat-release
+[root@localhost ~]# 
+[root@localhost ~]# vim /etc/yum.repos.d/rheliso.repo 
+[path-1]
+name=This is my local yum repo file for baseos directory.
+baseurl=file:///redhatisodata
+enabled=1
+gpgcheck=0
+
+
+:wq!
+[root@localhost ~]# yum clean all 
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+10 files removed
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# yum repolist all 
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+repo id                                       repo name                                                                                                status
+path-1                                        This is my local yum repo file for baseos and appstream directory.                                       enabled
+[root@localhost ~]#  yum remove  tree  
+[root@localhost ~]#  yum install  tree  
+
+
+=======================================================================================
+How we can enable GPGkey check concept in YUM repo file
+
+=======================================================================================
+
+[root@localhost ~]# ls /redhatisodata/AppStream
+Packages
+[root@localhost ~]# ls /redhatisodata/BaseOS
+Packages
+[root@localhost ~]# 
+[root@localhost ~]# ls /redhatisodata
+AppStream  BaseOS  EFI  EULA  extra_files.json  GPL  images  isolinux  media.repo  repodata  RPM-GPG-KEY-redhat-beta  RPM-GPG-KEY-redhat-release
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cat  /redhatisodata/RPM-GPG-KEY-redhat-release
+
+[root@localhost ~]# vim  /etc/yum.repos.d/rheliso.repo 
+[path-1]
+name=This is my local yum repo file for baseos and appstream directory.
+baseurl=file:///redhatisodata
+enabled=1
+gpgcheck=1
+gpgkey=file:///redhatisodata/RPM-GPG-KEY-redhat-release
+
+
+:wq!
+[root@localhost ~]# yum clean all 
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+5 files removed
+[root@localhost ~]# 
+[root@localhost ~]# yum remove  tree -y
+
+
+
+[root@localhost ~]# yum install   tree
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+This is my local yum repo file for baseos and appstream directory.                                                            343 MB/s | 7.2 MB     00:00    
+Last metadata expiration check: 0:00:01 ago on Sun 16 Mar 2025 12:24:27 PM IST.
+Dependencies resolved.
+==============================================================================================================================================================
+ Package                           Architecture                        Version                                      Repository                           Size
+==============================================================================================================================================================
+Installing:
+ tree                              x86_64                              1.8.0-10.el9                                 path-1                               58 k
+
+Transaction Summary
+==============================================================================================================================================================
+Install  1 Package
+
+Total size: 58 k
+Installed size: 113 k
+Is this ok [y/N]: y
+Downloading Packages:
+This is my local yum repo file for baseos and appstream directory.                                                            3.5 MB/s | 3.6 kB     00:00    
+Importing GPG key 0xFD431D51:
+ Userid     : "Red Hat, Inc. (release key 2) <security@redhat.com>"
+ Fingerprint: 567E 347A D004 4ADE 55BA 8A5F 199E 2F91 FD43 1D51
+ From       : /redhatisodata/RPM-GPG-KEY-redhat-release
+Is this ok [y/N]: y
+Key imported successfully
+Importing GPG key 0x5A6340B3:
+ Userid     : "Red Hat, Inc. (auxiliary key 3) <security@redhat.com>"
+ Fingerprint: 7E46 2425 8C40 6535 D56D 6F13 5054 E4A4 5A63 40B3
+ From       : /redhatisodata/RPM-GPG-KEY-redhat-release
+Is this ok [y/N]: y
+Key imported successfully
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                      1/1 
+  Installing       : tree-1.8.0-10.el9.x86_64                                                                                                             1/1 
+  Running scriptlet: tree-1.8.0-10.el9.x86_64                                                                                                             1/1 
+  Verifying        : tree-1.8.0-10.el9.x86_64                                                                                                             1/1 
+Installed products updated.
+
+Installed:
+  tree-1.8.0-10.el9.x86_64                                                                                                                                    
+
+Complete!
+
+
+
+================================================================================
+
+  142  dnf remove tree  
+  143  dnf install   tree  
+
+================================================================================
+
+
+
+
+
+
+

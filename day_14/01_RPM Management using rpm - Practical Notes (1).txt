@@ -1,0 +1,575 @@
+==================================================================================
+
+
+Chapter-1  How we can manage or install rpm using rpm command on any machine  ?
+
+==================================================================================
+Machine  <=== using ISO image  <=== already install  <== information find out
+
+==================================================================================
+Task-1 How we can find out the details about any redhat Linux machine using rpm command ?
+
+[root@localhost ~]# which rpm  
+/usr/bin/rpm
+[root@localhost ~]# cat /etc/redhat-release 
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# ls
+anaconda-ks.cfg  data  Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# cat anaconda-ks.cfg 
+
+
+[root@localhost ~]# history 
+    1  cat /etc/redhat-release 
+    2  which rpm 
+    3  which  yum
+    4  which  dnf
+    5  rpm  -qf  /usr/bin/rpm
+    6  rpm  -qf  /usr/bin/yum
+    7  rpm  -qf  /usr/bin/dnf
+    8  rpm -qa  tree
+    9  rpm -qi  tree
+   10  rpm -qa tree
+   11  yum install  nagios
+   12  yum remove  tree 
+   13   
+   14  which rpm  
+   15  cat /etc/redhat-release 
+   16  ls
+   17  cat anaconda-ks.cfg 
+   18  rpm -q   -a  
+   19  rpm -qa  
+   20  rpm -qa  | wc -l  
+   21  rpm -qa  | cat -n 
+   22  rpm -qa  tree 
+   23  rpm -qa  zip
+   24  rpm -qa  bzip2
+   25  rpm -qa  tar 
+   26  rpm -qa  vsftpd
+   27  rpm -qa  ftp
+   28  rpm -qa vim
+   29  rpm -qa vim*
+   30  rpm -qa zip*
+   31  rpm -qa  *zip*
+   32  rpm -qa  | grep zip
+   33  rpm -qa  | grep vim
+   34  rpm -qa  | grep tar
+   35  rpm -qa  | grep -w  tar
+   36  rpm -qa  vsftpd
+   37  rpm -qa --last  
+   38  rpm -qa tree  --last  
+   39  rpm -qa tar  --last  
+   40  rpm -qa --last  | head  -n 5  
+   41  rpm -qa --last  | tail   -n 5  
+   42  rpm -qa --last  | tac  
+   43  rpm -qa --last  | tac  | head  -n 1
+   44  rpm -qa --last  | tac  | tail  -n 1
+   45  cat   /etc/crontab 
+   46  tac    /etc/crontab 
+   47  rpm -qa --last  | tac  | head  -n 1
+   48  rpm -qa --last  | tac  | tail  -n 1
+   49  history 
+   50  rpm -qa  tree
+   51  rpm -qi  tree
+   52  cat /etc/redhat-release 
+   53  which useradd 
+   54  which usermod
+   55  which userdel
+   56  which fdisk
+   57  rpm -qf  /usr/sbin/useradd
+   58  rpm -qf  /usr/sbin/usermod  
+   59  rpm -qf  /usr/sbin/userdel 
+   60  rpm -qa | qc -l 
+   61  rpm -qa | wc -l 
+   62  rpm  -qf  /usr/sbin/fdisk
+   63  which vim
+   64  rpm -qf  /usr/bin/vim
+   65  rpm -qa vim-enhanced
+   66  rpm -qa  | wc -l  
+   67  ls /usr/bin  | wc -l  
+   68  ls /usr/sbin  | wc -l  
+   69  expr  534 + 1491 
+   70  ls /usr/bin    
+   71  1491
+   72  ls /usr/sbin    
+   73  ls /usr/bin  | wc -l  
+   74  ls /usr/sbin  | wc -l  
+   75  rpm -qa  | wc -l  
+   76  expr  534 + 1491 
+   77  rpm -ql  tree  
+   78  rpm -qa  tree
+   79  which tree
+   80  rpm -qa shadow-utils 
+   81  rpm -qf  /usr/sbin/useradd 
+   82  rpm -ql  tree
+   83  rpm -ql  tree |  grep bin 
+   84  rpm -ql  tree |  grep bin  | wc -l
+   85  rpm -ql  shadow-utils 
+   86  rpm -ql  shadow-utils  | wc -l  
+   87  rpm -ql  shadow-utils  | grep bin 
+   88  rpm -ql  shadow-utils  | grep bin  | wc -l 
+   89  rpm -ql  tree |  grep bin  | wc -l
+   90  rpm -ql  shadow-utils  | grep bin 
+   91  rpm -ql  shadow-utils  | grep sbin 
+   92  rpm -ql  shadow-utils  | grep -w  bin 
+   93  rpm -ql  shadow-utils  | grep -w  bin  | wc -l  
+   94  rpm -ql  shadow-utils  | grep sbin | wc -l  
+   95  rpm -ql  shadow-utils  | grep bin  | wc -l  
+   96  rpm -qf  /usr/bin/vim
+   97  rpm -qa vim-enhanced
+   98  rpm -qi  vim-enhanced
+   99  rpm -qd  vim-enhanced
+  100  rpm -ql  vim-enhanced
+  101  rpm -ql  vim-enhanced | grep bin  
+  102  rpm -qa  tree
+  103  rpm -qi  tree
+  104  rpm -qd  tree
+  105  man  tree 
+  106  cat  /usr/share/doc/tree/README
+  107  rpm -qa shadow-utils 
+  108  rpm -qi   shadow-utils 
+  109  rpm -ql   shadow-utils 
+  110  rpm -qd    shadow-utils 
+  111  rpm -qc    shadow-utils 
+  112  useradd mohit
+  113  which useradd 
+  114  rpm -qf  /usr/sbin/useradd
+  115  rpm -qc  shadow-utils
+  116  cat  /etc/default/useradd
+  117  cat  /etc/login.defs 
+  118  cat /etc/crontab 
+  119  rpm -qf   /etc/crontab 
+  120  rpm -ql crontabs
+  121  which crontab 
+  122  rpm -ql /usr/bin/crontab
+  123  rpm -qf   /usr/bin/crontab
+  124  rpm  -ql cronie
+  125  rpm  -ql tree
+  126  systemctl start crond  
+  127  systemctl enable crond  
+  128  pidof crond
+  129  pidof tree
+  130  pstree   
+  131  systemctl stop crond 
+  132  systemctl disable crond 
+  133  pstree   
+  134  which crond
+  135  rpm -qf  /usr/sbin/crond
+  136  systemctl start crond
+  137  systemctl enable   crond
+  138  pidof crond
+  139  pstree   
+  140  pstree    |  grep crond
+  141  pstree    |  grep sshd
+  142  pstree    |  grep chronyd
+  143  pstree    |  grep vsftd
+  144  pstree    |  grep vsftpd
+  145  pstree    |  grep httpd
+  146  rpm -qa cronie
+  147  rpm -qa tree
+  148  rpm -ql  tree
+  149  rpm -ql  cronie
+  150  rpm -ql  cronie |  grep service
+  151  rpm -ql  tree |  grep service
+  152  rpm -qa at  
+  153  rpm -ql   at  
+  154  rpm -ql   at   |  grep bin  
+  155  rpm -ql   at   |  grep man 
+  156  rpm -ql   at   |  grep doc
+  157  rpm -ql   at   |  grep bin 
+  158  rpm -ql   at   |  grep service
+  159  pstree   | grep atd 
+  160  pstree   | grep crond  
+  161  rpm -ql  shadow-utils  |  grep service
+  162  rpm -ql  tree   |  grep service
+  163  rpm -ql  zip    |  grep service
+  164  rpm -ql  tar      |  grep service
+  165  rpm -qa | wc -l  
+  166  pstree  
+  167  rpm -ql  at | grep bin 
+  168  rpm -ql  at | grep service
+  169  systemctl is-active atd
+  170  pstree | grep atd  
+  171  pidof atd 
+  172  pidof at
+  173  pidof crontab 
+  174  pidof crond
+  175  ps -aux 
+  176  pstree
+  177  ps -aux | grep crond 
+  178* pidof cron
+  179  ps -aux | grep atd
+  180  ps -aux | grep crontab
+  181  history 
+  182  which sshd
+  183  rpm -qf  /usr/sbin/sshd
+  184  rpm -ql  openssh-server
+  185  rpm -ql  openssh-server | grep bin 
+  186  rpm -ql  openssh-server | grep doc
+  187  rpm -ql  openssh-server | grep service
+  188  systemctl is-active sshd
+  189  pstree  |  grep sshd
+  190  pstree 
+  191  pidof sshd
+  192  pidof crond 
+  193  pidof tree
+  194  netstat -tunlp  |  grep sshd
+  195  netstat -tunlp  |  grep crond
+  196  netstat -tunlp  |  grep atd
+  197  pstree | grep sshd
+  198  pstree | grep crond
+  199  pstree | grep atd
+  200  systemctl restart sshd
+  201  pidof sshd
+  202  pstree | grep sshd
+  203  netstat -tunlp  |  grep sshd
+
+
+==================================================================================
+
+Difference Between PID and PORT Number
+
+ # ps -aux
+ # pstree 
+
+#  netstat   -tunlp  |  grep sshd
+#  netstat   -tunlp  |  grep crond
+
+Types of Service 
+
+1- Internal Service                             ===> crond + atd  ===>  internal service example   ===> only having the PID number
+2- External Services OR Network based Service   ===> sshd vsftpd httpd  ===> network based service example ===> PID + PORT number  
+
+==================================================================================
+Task-2 How we Uninstall any rpms in  redhat Linux machine using rpm command ?
+
+
+[root@localhost ~]# rpm -e  tree
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa  | wc -l 
+1169
+[root@localhost ~]# rpm -e  vim-enhanced  
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa  | wc -l 
+1168
+[root@localhost ~]# 
+[root@localhost ~]# which tree'
+> ^C
+[root@localhost ~]# which tree
+/usr/bin/which: no tree in (/root/.local/bin:/root/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin)
+[root@localhost ~]# 
+[root@localhost ~]# which vim 
+/usr/bin/which: no vim in (/root/.local/bin:/root/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin)
+[root@localhost ~]# 
+[root@localhost ~]# tree
+bash: tree: command not found...
+[root@localhost ~]# 
+[root@localhost ~]# vim xyz  
+bash: vim: command not found...
+[root@localhost ~]# rpm -e tar 
+error: Failed dependencies:
+	tar is needed by (installed) sos-4.2-15.el9.noarch
+	tar is needed by (installed) insights-client-0:3.1.7-6.el9_0.noarch
+	tar is needed by (installed) open-vm-tools-11.3.5-1.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -e tar  --nodeps  
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa  tar 
+[root@localhost ~]# 
+[root@localhost ~]# rpm -e zip 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# rpm -e bzip2 
+error: Failed dependencies:
+	bzip2 is needed by (installed) sos-4.2-15.el9.noarch
+[root@localhost ~]# 
+[root@localhost ~]# rpm -e bzip2  --nodeps  
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa  | wc -l 
+1165
+[root@localhost ~]# rpm -qa  vsftpd
+[root@localhost ~]# rpm -qa  ftp
+[root@localhost ~]# 
+
+
+==================================================================================
+Task-3 How we install any rpms in  redhat Linux machine using rpm command ?
+
+
+Choice-1  using the local rhel-9 iso image, we can connect this ISO image file with our VM machine to install required packages
+
+
+
+[root@localhost ~]# lsblk 
+NAME          MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda             8:0    0   30G  0 disk 
+├─sda1          8:1    0    1G  0 part /boot
+└─sda2          8:2    0   29G  0 part 
+  ├─rhel-root 253:0    0   26G  0 lvm  /
+  └─rhel-swap 253:1    0    3G  0 lvm  [SWAP]
+sr0            11:0    1  7.9G  0 rom  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mkdir  /redhatisodata  
+[root@localhost ~]# 
+[root@localhost ~]# mount /dev/sr0   /mnt  
+mount: /mnt: WARNING: source write-protected, mounted read-only.
+[root@localhost ~]# 
+[root@localhost ~]# cd /mnt
+[root@localhost mnt]# ls
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost mnt]# 
+[root@localhost mnt]# cp -rf  *    /redhatisodata
+[root@localhost mnt]# 
+[root@localhost mnt]# 
+[root@localhost mnt]# ls /redhatisodata/BaseOS
+Packages  repodata
+[root@localhost mnt]# 
+[root@localhost mnt]# ls /redhatisodata/AppStream
+Packages  repodata
+[root@localhost mnt]# cd
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls /redhatisodata
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# umount /mnt  
+[root@localhost ~]# 
+[root@localhost ~]# eject 
+
+Now we can install available rpms from this directory 
+
+Choice-1  Using RPM 
+Choice-2  Using YUM 
+
+
+==================================================================================
+Choice-1  Using RPM 
+
+[root@localhost ~]# find  /redhatisodata   -name  "vsftpd*"
+/redhatisodata/AppStream/Packages/vsftpd-3.0.3-49.el9.x86_64.rpm
+[root@localhost ~]# 
+[root@localhost ~]# find  /redhatisodata   -name  "ftp*"
+/redhatisodata/AppStream/Packages/ftp-0.17-89.el9.x86_64.rpm
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# find  /redhatisodata   -name  "tree*"
+/redhatisodata/BaseOS/Packages/tree-1.8.0-10.el9.x86_64.rpm
+[root@localhost ~]# 
+[root@localhost ~]# find  /redhatisodata   -name  "zip*"
+/redhatisodata/BaseOS/Packages/zip-3.0-33.el9.x86_64.rpm
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+==================================================================================
+
+[root@localhost ~]# history 
+
+    1  find  /redhatisodata   -name  "vsftpd*"
+    2  find  /redhatisodata   -name  "ftp*"
+    3  find  /redhatisodata   -name  "tree*"
+    4  find  /redhatisodata   -name  "zip*"
+    5  rpm -ivh /redhatisodata/AppStream/Packages/vsftpd-3.0.3-49.el9.x86_64.rpm
+    6      
+    7  rpm -iv  /redhatisodata/AppStream/Packages/ftp-0.17-89.el9.x86_64.rpm
+    8  rpm -ivh  /redhatisodata/BaseOS/Packages/tree-1.8.0-10.el9.x86_64.rpm
+    9  rpm -ivh /redhatisodata/BaseOS/Packages/zip-3.0-33.el9.x86_64.rpm
+   10  rpm -qa  vsftpd 
+   11  rpm -qa  ftp
+   12  rpm -qa  zip
+   13  rpm -qa  tree
+   14  mkdir  -p  /kr/network/cloud
+   15  tree  /kr  
+   16  vim xyz  
+   17  find  /redhatisodata   -name  "vim*"
+   18  rpm -ivh  /redhatisodata/AppStream/Packages/vim-enhanced-8.2.2637-15.el9.x86_64.rpm
+   19  vim xyz  
+   20  rpm -qa  | wc -l  
+   21  find  /redhatisodata   -name  "tar*"
+   22  find  /redhatisodata   -name  "bzip2*"
+   23  rpm -ivh  /redhatisodata/BaseOS/Packages/tar-1.34-3.el9.x86_64.rpm
+   24  rpm -ivh  /redhatisodata/BaseOS/Packages/bzip2-1.0.8-8.el9.x86_64.rpm
+   25  rpm -qa  | wc -l  
+   26  rpm -qa  vsftpd
+   27  rpm -qa  tree
+   28  pstree
+   29  rpm -qa vsftpd
+   30  rpm -qc vsftpd
+   31  rpm -qd vsftpd
+   32  rpm -qi vsftpd
+   33  rpm -ql  vsftpd
+   34  rpm -ql  vsftpd |  grep service
+   35  rpm -ql  vim-enhanced  |  grep service
+   36  pstree  |  grep vim 
+   37  pstree  |  grep vsftpd
+   38  netstat -tunlp  |  grep vsftpd
+   39  pidof  vsftpd
+   40  systemctl start  vsftpd
+   41  systemctl enable   vsftpd
+   42  pidof  vsftpd
+   43  pstree  | grep vsftpd  
+   44  netstat -tunlp  | grep vsftpd  
+   45  history 
+[root@localhost ~]# 
+
+How we can install required dependancies OR Required package if we are getting error dependancies not available
+==================================================================================
+[root@localhost ~]# find  /redhatisodata  -name "targetcli*"
+/redhatisodata/AppStream/Packages/targetcli-2.1.53-7.el9.noarch.rpm
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa targetcli  
+[root@localhost ~]# 
+[root@localhost ~]# rpm -ivh /redhatisodata/AppStream/Packages/targetcli-2.1.53-7.el9.noarch.rpm
+warning: /redhatisodata/AppStream/Packages/targetcli-2.1.53-7.el9.noarch.rpm: Header V3 RSA/SHA256 Signature, key ID fd431d51: NOKEY
+error: Failed dependencies:
+	python3-configshell is needed by targetcli-2.1.53-7.el9.noarch
+	python3-rtslib is needed by targetcli-2.1.53-7.el9.noarch
+	target-restore is needed by targetcli-2.1.53-7.el9.noarch
+
+
+How we can resolve this ?
+==================================================================================
+How we can do this using YUM OR dnf repo file concept ?
+==================================================================================yum install targetcli    
+
+   67  ls /redhatisodata
+   68  find  /redhatisodata  -name  "targetcli*"
+   69  rpm -ivh  /redhatisodata/AppStream/Packages/targetcli-2.1.53-7.el9.noarch.rpm
+   70  find  /redhatisodata  -name  "python3-configshell*"
+   71  find  /redhatisodata  -name  "python3-rtslib*"
+   72  find  /redhatisodata  -name  "target-restore*"
+   73  rpm -ivh  /redhatisodata/BaseOS/Packages/python3-configshell-1.1.28-7.el9.noarch.rpm
+   74  find  /redhatisodata  -name  "python3-pyparsing*"
+   75  find  /redhatisodata  -name  "python3-urwid*"
+   76  rpm -ivh  /redhatisodata/BaseOS/Packages/python3-pyparsing-2.4.7-9.el9.noarch.rpm
+   77  rpm -ivh /redhatisodata/BaseOS/Packages/python3-urwid-2.1.2-4.el9.x86_64.rpm
+   78  rpm -ivh  /redhatisodata/BaseOS/Packages/python3-configshell-1.1.28-7.el9.noarch.rpm
+   79  rpm -ivh  /redhatisodata/AppStream/Packages/python3-rtslib-2.1.74-7.el9.noarch.rpm
+   80  find  /redhatisodata  -name  "python3-kmod*"
+   81  find  /redhatisodata  -name  "python3-pyudev*"
+   82  rpm -ivh  /redhatisodata/BaseOS/Packages/python3-kmod-0.9-32.el9.x86_64.rpm
+   83  rpm -ivh  /redhatisodata/BaseOS/Packages/python3-pyudev-0.22.0-6.el9.noarch.rpm
+   84  rpm -ivh  /redhatisodata/AppStream/Packages/python3-rtslib-2.1.74-7.el9.noarch.rpm
+   85  rpm -ivh /redhatisodata/AppStream/Packages/target-restore-2.1.74-7.el9.noarch.rpm
+   86  rpm -ivh  /redhatisodata/AppStream/Packages/targetcli-2.1.53-7.el9.noarch.rpm
+   87  systemctl restart  target 
+   88  systemctl enable  target 
+   89  rpm -qpR   /redhatisodata/AppStream/Packages/targetcli-2.1.53-7.el9.noarch.rpm
+   90  rpm -qa targetcli  
+   91  rpm -qR  targetcli  
+   92  find /redhatisodata  -name "python3-configshell*"
+   93  history 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa  vsftpd
+vsftpd-3.0.3-49.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# find /redhatisodata  -name "vsftpd*"
+/redhatisodata/AppStream/Packages/vsftpd-3.0.3-49.el9.x86_64.rpm
+[root@localhost ~]# 
+[root@localhost ~]# rpm -Uvh /redhatisodata/AppStream/Packages/vsftpd-3.0.3-49.el9.x86_64.rpm
+warning: /redhatisodata/AppStream/Packages/vsftpd-3.0.3-49.el9.x86_64.rpm: Header V3 RSA/SHA256 Signature, key ID fd431d51: NOKEY
+Verifying...                          ################################# [100%]
+Preparing...                          ################################# [100%]
+	package vsftpd-3.0.3-49.el9.x86_64 is already installed
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# rpm -Uvh /redhatisodata/AppStream/Packages/vsftpd-3.0.3-49.el9.x86_64.rpm  --force 
+warning: /redhatisodata/AppStream/Packages/vsftpd-3.0.3-49.el9.x86_64.rpm: Header V3 RSA/SHA256 Signature, key ID fd431d51: NOKEY
+Verifying...                          ################################# [100%]
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:vsftpd-3.0.3-49.el9              ################################# [ 50%]
+Cleaning up / removing...
+   2:vsftpd-3.0.3-49.el9              ################################# [100%]
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa vsftpd
+vsftpd-3.0.3-49.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -ivh /redhatisodata/AppStream/Packages/vsftpd-3.0.3-49.el9.x86_64.rpm  --force 
+warning: /redhatisodata/AppStream/Packages/vsftpd-3.0.3-49.el9.x86_64.rpm: Header V3 RSA/SHA256 Signature, key ID fd431d51: NOKEY
+Verifying...                          ################################# [100%]
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:vsftpd-3.0.3-49.el9              ################################# [100%]
+[root@localhost ~]# 
+
+==================================================================================== 
+
+Alternate Method using YUM 
+
+====================================================================================
+====================================================================================
+/etc/yum.repos.d/abc.repo  ===> BaseOS   + AppStream  ==> save
+
+/redhatisodata   <===== BaseOS
+                 <===== AppStream 
+
+
+# yum install targetcli   
+
+====================================================================================
+
+How we can download any rpms from redhat official website  ?
+
+                           OR
+
+How we can sync our machine with direct redhat online repo to install available rpms ?
+
+====================================================================================
+
+
+
+[root@localhost ~]# ls  /redhatisodata
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls  /redhatisodata/BaseOS
+Packages  repodata
+[root@localhost ~]# 
+[root@localhost ~]# ls  /redhatisodata/AppStream
+Packages  repodata
+[root@localhost ~]# 
+[root@localhost ~]# cd  /etc/yum.repos.d
+[root@localhost yum.repos.d]# 
+[root@localhost yum.repos.d]# ls
+redhat.repo
+[root@localhost yum.repos.d]# 
+[root@localhost yum.repos.d]# cat redhat.repo 
+#
+# Certificate-Based Repositories
+# Managed by (rhsm) subscription-manager
+#
+# *** This file is auto-generated.  Changes made here will be over-written. ***
+# *** Use "subscription-manager repo-override --help" if you wish to make changes. ***
+#
+# If this file is empty and this system is subscribed consider
+# a "yum repolist" to refresh available repos
+#
+[root@localhost yum.repos.d]# 
+[root@localhost yum.repos.d]# 
+[root@localhost yum.repos.d]# 
+[root@localhost yum.repos.d]# cd
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# yum install samba  
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+Error: There are no enabled repositories in "/etc/yum.repos.d", "/etc/yum/repos.d", "/etc/distro.repos.d".
+[root@localhost ~]# 
+
+

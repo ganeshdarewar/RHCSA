@@ -1,0 +1,399 @@
+=========================================================
+
+
+ YUM [ YellowDog  update Manager or modifier ]
+
+                 OR
+
+   [ Yellow dog Updater Modified ]
+
+
+=========================================================        
+
+RPM Installation Utility ?
+
+
+1- RPM 
+
+2- YUM [ Yellow dog Updater Modified ] OR DNF [ Dandified YUM ]
+
+Difference between rpm and YUM ?
+Difference between YUM and DNF ?
+
+
+=========================================================
+
+1-  YUM basically is a smart tool OR smart Utility which is also use to install any rpms with automatic dependencies Resolution.
+
+
+2-  but if we are using RPM command , we need to install RPMs dependencies manually step by step.
+
+3-  yum Basically provides a smart way for RPM installation from any defined location.
+
+==========================================================
+Choice-1 using rpm command
+
+1- Install 
+2- Querry                        
+3- update 
+4- Erase or uninstall 
+
+# rpm -q
+      -i 
+      -e 
+      -U 
+
+
+Choice-2 Using yum or dnf command
+
+=========================================================
+
+========================================================= 
+# rpm -ivh  =====>  location + completename  but there is no need to create repo file.
+
+~] # yum install packagename  [Note: This package must be available in my repo file URLs]
+
+
+/etc/yum.repos.d/abc.repo   xyz.repo   ===> how many repo files are available in this path  ==> available URLs ==> reachable
+                 ==> search ==> YES ==> rpm installation with dependencies. 
+
+=========================================================
+
+repo name ? Recommended   jboss   virtualization  openstack   openshift  ansible
+
+
+# ls  /etc/yum.repos.d/jboss.repo  OR openshift.repo    openstack.repo    rheldvd.repo   google-chrome.repo  zabbix.repo  nagios.repo
+
+[repoID1]
+paramenters=value
+
+[repoID2]
+parameters=value
+
+=========================================================
+
+Redhat ISO ==> image  ==> Folders  ==> default set of rpms ==>
+
+1- During the OS installation  2- After the OS installation
+
+Choice-1 using rpm command
+ 
+Choice-2 using yum command
+
+
+
+
+
+=========================================================
+
+ISO image copy  ==> BaseOS + AppStream
+                    3500   + 3000 rpms
+
+# cd /etc/yum.repos.d
+
+# vim   xyz.repo   OR redhatlocaliso.repo  OR  abc.repo  OR rhel9iso.repo
+
+[path-1]  ===> sectionname OR repo ID  ==> Note: REPO ID name always must be uniq name and we can not use space in repo ID
+
+baseurl=
+
+[path-2]
+
+baseurl=
+
+
+
+
+:wq!
+
+~ ]  # ls
+~ ]  # yum install  httpd  ==> 1 + 9    ===> 10 rpm will install  
+
+=========================================================    
+# yum install  httpd ==>  plus ==> 9 package OE Required Files OR Required RPMs OR Required dependencies
+
+======================== /etc/yum.repos.d
+
+/etc/yum.repos.d/redhatlocaliso.repo      
+/etc/yum.repos.d/openstakcloud.repo  
+/etc/yum.repos.d/jboss.repo 
+
+========================repo file  ==> repo id  ==> baseurl=location of the rpms 
+
+baseurl ==> types of url  ==> 1- local to local  2- internet or network 
+
+=========================================================
+
+ /tcs <=== 15 packages   <== four actual rpm + 11 required rpms
+
+
+# cd /tcs  
+# ls  
+
+15 rpms   are available in this directory 
+
+Choice-1 we can install these rpm only with the help of rpm command step by step.
+
+Choice-2 we can create repo file first and then we can define this path with baseurl parameter. 
+
+Extra steps:-  
+
+========================================
+
+repo file ==> URL  <=== rpms + repective repodata
+
+========================================
+# createrepo   /tcs   ==> to create repodata directory with all information   ==> a to z 
+
+========================================
+        
+====> repo file  ===>  RPM Path  + REPODATA
+
+=======================================
+
+  
+
+=======================================
+
+Choice-1 using rpm command   ==> these is no need to create repo file and mentioned the url as well + no repodata
+
+Choice-2 using yum command   ==> then we need to create repo file and need to mention this  /tcs path in baseurl
+                                 parameter + repodata directory must be available in every defined URLs
+
+yum ==> repo ==> url ==> 1- rpms collection   2- repodata directory [must be available]
+ 
+==================================
+
+# createrepo  /tcs  
+# ls /tcs
+
+rpms   +  repodata
+
+# ls /tcs/repodata
+
+XML files will be avaialble
+
+==================================
+
+yum Basically provides a smart way for RPM installation from any defined location.
+
+YUM  ==> path  ==> 1- Number of RPMs  +  2- repodata 
+
+YUM Always works on repodata directory to mantains the indexing file in .xml.gz  format.
+
+"it means if we are going to provide any path in YUM repository,
+Repodata directory must be available seperatly in every defined path. "
+
+
+/redhatdvd/AppSream/   Packages [ can be anything ] + repodata [same]
+/redhatdvd/BaseOS/     Packages [ can be anything ] + repodata [same]
+
+# mkdir  /redhatdvd/AppStream/repodata ==> no ==> wrong command 
+
+# createrepo -v   /redhatdvd/AppStream  ==> A to Z ==> rpm name ==> respective  ==> XML  ==> repodata ==> store
+
+# createrepo  -v  /redhatdvd/BaseOS  ==> A to Z ==> rpm name ==> respective  ==> XML  ==> repodata ==> store
+
+    OR
+
+# createrepo   /redhatdvd
+
+====================================================
+REPO FILE  ===> REPO ID  ===> URLS   ===> 1- RPMS   2- Respective repodata
+====================================================
+
+
+
+YUM Always Support two types of URL  ?
+
+
+1- Local URLs    ===> local machine 
+
+                 ==>  RPMs + repodata ==> folder ==> YUM repo  ==> need to mention it
+
+
+2- Network Based URL OR Internet based  ==> this path can be network based  => For Example:- FTP and HTTP Server
+
+
+
+Example:- Redhat based URL + Other Vendors based URL
+
+Rule-2   ==> machine  ==> reachable ==>  ping 
+
+   
+================================================
+Configure yum repo file with these two given URLs ?
+
+http://192.168.0.100/rhel-9/BaseOS
+
+
+http://192.168.0.100/rhel-9/AppStream
+
+===============================================
+
+
+
+================================================ 
+#   ls  /etc/yum.repos.d/xyz.repo
+
+baseurl=
+
+network based examples
+
+ftp://server-ip/path
+http://
+https://
+
+****************************************************************************************************
+
+file://   ==> local to local 
+
+file:///tmp/java
+
+****************************************************************************************************
+
+path ==>    /redhatdvd/folder1 ===> 2500
+            /redhatdvd/folder2 ===> 3000 
+
+Choice-1   using rpm command ==>  there is no need create repo file + there is no concept of repodata and repo file  
+Choice-2   using yum command ===> 1- create repo file   2- mentioned these URLs   3- Check the repodata directory is available or not
+
+
+****************************************************************************************************
+
+file:///redhatdvd/BaseOS/   ==> Packages + repodata
+file:///redhatdvd/AppStream ==> Packages  + repodata
+
+==================================================================================
+1- file:///redhatdvd
+
+
+# createrepo   /redhatdvd    ==> new repodata generate
+
+
+
+
+************************************************************************************
+
+
+How to configue  yum repo file using local ISO Image ?
+
+
+
+
+Step-1  Connect ISO Image in your machine and copy all the dvd files into any directory.
+
+
+
+Step-2   Create repo file with any name and define your URL as per copy place ?
+
+
+****************************************************************************************
+choice-1 single repo with single baseurl
+choice-2 single repo with multiple url 
+========================================================================================
+# cd /etc/yum.repos.d
+
+# vim redhatdvd.repo
+
+[url-1]
+
+baseurl=file:///redhatdvd/AppStream ==> 4500
+
+
+[url-2]
+
+baseurl=file:///redhatdvd/BaseOS  ==> 2200
+
+:wq 
+
+# vim  jboss.repo
+
+[jboss-1]
+baseurl=https://www.redhat.com/jboss/version6/rhel8/jboss1
+
+[jboss-2]
+baseurl=https://www.redhat.com/jboss/version6/rhel8/jboss2
+
+:wq
+
+4700 RPMS 
+
+
+~ ] # yum install xyz   ===>  /etc/yum.repos.d/repo file  ===> read  ==> baseurl  ==> search  ===> repodata ===> information ==> match ==> YES ===> will start the installation
+
+
+========================================================================================
+
+# yum repolist all
+
+repo ID               rpmcollection 
+path-1                   4500
+path-2                   2200
+jboss-1                  3000 
+jboss-2                  2000
+
+=======================================================================================
+#vim  xyz.repo
+
+[repoid]
+parameters=value
+parameters=value
+
+[repoid]
+parameter=value
+parameter=value
+
+:wq
+
+======================
+
+Note:- repoid name must be uniq 
+
+
+========================================================================================
+# which rpm
+# which yum 
+# yum repolist
+
+   0  or no repo available 
+
+========================================================================================
+
+# yum remove  yum  === not allowed ==> not recommended 
+
+# rm -rf  /etc/yum.repos.d/xyz.repo
+
+
+=======================================================================================
+
+ 
+=======================================================================================
+file:///redhatdvd   ==> local to local
+
+
+ftp://
+http://    ==> network based
+https://
+
+
+=======================================================================================
+
+
+Redhat office Exams
+
+configure yum repo file file with these given URLs
+
+
+ftp://192.168.0.100/pub/rhel-9/BaseOS
+
+ftp://192.168.0.100/pub/rhel-9/AppStream
+
+
+
+========================================================================================
+
+
+
+
+

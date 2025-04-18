@@ -1,0 +1,686 @@
+=======================================================================
+                           Day-15 Session 
+=======================================================================
+
+1- RPM Management Theory Session
+
+2- How we can manage the rpms using rpm command only.
+
+3- YUM Theory Session and Difference between rpm and yum and  between yum and dnf
+ 
+4- How we can manage the rpms using YUM OR DNF command only.
+
+=======================================================================
+repo file  ===>  /etc/yum.repos.d/xyz.repo ==> repo ID  ==> baseurl ===> 1- local to local 2- Network based URL ==> RPMs + Respective repodata
+=======================================================================
+RPM Management Installation  
+
+1- During the OS installation  ===> using the ISO image  ===> As per GROUP Selection 1- Server with GUI  2- Minimal Installation
+2- After the OS installation  ===> we can install the rpms as per our need
+
+     Choice-1  using rpm command  choice-2 yum or dnf
+
+
+Objective:-
+
+After the OS installation ===> 
+
+1- we can connect the Same ISO image with our machine and we can mention the rpms path in our repo file.
+
+2- How we can sync our machine with free online redhat repository OR rpms path using redhat login ID and password.
+ 
+3- How we can connect our machine with EPEL online repository.
+
+4- How we can install any rpms directly from the vendor website. 
+
+=======================================================================
+machine [H/W]  <=== Operating System  <=== 1- default application    2- Custom application as per project requirement
+=======================================================================
+
+1- using rpm command
+
+2- using yum or dnf command
+
+=======================================================================
+
+After the OS installation ===> 
+
+Choice-1  We can connect the Same ISO image with our machine and we can mention the rpms path in our repo file.
+
+Method:-1  using default automatic mount point how we can create repo file
+Method:-2  We can mount ISO image on  /mnt OR on any custom directory if we want
+Method:-3  We can permanently copy the all rpms related data in our machine so that we can disconnect the ISO image
+
+Connect ISO image with your VM machine  
+
+[root@localhost ~]# cat  /etc/redhat-release 
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1    8G  0 rom  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost ~]# 
+[root@localhost ~]# ls  /run/media/root/RHEL-9-0-0-BaseOS-x86_64/AppStream
+Packages  repodata
+[root@localhost ~]# 
+[root@localhost ~]# ls  /run/media/root/RHEL-9-0-0-BaseOS-x86_64/BaseOS
+Packages  repodata
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# 
+[root@localhost ~]# yum repolist all 
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+No repositories available
+[root@localhost ~]# 
+[root@localhost ~]# ls  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost ~]# 
+[root@localhost ~]# ls  /run/media/root/RHEL-9-0-0-BaseOS-x86_64/AppStream
+Packages  repodata
+[root@localhost ~]# 
+[root@localhost ~]# ls  /run/media/root/RHEL-9-0-0-BaseOS-x86_64/BaseOS
+Packages  repodata
+[root@localhost ~]# 
+[root@localhost ~]# vim /etc/yum.repos.d/abc.repo
+
+
+[path-1]
+name=abc
+baseurl=file:///run/media/root/RHEL-9-0-0-BaseOS-x86_64/AppStream
+enabled=1
+gpgcheck=0
+[path-2]
+name=xyz
+baseurl=file:///run/media/root/RHEL-9-0-0-BaseOS-x86_64/BaseOS
+enabled=1
+gpgcheck=0
+
+
+:wq!
+[root@localhost ~]# yum clean all 
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+0 files removed
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# yum repolist all  
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+repo id                                                       repo name                                                  status
+path-1                                                        abc                                                        enabled
+path-2                                                        xyz                                                        enabled
+[root@localhost ~]# 
+
+
+=======================================================================
+
+Method:-2  We can mount ISO image on  /mnt OR on any custom directory if we want
+
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1    8G  0 rom  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mount /dev/sr0   /mnt  
+mount: /mnt: WARNING: source write-protected, mounted read-only.
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1    8G  0 rom  /mnt
+                                /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# ls /mnt  
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost ~]# 
+[root@localhost ~]# ls /mnt/AppStream
+Packages  repodata
+[root@localhost ~]# 
+[root@localhost ~]# ls /mnt/BaseOS
+Packages  repodata
+
+
+[root@localhost ~]# vim /etc/yum.repos.d/abc.repo
+[path-1]
+name=abc
+baseurl=file:///mnt/AppStream
+enabled=1
+gpgcheck=0
+[path-2]
+name=xyz
+baseurl=file:///mnt/BaseOS
+enabled=1
+gpgcheck=0
+
+
+:wq!
+[root@localhost ~]# yum clean all 
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+0 files removed
+[root@localhost ~]# 
+[root@localhost ~]# yum repolist all  
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+repo id                                                       repo name                                                  status
+path-1                                                        abc                                                        enabled
+path-2                                                        xyz                                                        enabled
+[root@localhost ~]# umount /mnt  
+
+Note:  1-  if we are using the mount point concept in this case we can not disconnect the ISO image
+       2-  but if we want to disconnect the iso image in that case we will copy the rpms related data permanantly in our machine.
+=======================================================================
+Method:-3  We can permanently copy the all rpms related data in our machine so that we can disconnect the ISO image
+[root@localhost ~]# mkdir  /redhatisodata 
+[root@localhost ~]# 
+[root@localhost ~]# cd /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# 
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# ls
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# 
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# 
+[root@localhost RHEL-9-0-0-BaseOS-x86_64]# cp -rf   *    /redhatisodata
+
+	[root@localhost RHEL-9-0-0-BaseOS-x86_64]# cd
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls /redhatisodata
+
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost ~]# eject 
+
+[root@localhost ~]# vim /etc/yum.repos.d/abc.repo
+
+[path-1]
+name=abc
+baseurl=file:///redhatisodata/AppStream
+enabled=1
+gpgcheck=0
+[path-2]
+name=xyz
+baseurl=file:///redhatisodata/BaseOS
+enabled=1
+gpgcheck=0
+
+
+:wq!
+
+[root@localhost ~]# yum clean all
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+12 files removed
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# yum repolist all  
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+repo id                                                       repo name                                                  status
+path-1                                                        abc                                                        enabled
+path-2                                                        xyz                                                        enabled
+[root@localhost ~]# 
+
+[root@localhost ~]# rm -rf  /etc/yum.repos.d/abc.repo 
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf /redhatisodata/
+[root@localhost ~]# 
+[root@localhost ~]# ls /
+afs  bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+==========================================================================================
+Note:-  we don't want to connect OR copy the ISO image data in my machine then how we can install rpms directly from the redhat website.
+
+www.redhat.com  ===> create redhat login ID and password   ===> 1- Personal    2- Corporate 
+
+
+Choice-1  we can download the rpms using rpm search link in www.redhat.com
+Choice-2  we can connect this machine with redhat online repository 1- Internet Enable   2- make sure we have working login ID and password
+
+==========================================================================================
+
+Step-1  Configure internet settings in your VM
+
+   32  ifconfig 
+   33  nmcli connection down ens160
+   35  nmcli connection up   ens160
+   36  ifconfig 
+
+[root@localhost ~]# ping google.com
+PING google.com (142.250.194.142) 56(84) bytes of data.
+64 bytes from del12s05-in-f14.1e100.net (142.250.194.142): icmp_seq=1 ttl=60 time=2.60 ms
+64 bytes from del12s05-in-f14.1e100.net (142.250.194.142): icmp_seq=2 ttl=60 time=2.05 ms
+64 bytes from del12s05-in-f14.1e100.net (142.250.194.142): icmp_seq=3 ttl=60 time=1.72 ms
+64 bytes from del12s05-in-f14.1e100.net (142.250.194.142): icmp_seq=4 ttl=60 time=2.68 ms
+64 bytes from del12s05-in-f14.1e100.net (142.250.194.142): icmp_seq=5 ttl=60 time=1.99 ms
+64 bytes from del12s05-in-f14.1e100.net (142.250.194.142): icmp_seq=6 ttl=60 time=2.76 ms
+64 bytes from del12s05-in-f14.1e100.net (142.250.194.142): icmp_seq=7 ttl=60 time=2.87 ms
+64 bytes from del12s05-in-f14.1e100.net (142.250.194.142): icmp_seq=8 ttl=60 time=2.46 ms
+64 bytes from del12s05-in-f14.1e100.net (142.250.194.142): icmp_seq=9 ttl=60 time=2.19 ms
+^C
+--- google.com ping statistics ---
+9 packets transmitted, 9 received, 0% packet loss, time 8014ms
+rtt min/avg/max/mdev = 1.716/2.367/2.866/0.374 ms
+[root@localhost ~]# 
+
+Step-2  check your redhat login ID and password is working or not  ?
+
+Windows ===> machine ==> google chrome  ===> www.redhat.com   ===> yes our account is working  ===> 1- rpm search download 2- online repo sync
+
+
+step-3   how we can register my machine with www.redhat.com to install free available rpms with login ID and password
+
+
+
+
+[root@localhost ~]# ls /etc/yum.repos.d
+redhat.repo
+[root@localhost ~]# cat /etc/yum.repos.d/redhat.repo 
+#
+# Certificate-Based Repositories
+# Managed by (rhsm) subscription-manager
+#
+# *** This file is auto-generated.  Changes made here will be over-written. ***
+# *** Use "subscription-manager repo-override --help" if you wish to make changes. ***
+#
+# If this file is empty and this system is subscribed consider
+# a "yum repolist" to refresh available repos
+#
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# subscription-manager register
+Registering to: subscription.rhsm.redhat.com:443/subscription
+Username: 
+Password: 
+The system has been registered with ID: a38c4cf3-7a45-4fad-8465-0a94b4537e08
+The registered system name is: localhost.localdomain
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls /etc/yum.repos.d
+redhat.repo
+[root@localhost ~]# 
+[root@localhost ~]# cat  /etc/yum.repos.d/redhat.repo 
+
+[root@localhost ~]# yum clean all 
+Updating Subscription Management repositories.
+17 files removed
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# yum repolist all  
+[root@localhost ~]# yum repolist all   |  grep enabled
+rhel-9-for-x86_64-appstream-rpms                              Red Hat E enabled
+rhel-9-for-x86_64-baseos-rpms                                 Red Hat E enabled
+[root@localhost ~]# 
+
+This machine is now ready to install RPMs directly from redhat official online repo
+==========================================================================================
+
+[root@localhost ~]# yum list 
+[root@localhost ~]# yum list  | wc -l  
+
+==========================================================================================
+
+TASK-1    How we can install required package for FTP Server and How we can start the service of FTP Server ?
+
+   50  dnf search vsftpd
+   51  dnf install   vsftpd
+   52  systemctl start vsftpd 
+   53  systemctl enable  vsftpd 
+   54  pstree  | grep  vsftpd  
+[root@localhost ~]# rpm -qa  tree
+tree-1.8.0-10.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa | wc -l 
+1173
+[root@localhost ~]# 
+
+[root@localhost ~]# yum list  | wc -l  
+7680
+[root@localhost ~]# 
+
+
+========================================================================================== Installation + Service activate + Configuration 
+
+TASK-2    How we can install required package for NFS Server and How we can start the service of NFS Server ?
+
+   59   dnf install rpcbind nfs-utils -y
+   60  systemctl start  rpcbind
+   61  systemctl start  nfs-server  
+   62  systemctl enable    rpcbind
+   63  systemctl enable    nfs-server 
+
+
+==========================================================================================
+
+TASK-3    How we can install required package for SAMBA Server and How we can start the service of SAMBA Server ?
+
+   65  dnf install samba samba-common samba-client
+   66  systemctl  start  smb
+   67  systemctl  enable    smb
+
+==========================================================================================
+
+TASK-4    How we can install required package for http webserver Server and How we can start the service of http webserver Server ?
+
+   69  yum search  httpd
+   70  yum install   httpd
+   71  systemctl start httpd
+   72  systemctl enable   httpd
+   73  pstree | grep httpd
+   74  pstree | grep vsftpd 
+
+==========================================================================================
+
+TASK-4    How we can install required package for mariadb database Server and How we can start the service of mariadb database Server ?
+
+[root@localhost ~]# yum install mariadb-server mariadb-backup mariadb-common
+
+[root@localhost ~]# systemctl start  mariadb 
+[root@localhost ~]# systemctl enable  mariadb  
+
+
+DNS...DHCP...POSTFIX EMAIL SERVER......so on all are available in this local ISO image OR this online redhat repository
+
+==========================================================================================
+
+  allineone application  ===> Four application  ==> Topic Count  ===> single application
+
+For Example:  LAMP Server  in Linux   ===> Linux Apache MySQL  PHP    ===> LAMP 
+For Example:  WAMP Server  in Windows 
+========================================================================================== /etc/yum.resos.d/repo file ==> URL
+repo file creation method
+
+1- manual repo file creation method  ==> VIM  ==> path  ===> file  ===> baseurl ===> mention  ===> use
+2- automatic method 
+                   
+
+==========================================================================================
+
+3- How we can connect our machine with EPEL online repository.
+4- How we can install any rpms directly from the vendor website. 
+
+
+==========================================================================================
+
+What is EPEL repo ?  Extra packages for Entrerpise Linux   ===> all in one place ===> around 25000 RPMs 
+
+==========================================================================================
+   97  yum install glances  
+   98  yum install htop
+   99  yum install znc
+  100  yum install nagios
+  101  history 
+
+[root@localhost ~]# subscription-manager repos --enable codeready-builder-for-rhel-9-$(arch)-rpms
+
+[root@localhost ~]# 
+[root@localhost ~]# dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+
+
+                           OR
+
+[root@localhost ~]# wget  https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+[root@localhost ~]# ls 
+[root@localhost ~]# rpm -ivh  epel-release-latest-9.noarch.rpm
+[root@localhost ~]# ls  /etc/yum.repos.d
+
+
+==========================================================================================
+
+
+
+
+[root@localhost ~]# yum clean all 
+Updating Subscription Management repositories.
+44 files removed
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# yum repolist all  |  grep enabled
+
+codeready-builder-for-rhel-9-x86_64-rpms                      Red Hat C enabled
+epel                                                          Extra Pac enabled
+epel-cisco-openh264                                           Extra Pac enabled
+rhel-9-for-x86_64-appstream-rpms                              Red Hat E enabled
+rhel-9-for-x86_64-baseos-rpms                                 Red Hat E enabled
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# yum list  
+
+
+
+
+[root@localhost ~]# yum list  |  grep epel  | wc -l  
+22858
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# yum search glances  
+Updating Subscription Management repositories.
+Last metadata expiration check: 0:01:43 ago on Sat 22 Mar 2025 10:57:24 AM IST.
+================================================================= Name Exactly Matched: glances ==================================================================
+glances.noarch : A cross-platform system monitoring tool
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+  110  yum clean all 
+  111  yum repolist all  |  grep enabled
+  112  yum list  
+  113  yum list  |  grep epel 
+  114  yum list  |  grep epel  | wc -l 
+[root@localhost ~]# yum list  |  grep glances
+glances.noarch                                                                           3.3.1-2.el9                          epel                                    
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# yum list  |  grep znc
+znc.x86_64                                                                               1.8.2-15.el9                         epel                                    
+znc-devel.x86_64                                                                         1.8.2-15.el9                         epel                                    
+znc-modperl.x86_64                                                                       1.8.2-15.el9                         epel                                    
+znc-modpython.x86_64                                                                     1.8.2-15.el9                         epel                                    
+znc-modtcl.x86_64                                                                        1.8.2-15.el9                         epel                                    
+[root@localhost ~]# 
+[root@localhost ~]# yum list  |  grep htop  
+htop.x86_64                                                                              3.3.0-1.el9                          epel                                    
+[root@localhost ~]# 
+
+[root@localhost ~]# yum list  |  grep teamviewer
+[root@localhost ~]# yum list  |  grep anydesk 
+
+==================================================================
+
+[root@localhost ~]# yum install glances  
+[root@localhost ~]# which glances 
+/usr/bin/glances
+[root@localhost ~]# 
+[root@localhost ~]# glances 
+[root@localhost ~]# 
+[root@localhost ~]# yum install  htop  -y  
+[root@localhost ~]# which htop  
+/usr/bin/htop
+[root@localhost ~]# 
+[root@localhost ~]# htop  
+[root@localhost ~]# 
+
+
+================================================================== LAMP 
+
+[root@localhost ~]# yum list |  grep  phpmyadmin
+
+[root@localhost ~]# yum install -y https://rpms.remirepo.net/enterprise/remi-release-9.rpm
+
+[root@localhost ~]# ls /etc/yum.repos.d
+epel-cisco-openh264.repo  epel.repo  epel-testing.repo  redhat.repo  remi-modular.repo  remi.repo  remi-safe.repo
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cat   /etc/yum.repos.d/remi.repo 
+
+[root@localhost ~]# yum install phpmyadmin
+
+
+================================================================
+
+How we can install any third party vendor based application which is not available in redhat repo and epel repo as well.
+
+
+team viewer ==> website  ==> downlaod ===> redhat linux ===> download ==> rpms 
+
+[root@localhost ~]# cd Downloads
+[root@localhost Downloads]# ls
+teamviewer_15.63.4.x86_64.rpm
+[root@localhost Downloads]# 
+[root@localhost Downloads]# cd
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# rpm -ivh  /root/Downloads/teamviewer_15.63.4.x86_64.rpm 
+warning: /root/Downloads/teamviewer_15.63.4.x86_64.rpm: Header V4 RSA/SHA256 Signature, key ID 3b7d1a07: NOKEY
+error: Failed dependencies:
+	libXss.so.1()(64bit) is needed by teamviewer-15.63.4-0.x86_64
+	libminizip.so.1()(64bit) is needed by teamviewer-15.63.4-0.x86_64
+	libxcb-icccm.so.4()(64bit) is needed by teamviewer-15.63.4-0.x86_64
+	libxcb-image.so.0()(64bit) is needed by teamviewer-15.63.4-0.x86_64
+	libxcb-keysyms.so.1()(64bit) is needed by teamviewer-15.63.4-0.x86_64
+	libxcb-render-util.so.0()(64bit) is needed by teamviewer-15.63.4-0.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# yum  install  /root/Downloads/teamviewer_15.63.4.x86_64.rpm 
+[root@localhost ~]# which teamviewer 
+/usr/bin/teamviewer
+[root@localhost ~]# 
+
+================================================================
+
+
+nagios installation steps on rhel-9
+
+zabbix installation steps on rhel-9
+
+https://www.tecmint.com/install-nagios-in-linux/
+
+
+================================================================
+[root@localhost ~]# yum install targetcli  -y
+================================================================
+What is the concept of group in YUM  ?
+
+# yum install packagename 
+# yum groupinstall packagename ? ===> group create   ==> set of rpms 
+
+
+================================================================
+
+We will create first new fresh machine with CLI mode only  ?
+
+How we can switch this machine in GUI mode without reinstallation and without deleting the VM ?
+
+GUI ==> CLI  ==> switch ===> YES
+only CLI ===> switch  ==> GUI ==> NO ===> but yes we can do this
+
+note: we need to install required rpms to switch this machine in GUI mode
+
+================================================================
+
+local iso mount and yum repo file 
+
+# lsblk 
+
+#  mount /dev/sr0  /mnt  
+
+# vi  /etc/yum.repos.d/abc.repo
+
+[path-1]
+name=abc
+baseurl=file:///mnt/BaseOS
+enabled=1
+gpgcheck=0
+
+[path-2]
+name=xyz
+baseurl=file:///mnt/AppStream
+enabled=1
+gpgcheck=0
+
+:wq!
+
+
+
+
+# yum  groupinstall  "Server with GUI"
+
+# systemctl  isolate graphical.target
+
+# systemctl  set-default  graphical.target
+
+# reboot
+
+================================================================ 
+
+Now this machine will move in GUI mode 
+
+================================================================
+
+
+Redhat linux  ===>  redhat website ===> /etc/yum.repos.d/ ===> need to register first 
+
+Centos Linux ===> centos website  ===> There is no need to register ==>  /etc/yum.repos.d/    default repo available ==> internet on 
+
+================================================================
+
+Package management   ==> using rpm + using yum or dnf  
+       + 
+Service Management   
+ 
+================================================================
+

@@ -1,0 +1,230 @@
+=============================================
+               Day-16 Session
+=============================================
+      Controlling Services/Daemons/Units
+
+=============================================
+              
+       Examples of systemctl commands 
+
+=============================================
+
+Objective:-1  Controlling Services/Daemons/Units using systemctl command 
+
+Objective:-2 Controll System Environment/Mode ===> RUNLEVEL OR TARGETS Controlling 
+
+============================================= 
+
+1- On demand process as per need 
+
+2- Continue running in backend and will accept the request from the user side ===> using services/daemons/Units ===> with the help of systemctl
+
+============================================= tree ==> type  ==> enter  ==> PID ==> finish  OR terminate OR kill 
+
+
+Terms ?
+
+1- utility name
+2- RPM name
+3- Service Name/Daemon Name/Unit Name
+
+=============================================  
+
+crontab       ==> cronie        ==> crond
+TopicName        packagename    ==> daemonname
+
+============================================= pstree  ===> available daemon/unit/services ===> default services + custom serivce 
+
+Difference between PID and PORT Numbers ?
+
+Services Types
+
+1- Internal Services                       EX:  crond and atd
+
+2- External OR network based services      EX:  SSH NFS FTP SAMBA apache DNS DHCP NTP TELNET ...so on 
+
+============================================= 
+
+TopicName             packagename        daemonname      PID number                           Portnumber
+  
+SSH                    XYZ Name           abc name       15363[can by anything]                 22  [default port  number]
+crontab
+NTP
+NFS
+FTP
+SAMBA
+APACHE
+DNS
+DHCP
+Mariadb
+...so on 
+=============================================
+
+# pstree |  grep crond 
+# pstree  | grep sshd
+
+# netstat -tunlp  |  grep sshd     ===> example of network based service
+# netstat -tunlp   | grep  crond    ===> example of internal service
+
+============================================
+
+============================================
+Services Types
+
+1- Internal Services                       EX:  crond and atd
+2- External OR network based services      EX:  SSH NFS FTP SAMBA apache DNS DHCP ...so on 
+
+===========================================
+Firewall configuration ==> for any network based service not for internal service ===> using always port number
+===========================================
+
+NFS server Configurtation
+
+=========================================== 
+
+1- package installation    ===> Package Management
+2- service start           ===> Service Management
+==========================================
+3- firewall management     ===> traffice management 
+========================================== 
+
+Difference PID and Port number [always use to make connection between server and client machine respective of the services]
+
+==========================================
+1- crontab topic
+2- XYZ name ==> package ==> yum install packagename  
+3- abc name ==> daemon  ==> systemctl start servicename/daemonname/unitname 
+4- pid
+5- port number of the service       ===> types of services in our machine  1- internal services   2- external services OR network based services
+#pidof crond
+
+port running  ==> # netstat -tunlp  
+
+
+Example:-     crontab    ==> crond  ==> running  ==> yes we have the PID but there is no port number of crontab  ==> internal service
+Example:-     SSH OR NTP ==> sshd   ==> running  ==> yes we have PID and port number both 
+==========================================
+
+machine-1 rhel-9    ==> having SSH + FTP + HTTP ==> service/daemin/Unit ==> running ==> 1- PID  2- PORT NUMBER  ==> external
+
+
+machine-2 rhel-9   # ssh   root@192.168.0.100     # ftp   192.168.0.100     # curl    http://192.168.0.100
+
+=========================================
+
+
+=========================================
+Daemon/Service/Unit  ==> 1- As a TEMP     
+  
+                         2- As a PERMENENT
+
+
+=========================================
+# yum install vsftpd
+# systemctl start  vsftpd  ===>  Example of TEMP action
+# pidof vsftpd
+=========================================
+# reboot 
+=========================================
+# pidof vsftpd  ===> will not display
+=============================================
+# systemctl start  vsftpd     ===> Example of TEMP
+# pidof vsftpd
+# systemctl enable vsftpd     ===> Example of PERM
+# reboot 
+=============================================
+# pidof vsftpd  ===> will display the PID
+=============================================
+
+# systemctl stop vsftpd    ===> TEMP ACTION        ===> without reboot
+# systemctl disable vsftpd ===> PERMANENT ACTION   ===> after the reboot
+# reboot 
+
+this daemon will not be activate this service after reboot
+
+=============================================
+
+============================================= 
+default services ==> inbuilt available
+Custom services  ==> we need install these as per requirements. ==> using rpm or YUM
+=============================================
+# pstree    ===> only running and available daemons
+# ps -aux   ===> complete running process  + daemons 
+ 
+============================================
+Till RHEL-6  ==> init ==> service [TEMP Action] + chkconfig [PERMANENT] 
+
+# service crond start   ==> TEMP     ===> what do you want without reboot the machine
+# chkconfig crond on    ==> PERMANET ===> what do you want after the reboot  
+
+# service crond stop 
+# chkconfig crond off 
+
+===========================================
+By rhel-7+8+9 ==> systemd ==> systemctl [TEMP + PERM]
+
+# systemctl  start crond  ==> TEMP  
+# systemctl enable crond  ==> PERMANENT
+
+
+# systemctl  stop crond  
+# systemctl  disable crond
+
+============================================ 
+
+# systemctl enable/disable  unitname   ==> PERMANENT       ==> after the reboot
+# systemctl start/stop/restart/reload/status   unitname  ==> TEMP  ==> on the spot
+============================================
+
+# chkconfig  unitname  on/off   ==> PERMANENT
+# service  unitname actions     ==> TEMP
+
+===================================================
+
+===================================================
+
+===================================================
+
+
+ 
+1- pidof          ===> to check the PID of any running process
+
+2- netstat or ss  ===> to check the port number of any services [EX: network based services]
+
+
+# netstat  -tunlp 
+# ss  -tunlp  
+===============================================
+What is Process Name ?
+What is Process ID ?
+What is Port Number ?  Traffic ==> Management  ==> using port number
+
+===============================================
+TopicName         ServiceName/Daemonname/Unitname            Default PORT     
+
+SSH server          sshd                                     22
+FTP                 vsftpd                                   20 and 21
+HTTP                httpd                                    80 and  443 
+NTP                 ntpd/chronyd                             123
+DNS                 named                                    53
+NFS                 nfs-server 
+......so on 
+
+
+Crontab             crond                           There is no port number
+=============================================
+[root@localhost ~]# cat  /etc/services    ===> default port number file ===> we can read this only 
+
+[root@localhost ~]# cat /etc/ssh/sshd_config  |  grep -i port
+# If you want to change the port on a SELinux system, you have to tell
+# semanage port -a -t ssh_port_t -p tcp #PORTNUMBER
+#Port 22
+# WARNING: 'UsePAM no' is not supported in Fedora and may cause several
+#GatewayPorts no
+[root@localhost ~]# 
+
+
+=============================================
+Network Management + Firewall Management
+=============================================
+

@@ -1,0 +1,559 @@
+[root@localhost ~]# cat  /etc/redhat-release 
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# cat  /etc/system-release
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# pstree 
+systemd─┬─ModemManager───3*[{ModemManager}]
+        ├─NetworkManager───2*[{NetworkManager}]
+        ├─VGAuthService
+        ├─accounts-daemon───3*[{accounts-daemon}]
+        ├─alsactl
+        ├─atd
+        ├─auditd─┬─sedispatch
+        │        └─2*[{auditd}]
+        ├─avahi-daemon───avahi-daemon
+        ├─bluetoothd
+        ├─chronyd
+        ├─colord───3*[{colord}]
+        ├─crond
+        ├─cupsd
+[root@localhost ~]# which sshd
+/usr/sbin/sshd
+[root@localhost ~]# which crond  
+/usr/sbin/crond
+[root@localhost ~]# which chronyd 
+/usr/sbin/chronyd
+[root@localhost ~]# 
+[root@localhost ~]# which httpd
+/usr/bin/which: no httpd in (/root/.local/bin:/root/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin)
+[root@localhost ~]# 
+[root@localhost ~]# which vsftpd
+/usr/bin/which: no vsftpd in (/root/.local/bin:/root/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin)
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qf  /usr/sbin/sshd
+openssh-server-8.7p1-8.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qf  /usr/sbin/crond  
+cronie-1.5.7-5.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qf  /usr/sbin/chronyd 
+chrony-4.1-3.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -ql cronie
+/etc/cron.d
+/etc/cron.d/0hourly
+/etc/cron.deny
+/etc/pam.d/crond
+/etc/sysconfig/crond
+/usr/bin/cronnext
+/usr/bin/crontab
+/usr/lib/.build-id
+/usr/lib/.build-id/29
+/usr/lib/.build-id/29/45bc479354faf5e48b33969e00ca8eff47d35a
+/usr/lib/.build-id/36
+/usr/lib/.build-id/36/19941bbbb58933867021f417f642abaa318ea8
+/usr/lib/.build-id/e4
+/usr/lib/.build-id/e4/a833abe12ef4d566a3685fec808ce96e01cfbf
+/usr/lib/systemd/system/crond.service
+/usr/sbin/crond
+/usr/share/doc/cronie
+/usr/share/doc/cronie/AUTHORS
+/usr/share/doc/cronie/ChangeLog
+/usr/share/doc/cronie/README
+/usr/share/licenses/cronie
+/usr/share/licenses/cronie/COPYING
+/usr/share/man/man1/cronnext.1.gz
+/usr/share/man/man1/crontab.1.gz
+/usr/share/man/man5/crontab.5.gz
+/usr/share/man/man8/cron.8.gz
+/usr/share/man/man8/crond.8.gz
+/var/spool/cron
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# rpm -ql tree  
+/usr/bin/tree
+/usr/lib/.build-id
+/usr/lib/.build-id/74
+/usr/lib/.build-id/74/6ceaa06df0d9c3eaa593f25d10b56a34acc603
+/usr/share/doc/tree
+/usr/share/doc/tree/README
+/usr/share/licenses/tree
+/usr/share/licenses/tree/LICENSE
+/usr/share/man/man1/tree.1.gz
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# which systemctl 
+/usr/bin/systemctl
+[root@localhost ~]# systemctl is-active crond  
+active
+[root@localhost ~]# systemctl is-enabled  crond  
+enabled
+[root@localhost ~]# 
+[root@localhost ~]# rpm -ql tree   |  grep service
+[root@localhost ~]# 
+[root@localhost ~]# rpm -ql cronie    |  grep service
+/usr/lib/systemd/system/crond.service
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# systemctl status crond 
+● crond.service - Command Scheduler
+     Loaded: loaded (/usr/lib/systemd/system/crond.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sun 2025-03-23 11:01:15 IST; 5min ago
+   Main PID: 1005 (crond)
+      Tasks: 1 (limit: 48647)
+     Memory: 1.0M
+        CPU: 7ms
+     CGroup: /system.slice/crond.service
+             └─1005 /usr/sbin/crond -n
+
+Mar 23 11:01:15 localhost.localdomain systemd[1]: Started Command Scheduler.
+Mar 23 11:01:15 localhost.localdomain crond[1005]: (CRON) STARTUP (1.5.7)
+Mar 23 11:01:15 localhost.localdomain crond[1005]: (CRON) INFO (Syslog will be used instead of sendmail.)
+Mar 23 11:01:15 localhost.localdomain crond[1005]: (CRON) INFO (RANDOM_DELAY will be scaled with factor 9% if used.)
+Mar 23 11:01:15 localhost.localdomain crond[1005]: (CRON) INFO (running with inotify support)
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# systemctl status sshd 
+● sshd.service - OpenSSH server daemon
+     Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sun 2025-03-23 11:01:14 IST; 6min ago
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+   Main PID: 926 (sshd)
+      Tasks: 1 (limit: 48647)
+     Memory: 2.9M
+        CPU: 12ms
+     CGroup: /system.slice/sshd.service
+             └─926 "sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups"
+
+Mar 23 11:01:14 localhost systemd[1]: Starting OpenSSH server daemon...
+Mar 23 11:01:14 localhost.localdomain sshd[926]: Server listening on 0.0.0.0 port 22.
+Mar 23 11:01:14 localhost.localdomain sshd[926]: Server listening on :: port 22.
+Mar 23 11:01:14 localhost.localdomain systemd[1]: Started OpenSSH server daemon.
+[root@localhost ~]# 
+[root@localhost ~]# pidof crond  
+1005
+[root@localhost ~]# pidof sshd
+926
+[root@localhost ~]# netstat -tunlp  |  grep crond  
+[root@localhost ~]# netstat -tunlp  |  grep sshd
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      926/sshd: /usr/sbin 
+tcp6       0      0 :::22                   :::*                    LISTEN      926/sshd: /usr/sbin 
+[root@localhost ~]# 
+[root@localhost ~]# ss   -tunlp  |  grep sshd
+tcp   LISTEN 0      128          0.0.0.0:22         0.0.0.0:*    users:(("sshd",pid=926,fd=3))         
+tcp   LISTEN 0      128             [::]:22            [::]:*    users:(("sshd",pid=926,fd=4))         
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# systemctl stop sshd 
+[root@localhost ~]# 
+[root@localhost ~]# systemctl is-active sshd  
+inactive
+[root@localhost ~]# pidof sshd 
+[root@localhost ~]# 
+[root@localhost ~]# netstat -tunlp  |  grep sshd
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# systemctl is-enabled  sshd  
+enabled
+[root@localhost ~]# 
+[root@localhost ~]# systemctl status sshd 
+○ sshd.service - OpenSSH server daemon
+     Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled; vendor preset: enabled)
+     Active: inactive (dead) since Sun 2025-03-23 11:08:37 IST; 52s ago
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+    Process: 926 ExecStart=/usr/sbin/sshd -D $OPTIONS (code=exited, status=0/SUCCESS)
+   Main PID: 926 (code=exited, status=0/SUCCESS)
+        CPU: 14ms
+
+Mar 23 11:01:14 localhost systemd[1]: Starting OpenSSH server daemon...
+Mar 23 11:01:14 localhost.localdomain sshd[926]: Server listening on 0.0.0.0 port 22.
+Mar 23 11:01:14 localhost.localdomain sshd[926]: Server listening on :: port 22.
+Mar 23 11:01:14 localhost.localdomain systemd[1]: Started OpenSSH server daemon.
+Mar 23 11:08:37 localhost.localdomain systemd[1]: Stopping OpenSSH server daemon...
+Mar 23 11:08:37 localhost.localdomain sshd[926]: Received signal 15; terminating.
+Mar 23 11:08:37 localhost.localdomain systemd[1]: sshd.service: Deactivated successfully.
+Mar 23 11:08:37 localhost.localdomain systemd[1]: Stopped OpenSSH server daemon.
+[root@localhost ~]# 
+[root@localhost ~]# systemctl disable sshd 
+Removed /etc/systemd/system/multi-user.target.wants/sshd.service.
+[root@localhost ~]# 
+[root@localhost ~]# systemctl status sshd 
+○ sshd.service - OpenSSH server daemon
+     Loaded: loaded (/usr/lib/systemd/system/sshd.service; disabled; vendor preset: enabled)
+     Active: inactive (dead)
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+
+Mar 23 11:01:14 localhost systemd[1]: Starting OpenSSH server daemon...
+Mar 23 11:01:14 localhost.localdomain sshd[926]: Server listening on 0.0.0.0 port 22.
+Mar 23 11:01:14 localhost.localdomain sshd[926]: Server listening on :: port 22.
+Mar 23 11:01:14 localhost.localdomain systemd[1]: Started OpenSSH server daemon.
+Mar 23 11:08:37 localhost.localdomain systemd[1]: Stopping OpenSSH server daemon...
+Mar 23 11:08:37 localhost.localdomain sshd[926]: Received signal 15; terminating.
+Mar 23 11:08:37 localhost.localdomain systemd[1]: sshd.service: Deactivated successfully.
+Mar 23 11:08:37 localhost.localdomain systemd[1]: Stopped OpenSSH server daemon.
+[root@localhost ~]# 
+[root@localhost ~]# systemctl is-active sshd  
+inactive
+[root@localhost ~]# 
+[root@localhost ~]# systemctl is-enabled  sshd  
+disabled
+[root@localhost ~]# 
+
+[root@localhost ~]# which crond
+/usr/sbin/crond
+[root@localhost ~]# which sshd 
+/usr/sbin/sshd
+[root@localhost ~]# pstree |  grep crond 
+        |-crond
+[root@localhost ~]# pstree |  grep sshd 
+[root@localhost ~]# netstat -tunlp | grep sshd  
+[root@localhost ~]# 
+[root@localhost ~]# which sshd 
+/usr/sbin/sshd
+[root@localhost ~]# pidof sshd
+[root@localhost ~]# 
+[root@localhost ~]# pstree |  grep sshd 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# systemctl start  sshd  
+[root@localhost ~]# 
+[root@localhost ~]# pidof sshd
+3030
+[root@localhost ~]# netstat -tunlp | grep sshd  
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      3030/sshd: /usr/sbi 
+tcp6       0      0 :::22                   :::*                    LISTEN      3030/sshd: /usr/sbi 
+[root@localhost ~]# 
+[root@localhost ~]# pstree  | grep sshd  
+        |-sshd
+[root@localhost ~]# 
+[root@localhost ~]# systemctl is-active sshd  
+active
+[root@localhost ~]# systemctl is-enabled  sshd  
+disabled
+[root@localhost ~]# 
+[root@localhost ~]# systemctl status sshd  
+● sshd.service - OpenSSH server daemon
+     Loaded: loaded (/usr/lib/systemd/system/sshd.service; disabled; vendor preset: enabled)
+     Active: active (running) since Sun 2025-03-23 11:11:44 IST; 52s ago
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+   Main PID: 3030 (sshd)
+      Tasks: 1 (limit: 48647)
+     Memory: 1.7M
+        CPU: 11ms
+     CGroup: /system.slice/sshd.service
+             └─3030 "sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups"
+
+Mar 23 11:11:44 localhost.localdomain systemd[1]: Starting OpenSSH server daemon...
+Mar 23 11:11:44 localhost.localdomain sshd[3030]: Server listening on 0.0.0.0 port 22.
+Mar 23 11:11:44 localhost.localdomain sshd[3030]: Server listening on :: port 22.
+Mar 23 11:11:44 localhost.localdomain systemd[1]: Started OpenSSH server daemon.
+[root@localhost ~]# 
+[root@localhost ~]# systemctl enable sshd 
+Created symlink /etc/systemd/system/multi-user.target.wants/sshd.service → /usr/lib/systemd/system/sshd.service.
+[root@localhost ~]# 
+[root@localhost ~]# systemctl is-active sshd  
+active
+[root@localhost ~]# systemctl is-enabled  sshd  
+enabled
+[root@localhost ~]# systemctl status sshd  
+● sshd.service - OpenSSH server daemon
+     Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sun 2025-03-23 11:11:44 IST; 1min 22s ago
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+   Main PID: 3030 (sshd)
+      Tasks: 1 (limit: 48647)
+     Memory: 1.7M
+        CPU: 11ms
+     CGroup: /system.slice/sshd.service
+             └─3030 "sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups"
+
+Mar 23 11:11:44 localhost.localdomain systemd[1]: Starting OpenSSH server daemon...
+Mar 23 11:11:44 localhost.localdomain sshd[3030]: Server listening on 0.0.0.0 port 22.
+Mar 23 11:11:44 localhost.localdomain sshd[3030]: Server listening on :: port 22.
+Mar 23 11:11:44 localhost.localdomain systemd[1]: Started OpenSSH server daemon.
+[root@localhost ~]# 
+
+[root@localhost ~]# systemctl is-active crond sshd  
+active
+active
+[root@localhost ~]# 
+[root@localhost ~]# systemctl is-enabled  crond sshd  
+enabled
+enabled
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# pstree | grep -i bluetooth
+        |-bluetoothd
+[root@localhost ~]# pstree | grep -i atd
+        |-atd
+[root@localhost ~]# pstree | grep -i crond
+        |-crond
+[root@localhost ~]# 
+[root@localhost ~]# pstree | grep -i sshd  
+        |-sshd
+[root@localhost ~]# 
+[root@localhost ~]# netstat -tunlp  
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      3030/sshd: /usr/sbi 
+tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN      924/cupsd           
+tcp6       0      0 :::22                   :::*                    LISTEN      3030/sshd: /usr/sbi 
+tcp6       0      0 ::1:631                 :::*                    LISTEN      924/cupsd           
+udp        0      0 0.0.0.0:5353            0.0.0.0:*                           780/avahi-daemon: r 
+udp        0      0 0.0.0.0:36360           0.0.0.0:*                           780/avahi-daemon: r 
+udp        0      0 127.0.0.1:323           0.0.0.0:*                           814/chronyd         
+udp6       0      0 :::5353                 :::*                                780/avahi-daemon: r 
+udp6       0      0 :::52509                :::*                                780/avahi-daemon: r 
+udp6       0      0 ::1:323                 :::*                                814/chronyd         
+[root@localhost ~]# 
+
+
+======================================================================
+How we can install new services in same machine as per project need using YUM repo file  
+======================================================================
+Choice-1  we can sync this machine with redhat online repo
+Choice-2  we can create local repo file with local iso image
+======================================================================
+We are going to use choice-2 just for practise purpose
+
+
+connect ISO image with your VM
+
+
+[root@localhost ~]# which vsftpd
+/usr/bin/which: no vsftpd in (/root/.local/bin:/root/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin)
+[root@localhost ~]# which httpd
+/usr/bin/which: no httpd in (/root/.local/bin:/root/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin)
+[root@localhost ~]#
+
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sdb      8:16   0    5G  0 disk 
+sr0     11:0    1    8G  0 rom  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# mount  /dev/sr0  /mnt 
+mount: /mnt: WARNING: source write-protected, mounted read-only.
+[root@localhost ~]# 
+[root@localhost ~]# ls /mnt  
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost ~]# 
+[root@localhost ~]# ls /mnt/AppStream
+Packages  repodata
+[root@localhost ~]# 
+[root@localhost ~]# ls /mnt/BaseOS
+Packages  repodata
+[root@localhost ~]# 
+[root@localhost ~]# vim /etc/yum.repos.d/abc.repo 
+[path-1]
+name=abc
+baseurl=file:///mnt/BaseOS
+enabled=1
+gpgcheck=0
+[path-2]
+name=xyz
+baseurl=file:///mnt/AppStream
+enabled=1
+gpgcheck=0
+
+
+:wq!
+
+[root@localhost ~]# yum clean all 
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+0 files removed
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# yum repolist all 
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+repo id                                                       repo name                                                  status
+path-1                                                        abc                                                        enabled
+path-2                                                        xyz                                                        enabled
+[root@localhost ~]# 
+
+======================================================================
+First Example:-1
+
+  74  yum install  vsftpd  
+   75  rpm -qa  vsftpd 
+   76  which vsftpd 
+   77  rpm -ql  vsftpd
+   78  rpm -ql  vsftpd |  grep service  
+   79  pstree  |  grep vsftpd 
+   80  rpm -qc  vsftpd 
+   81  systemctl start  vsftpd 
+   82  systemctl is-active  vsftpd 
+   83  systemctl is-enabled  vsftpd 
+   84  systemctl enable vsftpd 
+   85  systemctl is-active  vsftpd 
+   86  systemctl is-enabled  vsftpd 
+   87  systemctl status vsftpd  
+   88  pstree |  grep  vsftpd 
+   89  netstat -tunlp  | grep  vsftpd  
+   90  pidof vsftpd 
+======================================================================
+Second Example:-
+
+[root@localhost ~]# pidof init  
+[root@localhost ~]# 
+[root@localhost ~]# which init 
+/usr/sbin/init
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# pstree  |  grep vsftpd 
+        |-vsftpd
+[root@localhost ~]# 
+[root@localhost ~]# pidof vsftpd 
+1022
+[root@localhost ~]# 
+[root@localhost ~]# netstat -tunlp  |  grep vsftpd 
+tcp6       0      0 :::21                   :::*                    LISTEN      1022/vsftpd         
+[root@localhost ~]# 
+
+  110  yum install httpd -y
+  111  rpm -qa httpd
+  112  which httpd
+  113  rpm -ql httpd
+  114  rpm -ql httpd | grep service
+  115  pstree  |  grep httpd
+  116  systemctl enable httpd 
+  117  pidof httpd
+  118  pstree  |  grep httpd
+  119  systemctl start  httpd 
+  120  pstree  |  grep httpd
+  121  netstat -tunlp  | grep httpd
+  122  netstat -tunlp
+ 124  yum remove tree  
+  125  yum install   tree  
+  126  rpm -ql  tree   
+  127  mkdir  -p  /kr/network/cloud  
+  128  tree  /kr 
+  129  pidof tree 
+  130  tree  /kr 
+  131  pidof tree 
+  132  pidof sshd
+  133  crontab -l  
+  134  history 
+
+======================================================================
+
+[root@localhost ~]# pidof sshd 
+936
+[root@localhost ~]# systemctl reload sshd  
+[root@localhost ~]# 
+[root@localhost ~]# pidof sshd 
+936
+[root@localhost ~]# 
+[root@localhost ~]# systemctl restart  sshd  
+[root@localhost ~]# 
+[root@localhost ~]# pidof sshd 
+4036
+[root@localhost ~]# netstat -tunlp  | grep sshd  
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      4036/sshd: /usr/sbi 
+tcp6       0      0 :::22                   :::*                    LISTEN      4036/sshd: /usr/sbi 
+[root@localhost ~]# 
+[root@localhost ~]# systemctl reload-or-restart  sshd  
+[root@localhost ~]# 
+[root@localhost ~]# pidof sshd 
+4036
+[root@localhost ~]# 
+======================================================================
+Systemctl basic Example:-
+======================================================================
+
+[root@localhost ~]# systemctl list-units  | grep crond 
+  crond.service                                                                                            loaded active running   Command Scheduler
+[root@localhost ~]# 
+[root@localhost ~]# systemctl list-units  | grep chronyd 
+  chronyd.service                                                                                          loaded active running   NTP client/server
+[root@localhost ~]# systemctl list-units  
+  147  systemctl list-units  
+  148  systemctl
+  149  systemctl list-units  
+  151  systemctl list-units  --type=path 
+  152  systemctl list-units  --type=socket
+  153  systemctl list-units  --type=service
+[root@localhost ~]# systemctl list-units  --type=service  --state=running  |  wc -l  
+46
+[root@localhost ~]# systemctl list-units  --type=service  --state=running
+  158  systemctl list-unit-files  
+  159  systemctl list-unit-files  | grep crond 
+  160  systemctl list-unit-files  | grep chronyd  
+
+
+======================================================================
+Daemon/Service/Units  ===> 1- mask [Lock]    2- unmask [Unlock] 
+
+======================================================================
+  163  systemctl is-active firewalld 
+  164  systemctl is-enabled  firewalld 
+  165  systemctl list-unit-files  |  grep  mask 
+  166  systemctl stop firewalld  
+  167  systemctl disable   firewalld  
+  168  systemctl start firewalld  
+  169  systemctl enable  firewalld  
+  170  systemctl stop firewalld  
+  171  systemctl disable   firewalld  
+  172  systemctl mask   firewalld  
+  173  systemctl list-unit-files  |  grep  mask 
+  174  systemctl start firewalld  
+  175  systemctl unmask  firewalld  
+  176  systemctl list-unit-files  |  grep  mask 
+  177  systemctl start firewalld  
+  178  systemctl enable  firewalld  
+  179  systemctl status  firewalld  
+
+======================================================================
+
+  181  systemctl status chronyd  
+  182  ls /usr/lib/systemd/system/
+  183  systemctl stop chronyd 
+  184  systemctl disable  chronyd 
+  185  ls /etc/systemd/system/multi-user.target.wants
+  186  ls /etc/systemd/system/multi-user.target.wants   |  grep chronyd 
+  187  ls /usr/lib/systemd/system |  grep chronyd
+  188  systemctl start chronyd
+  189  ls /usr/lib/systemd/system |  grep chronyd
+  190  ls /etc/systemd/system/multi-user.target.wants   |  grep chronyd 
+  191  systemctl enable chronyd 
+  192  ls /etc/systemd/system/multi-user.target.wants   |  grep chronyd 
+  193  ls /usr/lib/systemd/system |  grep chronyd
+  194  systemctl stop chronyd 
+  195  systemctl disable   chronyd 
+  196  systemctl start chronyd 
+  197  systemctl enable  chronyd 
+
+
+======================================================================
+
+
+
+

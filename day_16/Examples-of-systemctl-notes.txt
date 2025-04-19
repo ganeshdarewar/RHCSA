@@ -467,12 +467,12 @@ tcp6       0      0 :::21                   :::*                    LISTEN      
 
 [root@localhost ~]# pidof sshd 
 936
-[root@localhost ~]# systemctl reload sshd  
+[root@localhost ~]# systemctl reload sshd   # reload configurations files
 [root@localhost ~]# 
 [root@localhost ~]# pidof sshd 
 936
 [root@localhost ~]# 
-[root@localhost ~]# systemctl restart  sshd  
+[root@localhost ~]# systemctl restart  sshd  # kill pid start with new pid 
 [root@localhost ~]# 
 [root@localhost ~]# pidof sshd 
 4036

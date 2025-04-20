@@ -1,0 +1,225 @@
+===========================================
+Day-10 Session 
+===========================================
+Sed ==> Basic Operation 
+Cut and awk ==> basic Operation
+===========================================
+Sed  ==> Stream Editor 
+
+With the help of sed command we can perform 
+these types of opeations:-
+
+1- Lines printing        ==> done  
+      lsblk | sed -n  '1p;3,5p;$p' 
+
+2- pattern searching         ==> done  
+      sed -n '/root/p' /etc/passwd
+
+2- lines deleting        ==> done
+      sed   -i   '6d'    /report 
+
+3- insert any line after any line number  ==> done
+  94  sed  -i  '2a  KR network Cloud'  /report 
+4- insert any line before any line number ==> done
+        94  sed  -i  '2i  KR network Cloud'  /report 
+5- find and replace operation ...so on    ==> 
+      ifconfig | grep -w  inet   | sed  -n  '1p' | sed 's/inet/ipaddress/;s/netmask/subnetmask/'
+
+=========================================== 
+Note:-   -n is the mantory options in print operation
+===========================================
+# sed   'oprations'    <filename>
+
+        OR
+
+# any-command-name  |  sed   'oprations'
+
+===========================================
+-i    ==> It will take the action in the original file content
+      Without -i all operation will perform only on the screen terminal
+===========================================
+ SED  ==> Examples Notes
+=========================================== 
+    2  cat  /etc/passwd 
+    3  cat  -n   /etc/passwd 
+    4  head -n 5  /etc/passwd
+    5  tail  -n 5  /etc/passwd
+    6  cat  /etc/passwd
+    7  sed  '1p'  /etc/passwd
+    8  sed -n  '1p'  /etc/passwd
+    9  sed -n  '5p'  /etc/passwd
+   10  head  -n 5 /etc/passwd
+   11  sed -n  '1,5p'  /etc/passwd
+   12  sed -n  '1p;5p'  /etc/passwd
+   13  sed -n  '1p'  /etc/passwd
+   14  sed -n  '$p'  /etc/passwd
+   15  useradd soniya  
+   16  sed  -n  '1p'  /etc/passwd
+   17  sed  -n  '$p'  /etc/passwd
+   18  sed  -n  '1p;$p'  /etc/passwd
+   19  sed  -n  '1p;$p'  /etc/passwd  >  /info    
+   20  cat  /info 
+   21  cat  -n  /etc/passwd | sed -n  '1p'
+   22  cat  -n  /etc/passwd | sed -n  '5p'
+   23  cat  -n  /etc/passwd | sed -n  '$p'
+   24  cat  -n  /etc/passwd | sed -n  '1p;$p'
+   25  cat  -n  /etc/passwd | sed -n  '1,5p'
+   26  cat  -n  /etc/passwd | sed -n  '1p;11p;21,25p;41,$p'
+   27  grep  -i -n  workgroup   /etc/samba/smb.conf
+   28  sed  -n '7p'   /etc/samba/smb.conf
+   29  lsblk  
+   30  lsblk   | cat  -n 
+   31  lsblk   | cat  -n  | head  -n  5
+   32  lsblk   | cat  -n  | head  -n  5 | tail -n 4  
+   33  lsblk   | cat  -n  | sed -n '2,5p' 
+   34  lsblk 
+   35  lsblk | sed -n  '3,5p' 
+   36  lsblk | sed -n  '1p;3,5p;$p' 
+   37  df  -h 
+   38  df  -h | cat  -n  
+   39  df  -h | cat  -n   | sed  -n  '6,7p'
+   40  df  -h | cat  -n   | sed  -n  '1p;6,7p'
+   41  df  -h | sed  -n  '1p;6,7p'
+   42  lscpu 
+   43  lscpu | cat -n  
+   44  lscpu | cat -n   | sed -n  '13p'
+   45  grep root  /etc/passwd
+   46  sed   '/root/p'  /etc/passwd
+   47  sed  -n    '/root/p'  /etc/passwd
+   48  sed  -n    '/root/p'  /etc/passwd  | sed  -n  '1p'
+   49  ifconfig 
+   50  ifconfig  | sed  -n  '2p'
+   51  head  /etc/passwd
+   52  head  /etc/passwd  >  /report  
+   53  cat  /report  
+   54  sed  -n  '1p'  /report  
+   55  sed  -n  '$p'  /report  
+   56  cat -n  /report 
+   57  sed   '6d'    /report 
+   58* sed   'd'    /report 
+   59  sed  -n   '6p'    /report 
+   60  cat  /report 
+   61  sed   -i   '6d'    /report 
+   62  cat  -n  /report 
+   63  sed  '1,5d'   /report 
+   64  sed  '1,5!d'   /report 
+   65  sed  -i  '1,5d'   /report 
+   66  cat -n  /report 
+   67  lsblk  
+   68  lsblk   | grep -E  'sda1|sda2'
+   69  lsblk   | grep -E  'sda1|sda2' | sed  '1d'
+   70  lsblk   | grep -E  'sda1|sda2' | sed  -i '1d'
+   71  lsblk   | grep -E  'sda1|sda2' 
+   72  lsblk   | grep -E  'sda1|sda2'  |  sed  '/boot/p'
+   73  lsblk   | grep -E  'sda1|sda2'  |  sed -n  '/boot/p'
+   74  ifconfig 
+   75  ifconfig | grep inet  
+   76  ifconfig | grep -w  inet  
+   77  ifconfig | grep -w  inet   | sed  -n  '1p'
+   78  ifconfig | grep -w  inet   | sed  -n  '1p' | sed 's/inet/ipaddress/'
+   79  ifconfig | grep -w  inet   | sed  -n  '1p' | sed 's/inet/ipaddress/;s/netmask/subnetmask/'
+   80  ifc
+   81  ifconfig 
+   82  ifconfig  |  grep ether  
+   83  ifconfig  |  grep ether   |  head  -n 1  
+   84  ifconfig  |  grep ether   |  head  -n 1   | sed  's/ether/macaddress/'
+   85  grep root  /etc/passwd
+   86  grep root  /etc/passwd | sed  's/root/network/'
+   87  grep root  /etc/passwd | sed  's/root/network/g'
+   88  cat  /report 
+   89  cat  -n    /report 
+   90  sed  '2a  KR network Cloud'  /report 
+   91  cat  /report 
+   92  sed  '2i  KR network Cloud'  /report 
+   93  sed  '2a  KR network Cloud'  /report 
+   94  sed  -i  '2a  KR network Cloud'  /report 
+   95  cat  /report 
+   96  sed  -i  '4i  KR network Cloud'  /report 
+   97  cat /report 
+   98  head  /etc/passwd
+   99  head  /etc/passwd  > /sample  
+  100  cat  /sample 
+  101  grep  root  /sample 
+  102  grep sync    /sample 
+  103  sed   's/root/network/'    /sample 
+  104  sed   's/root/network/g'    /sample 
+  105  sed   's/Root/network/g'    /sample 
+  106  sed   's/ROOT/network/g'    /sample 
+  107  sed   's/ROOT/network/gi'    /sample 
+  108  sed   's/sync/network/gi'    /sample 
+  109  sed   's/sync/network/gi'    /sample   |  grep network  
+  110  grep sync /sample 
+  111  grep sync /sample  ;  sed   's/sync/network/gi'    /sample   |  grep network
+  112  sed    's/root/network/g'  /sample 
+  113  sed    's/root/network/'  /sample 
+  114  grep root   /sample 
+  115  grep root   /sample  | sed  's/root/network/'
+  116  grep root   /sample  | sed  's/root/network/2'
+  117  grep root   /sample  | sed  's/root/network/1'
+  118  grep root   /sample  | sed  's/root/network/'
+  119  grep root   /sample  | sed  's/root/network/2'
+  120  grep root   /sample  | sed  's/root/network/2g'
+  121  sed 's/root/network/2g'   /sample 
+  122  sed '1s/root/network/2g'   /sample 
+  123  sed '1s/root/network/g'   /sample 
+  124  sed '5s/root/network/g'   /sample 
+  125  sed '1,10s/root/network/g'   /sample 
+  126  history 
+  127  ifconfig |  grep -E  'inet|ether'
+  128  ifconfig |  grep -E -w    'inet|ether'
+  129  ifconfig |  grep -E -w    'inet|ether' | sed  -n  '2p'
+  130  ifconfig |  grep -E -w    'inet|ether' | sed  -n  '1,2p'
+  131  ifconfig |  grep -E -w    'inet|ether' | sed  -n  '1,2p' | sed   's/inet/ipaddress/g'
+  132  ifconfig |  grep -E -w    'inet|ether' | sed  -n  '1,2p' | sed   's/ether/macaddress/g'
+  133  ifconfig |  grep -E -w    'inet|ether' | sed  -n  '1,2p' | sed   -e   's/ether/macaddress/g'    -e  s/inet/ipaddress/g'
+  134  ifconfig |  grep -E -w    'inet|ether' | sed  -n  '1,2p' | sed   -e   's/ether/macaddress/g'    -e  's/inet/ipaddress/g'
+  135  ifconfig |  grep -E -w    'inet|ether' | sed  -n  '1,2p' | sed   's/ether/macaddress/g;s/inet/ipaddress/g'
+  136  cat  /repo rt 
+  137  cat  /sample 
+  138  cat  /sample  | grep  -E   'root|sync'
+  139  cat  /sample  | grep  -E   'root|sync' | sed 's/root/network/g;s/sync/cloud/g'
+  140  cat  /sample  | grep  -E   'root|sync' | sed 's/root/network/g;s/sync/cloud/g' | grep  -E  'network|cloud'
+  141  sed 's/root/network/g;s/sync/cloud/g'  /sample 
+  142  sed 's/root/network/g'  /sample 
+  143  history 
+  144  sed    -i   's/root/network/gi'  /sample 
+  145  cat  /sample 
+  146  sed    -i   's/network/root/gi'  /sample 
+  147  cat  /sample 
+  148  sed  's/:/ >>>>  /g'  /sample 
+  149  cat  /sample 
+  150  sed -i   's/:/ >>>>  /g'  /sample 
+  151  cat  /sample 
+  152  sed  's/ >>>>  /:/g'  /sample 
+  153  sed -i   's/ >>>>  /:/g'  /sample 
+  154  cat  /sample 
+  155  grep '^root'  /etc/passwd
+  156  grep '^root'  /etc/passwd | sed  's/root/network/g'
+  157  cat /etc/passwd
+  158  cat  -n  /etc/sudoers 
+  159  sed   -n  '100p'  /etc/sudoers 
+  160  sed   '100s/^/#/'  /etc/sudoers 
+  161  sed  -i    '100s/^/#/'  /etc/sudoers 
+  162  sed   -n  '100p'  /etc/sudoers 
+  163  sed  -i    '100s/^#//'  /etc/sudoers 
+  164  sed   -n  '100p'  /etc/sudoers 
+  165  sed   '1s/root/network/' /sample 
+  166  sed   '1s/root//' /sample 
+  167  sed   '1s/root/     /' /sample 
+  168  sed   '1s/root//' /sample 
+  169  grep -n -i  workgroup  /etc/samba/smb.conf
+  170  sed  '7s/SAMBA/DON/'  /etc/samba/smb.conf
+  171  sed  '7s/SAMBA/DON/'  /etc/samba/smb.conf  |  sed  -n  '7p'
+  172  sed  -i   '7s/SAMBA/DON/'  /etc/samba/smb.conf 
+  173  grep -n -i  workgroup  /etc/samba/smb.conf
+  174  sed  -i   '7s/DON/SAMBA/'  /etc/samba/smb.conf 
+  175  grep -n -i  workgroup  /etc/samba/smb.conf
+  176  lsblk 
+  177  lsblk |  grep sda
+  178  lsblk |  grep -w   sda
+  179  lsblk |  grep -w   sda | sed  's/disk/myfirstdisk/g'
+
+===============================================
+
+
+

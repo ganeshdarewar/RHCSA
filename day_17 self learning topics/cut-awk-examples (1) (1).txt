@@ -1,0 +1,180 @@
+=================================
+  Day-10   Session - Part - 2 
+=================================
+cut and awk commands
+=================================
+1- cat
+2- head
+3- tail
+4- grep egrep fgrep
+5- sed 
+6- pipe symbols
+7- > and >>
+8- wc command 
+9- touch 
+10- mkdir 
+=================================
+
+cut ==> it is use to cut any records by using coloumn or fields and characters from any file or from
+        any commands output.
+
+#  cut   <options>     <filename>
+                  OR
+# any-command-name  | cut  <options>
+
+options:-
+
+-c    ==> cut by characters 
+-f    ==> cut by fields
+-d    ==> delimeter  or to define any symbol to understand about fields
+
+:   ,   ;  space these symbols can be consider as a delimeters
+
+=================================
+
+    1  cat  /etc/passwd
+    2  useradd user1
+    3  useradd user2
+    4  useradd user3
+    5  useradd user4
+    6  useradd user5
+    7  ls /home  
+    8  cat  /etc/passwd
+    9  tail -n 5  /etc/passwd
+   10  cut  -c1    /etc/passwd 
+   11  cut  -c1,3    /etc/passwd 
+   12  cut  -c1-5    /etc/passwd 
+   13  head  -n 1  /etc/passwd
+   14  head  -n 1  /etc/passwd | cut  -c1 
+   15  head  -n 1  /etc/passwd | cut  -c1,4 
+   16  head  -n 1  /etc/passwd | cut  -c1-4 
+   17  tail - 5  /etc/passwd
+   18  tail -n  5  /etc/passwd
+   19  tail -n  5  /etc/passwd |  cut  -c1
+   20  tail -n  5  /etc/passwd |  cut  -c1-5
+   21  cat -n  /etc/passwd
+   22  sed  -n  '25p'  /etc/passwd
+   23  sed  -n  '25p'  /etc/passwd | cut  -c1-3
+   24  lsblk 
+   25  lsblk  |  sed  -n  '2p'
+   26  lsblk  |  sed  -n  '2p' |  cut -c1-3
+   27  cat  /etc/passwd
+   28  cut  -f1   /etc/passwd  
+   29  cut  -d:  -f1   /etc/passwd  
+   30  cut  -d':'  -f1   /etc/passwd  
+   31  tail -n 5  /etc/passwd
+   32  tail -n 5  /etc/passwd | cut  -d:   -f1
+   33  tail -n 5  /etc/passwd | cut  -d:   -f1,7
+   34  tail -n 5  /etc/passwd | cut  -d:   -f1,7   >  /tmp/info
+   35  cat  /tmp/info 
+   36  tail -n 5  /etc/passwd
+   37  tail -n 5  /etc/passwd | cut  -d:   -f1,7
+   38  tail -n 5  /etc/passwd | cut  -d:   -f1,3,4
+   39  tail -n 5  /etc/passwd | cut  -d:   -f1-4
+   40  tail -n 5  /etc/passwd | cut  -d:   -f1-4 | sed  's/:/>>>/g'
+   41  tail -n 5  /etc/passwd
+   42  tail -n 5  /etc/passwd | cut  -d:   -f7
+   43  vim  example 
+   44  cat  example 
+   45  cut   -f1   example 
+   46  cut  -d' '   -f1   example 
+   47  cut  -d' '   -f1,4   example 
+   48  cut  -c1-4  example 
+   49  sed  -n  '1p,$p' example 
+   50  sed  -n  '1p;$p' example 
+   51  sed  -n  '1p;$p' example  | cut  -d' '  -f1  
+   52  vim example 
+   53  cat   example 
+   54  cat   example | cut -d:  -f1
+   55  cat   example | cut -d:  -f4
+   56  vim example 
+   57  cat   example | cut -d:  -f4
+   58  cat   example | cut -d[;:]  -f4
+   59  cat   example | cut -d[:;]  -f4
+   60  tail -n 5  /etc/passwd
+   61  tail -n 5  /etc/passwd | awk  -F':'   '{print $1}'
+   62  tail -n 5  /etc/passwd | awk  -F':'   '{print $1,$7}'
+   63  tail -n 5  /etc/passwd | cut  -d:   -f1,7
+   64  tail -n 5  /etc/passwd | awk  -F':'   '{print $1,$7}'
+   65  tail -n 5  /etc/passwd | awk  -F':'   '{print $1,$7}'  OFS=':'
+   66  tail -n 5  /etc/passwd | awk  -F':'   '{print $1,$7}'  OFS=' >>> '
+   67  tail -n 5  /etc/passwd | awk  -F':'   '{print $1,$7}'  OFS=' ram '
+   68  tail -n 5  /etc/passwd | awk  -F':'   '{print $1,$7}'
+   69  tail -n 5  /etc/passwd | awk   '{print $1,$7}'  FS=':'
+   70  tail -n 5  /etc/passwd | awk   '{print $1,$7}'  FS=':'  OFS=':'
+   71  head  -n 1  /etc/passwd
+   72  head  -n 1  /etc/passwd | 
+   73  head  -n 1  /etc/passwd | awk  -F:   '{print $1}'
+   74  df  -h
+   75  df  -h | cut -d' '  -f1  
+   76  df  -h | cut -d' '  -f2  
+   77  df  -h 
+   78  df  -h  | awk    '{print $1}'
+   79  df  -h  | awk    '{print $1,$2}'
+   80  df  -h  | awk    '{print $1,$2}'  | column  -t  
+   81  df  -h  | awk    '{print $1,$2}'   
+   82  df  -h  | awk    '{print $1,$2}'   |  column -t 
+   83  df  -h  | awk    '{print $1,$2}'  
+   84  df  -h  | awk    '{print $1,$2}'    OFS='        '
+   85  df  -h  | awk    '{print $1,$2}'   |  column -t 
+   86  df -h
+   87  df -h | cat -n 
+   88  df -h | cat -n  |  sed  -n  '1p;6,7p'
+   89  df -h  |  sed  -n  '1p;6,7p'
+   90  df -h  |  sed  -n  '1p;6,7p'  | awk  '{print $1,$5}'
+   91  df -h  |  sed  -n  '1p;6,7p'  | awk  '{print $1,$5}' | column -t  
+   92  ifconfig 
+   93  ifconfig  | grep inet  
+   94  ifconfig  | grep -w  inet  
+   95  ifconfig  | grep -w  inet   |  head  -n 1  
+   96  ifconfig  | grep -w  inet   |  head  -n 1   | awk  '{print $2,$4}'
+   97  ifconfig  | grep -w  inet   |  head  -n 1   | awk  '{print $2}'
+   98  ifconfig 
+   99  ifconfig  |  grep ether  
+  100  ifconfig  |  grep ether   | head  -n 1  
+  101  ifconfig  |  grep ether   | head  -n 1   | awk  '{print $2}'
+  102  ifconfig  | grep -w  inet   |  head  -n 1   | awk  '{print $2}'
+  103  a=$(ifconfig  | grep -w  inet   |  head  -n 1   | awk  '{print $2}')
+  104  b=$(ifconfig  |  grep ether   | head  -n 1   | awk  '{print $2}')
+  105  echo $a
+  106  echo $b
+  107  echo "our machine IP address is = $a and MAC address is = $b"
+  108  xyz=krishna 
+  109  echo $xyz  
+  110  date  
+  111  xyz=date 
+  112  echo $xyz  
+  113  xyz=$(date) 
+  114  echo $xyz  
+  115  history 
+  116  cat  /var/log/secure 
+  117  tail -n 5   /var/log/secure 
+  118  tail -n 5   /var/log/secure   | awk  '{print  $1,$2,$3,$4}'
+  119  tail -n 5   /var/log/secure   | cut  -d' '   -f1-4
+  120  cat example 
+  121  awk  -F'[;:]'  '{print $1}'
+  122  awk  -F[;:]  '{print $1}'
+  123  awk  -F[;:]  '{print $1}' example 
+  124  awk  -F'[;:]'  '{print $1}' example 
+  125  awk  -F'[;:]'  '{print $4}' example 
+  126  awk  -F'[;:]'  '{print $1,$4}' example 
+  127  cat  /etc/shadow
+  128  tail -n 5  /etc/shadow
+  129  tail -n 5  /etc/shadow | cut -d:  -f1,6
+  130  lsblk  
+  131  lsblk   | sed  -n  '1p;3,5p'
+  132  lsblk   | sed  -n  '1p;3,5p' | awk  '{print $1}'
+  133  lsblk   | sed  -n  '1p;3,5p' | awk  '{print $1,$4}'
+  134  lsblk   | sed  -n  '1p;3,5p' | awk  '{print $1,$4,$7}'
+  135  lsblk   | sed  -n  '1p;3,5p' | awk  '{print $1,$4,$7}'  | column -t  
+  136  history 
+  137  grep  root  /etc/passwd
+  138  grep -o   root  /etc/passwd
+  139  grep -o   root  /etc/passwd |  uniq
+  140  grep -o   root  /etc/passwd |  uniq  -d  
+  141  grep -o   root  /etc/passwd |  uniq  -c  
+  142  grep  -E   'root|games|ftp'   /etc/passwd
+  143  grep  -E -o    'root|games|ftp'   /etc/passwd
+  144  grep  -E -o    'root|games|ftp'   /etc/passwd |  uniq  
+  145  history 
+================================================================

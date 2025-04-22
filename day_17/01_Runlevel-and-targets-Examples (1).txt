@@ -1,0 +1,206 @@
+===========================================================================
+   RunLevel   [ Till RHEL-6 ] 
+     OR 
+   Targets    [ In RHEL-7 + RHEL-8 + RHEL-9 ]
+
+
+===========================================================================
+
+
+1-  Runlevel and Targets both are used to initialize machine in different Different types of modes OR environments.
+
+2-  Every run level number or targets already have pre configured role or features in the system.
+
+3-  Runlevel basically managed by  "init" program while the targets is managed by "systemd".
+
+
+
+
+There are 7 types of runlevel in Linux OS  ? 
+
+==========================================================================
+0 1 2 3 4 5 6 ===> Runlevel numbers
+==========================================================================
+==========================================================================
+
+# init	0		[ poweroff the machine ]
+
+# init	1 		[ Single user mode OR Troubleshooting Mode ]
+
+# init	2 		[ Multi user mode without Networking ]
+
+# init	3		[ Full Multi user mode with network OR CLI mode only OR Text Mode Only ]  without GUI mode 
+
+# init	4		[ un-used ] or [ Undefined ] OR [ Blank ]
+
+# init 	5		[ Full Multi User mode with network ==> GUI + CLI mode  OR  X-window ]
+
+# init	6 		[ Reboot the machine ]
+
+********************************************************************************
+
+Note-   At a time we can run any machine only on any one runlevel number as  per your needs.
+
+********************************************************************************
+
+Note-  we always run production server only on runlevel 3 [ around 90% ]  OR  runlevel 5  [ around 10% ]
+                                                                  
+
+********************************************************************************
+
+
+
+How to check current runlevel number in any machine  ?
+
+# runlevel  
+    
+   OR
+
+# who  -r  
+
+
+[root@localhost ~]# runlevel
+N 5    # here N => none that means it originally install in gui mode
+
+[root@localhost ~]# runlevel
+3 5    # runlelvel shifted to CLI to gui mode
+
+How to switch or change runlevel as a  temporary basis ?
+
+# init 3       [ to move in CLI mode ]
+
+# init 5       [ to again come back in GUI mode ]
+
+
+====================================================  
+1- During the OS installation ==> 1- Minimal Installation [runelvel 3 ]      2- Server with GUI [runlevel 5]
+2- After the OS installation  ==> we can change the runelevels or targets as per need using command line ?  
+====================================================
+
+Types of runlevel changing Method ?
+
+1- Temporary    ====>    1- using init command   2- At the time of machine boot up OR Start up. using e option
+
+
+2- Permanent    ====>    /etc/inittab    ==> Note:-  don't use this file in rhel-7 and RHEL-8 + RHEL-9
+
+***********************************************************
+
+    #   vim   /etc/inittab  
+
+
+      id : 3 : initdefault
+
+
+     :wq 
+
+   #  init  6 
+
+After raboot your machine will boot in new runlevel number whatever you have defined
+ in /etc/inittab file. 
+
+
+
+runlevel  5   ===> switch  ==> runlelvel  ==> 3  ==> YES
+runlevel  3   ===> switch  ==> runlelvel  ==> 5  ==> YES
+
+===========================================================
+runlevel 3 ==> installed  ==> switch  ==> runlevel 5  ==> default answer is no  ==> but yes we can do this using rpm installation
+
+========================HOLD===============================rpm or yum 
+
+Step-1  First we will configure YUM to install Required rpms
+
+Step-2 # yum  groupinstall  "Server with GUI"
+
+Step-3 # init 5   OR  # systemctctl isolate graphical.target       ===> TEMP Action
+                      # systemctctl set-default  graphical.target   ==> Permanent Action ===>  now server will move in GUI mode 
+  
+===========================================================
+***********************************************************
+
+
+Targets :-
+
+There are two types of main targets in RHEL-7 + RHEL-8 + RHEL-9 ?
+
+1-  multi-user.target     <======>  init 3    ===> Full multi user  mode with CLI only 
+
+2-  graphical.target      <======>  init 5    ===> Full Multi user mode with GUI + CLI both 
+
+===========================================================
+***********************************************************
+
+# init  6    OR   #  systemctl   reboot     OR   # reboot
+
+# init  0    OR   #  systemctl    poweroff  OR   # poweroff 
+
+**********************************************************
+
+#  init 2   
+                      Ignored in RHEL-7 + RHEL-8 + RHEL-9
+#  init 4   
+
+**********************************************************
+
+Single user  mode     ===> Till rhel-6     ===>      1  or s
+Single User  mode     ===> in rhel-7+8+9   ===>      rd.break
+
+**********************************************************
+
+# systemctl   get-default                             [ to check default target in my machine ]
+
+# systemctl   isolate        <your-target-name>       [ to switch from one target to another target as a Temporary basis ]
+
+# systemctl   set-default     <your-target-name>      [ to set permanent targets ]
+
+# cat  /etc/systemd/system/default.target             [ Configuration File of targets ]
+
+
+
+OR
+
+# cat /etc/inittab   ==> configuration file of RUNLEVELS
+
+[root@servera ~]# ln -sf /lib/systemd/system/graphical.target /etc/systemd/system/default.target
+                                OR
+[root@servera ~]# systemctl set-default  graphical.target
+
+
+[root@servera ~]# ls -l /etc/systemd/system/default.target
+
+===========================================================
+
+RPM installation and YUM Configuration ==>
+
+How we can set runlevel and targets during the OS installation time ?
+
+Task-1  Minimal installation   ==> after the installation  ==> you will get only CLI 
+
+Task-2  First we will configure Local YUM repo file using rhel 9 ISO image
+
+task-3  Then will install all the required packages for GUI mode 
+
+task-4  Now we will run the target changing command 
+
+
+
+# systemctl  isolate  graphical.target
+
+# systemctl  set-default  graphical.target
+
+
+============================================================
+============================================================
+============================================================
+
+
+
+
+
+
+
+
+
+
+	 

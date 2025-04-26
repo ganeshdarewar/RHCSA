@@ -1,0 +1,140 @@
+[root@localhost ~]# runlevel 
+N 5
+[root@localhost ~]# 
+[root@localhost ~]# who -r  
+         run-level 5  2024-07-14 08:37
+[root@localhost ~]# 
+[root@localhost ~]# cat /etc/redhat-release 
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# systemctl get-default 
+graphical.target
+[root@localhost ~]# 
+[root@localhost ~]# reboot 
+[root@localhost ~]# pidof init
+[root@localhost ~]# pidof systemd
+2099 2095 1
+[root@localhost ~]# 
+[root@localhost ~]# which systemctl 
+/usr/bin/systemctl
+[root@localhost ~]# which init
+/usr/sbin/init
+[root@localhost ~]# 
+[root@localhost ~]# runlevel 
+N 5
+[root@localhost ~]# 
+[root@localhost ~]# who -r  
+         run-level 5  2024-07-14 09:54
+[root@localhost ~]# 
+[root@localhost ~]# systemctl get-default 
+graphical.target
+[root@localhost ~]# 
+
+[root@localhost ~]# systemctl get-default 
+graphical.target
+[root@localhost ~]# 
+[root@localhost ~]# runlevel 
+N 5
+[root@localhost ~]# 
+
+[root@localhost ~]# systemctl isolate multi-user.target     OR     # init 3
+
+
+  479  systemctl isolate multi-user.target 
+  480  runlevel 
+  481  ls
+  482  cat anaconda-ks.cfg 
+  483  rpm -qa | wc -l  
+  484  systemctl isolate graphical.target 
+  485  cat  /etc/systemd/system/default.target
+  486  ls -l    /etc/systemd/system/default.target
+  487  history 
+[root@localhost ~]# 
+
+
+[root@localhost ~]# systemctl set-default multi-user.target 
+Removed /etc/systemd/system/default.target.
+Created symlink /etc/systemd/system/default.target → /usr/lib/systemd/system/multi-user.target.
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls -l    /etc/systemd/system/default.target
+lrwxrwxrwx. 1 root root 41 Jul 14 10:19 /etc/systemd/system/default.target -> /usr/lib/systemd/system/multi-user.target
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cat  /etc/systemd/system/default.target
+
+  488  systemctl set-default multi-user.target 
+  489  ls -l    /etc/systemd/system/default.target
+  490  cat  /etc/systemd/system/default.target
+  491  systemctl isolate multi-user.target 
+  492  reboot 
+  493  runlevel 
+  494  systemctl get-default 
+  495  systemctl set-default graphical.target 
+  496  systemctl isolate graphical.target 
+  497  history 
+
+============================================================
+How we can move machine in GUI env from the minimal ENV ?
+
+1- Connect ISO image and mount it on any directory  
+2- Create repo file and define the rpm location 
+3- # yum group list   # yum groupinstall  "Server with GUI"  -y  
+4- # systemctl set-default  grpahical.target
+   # systemctl isolate graphical.target
+
+
+5-   now we can reboot the machine just for testing purpose.
+
+============================================================
+Solution 
+Connect ISO image with YOUR VM
+
+
+   15  ls  /
+   16  lsblk 
+   17  mount  /dev/sr0  /mnt 
+   18  ls /mnt 
+   19  ls /mnt/AppStream
+   20  ls /mnt/BaseOS
+   24  vi  /etc/yum.repos.d/xyz.repo
+
+
+[path-1]
+name=abc
+baseurl=file:///mnt/BaseOS
+enabled=1
+gpgcheck=0
+[path-2]
+name=xyz
+baseurl=file:///mnt/AppStream
+enabled=1
+gpgcheck=0
+
+:wq
+
+
+   25  yum clean all 
+   26  yum  repolist all  
+   27  yum list
+   28  yum grouplist
+   29  yum  groupinstall  "Server with GUI"  -y  
+   30  runlevel 
+   31  rpm -qa | wc -l
+   32  which gedit
+   33  which vi
+   34  which vim
+   35  systemctl isolate  graphical.target  
+   36  systemctl get-default 
+   37  ll  /etc/systemd/system/default.target
+   38  systemctl set-default graphical.target 
+   39  ll  /etc/systemd/system/default.target
+   40  init 6 
+
+[root@localhost ~]# which init
+/usr/sbin/init
+[root@localhost ~]# ls -l  /usr/sbin/init
+lrwxrwxrwx. 1 root root 22 Apr  7  2022 /usr/sbin/init -> ../lib/systemd/systemd
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]#

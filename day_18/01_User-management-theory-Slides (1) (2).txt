@@ -1,0 +1,334 @@
+=================================================================
+
+         User Management
+              OR
+  How to Manage Users account in Linux  OS ?
+
+=================================================================
+Linux admin ==> Types of machine ?
+
+1- physical Machines 
+2- Virtual Machines
+3- Cloud Based Machines 
+
+machine <=== H/W  <== Operating System <== Application/Tool/Services   <=== users or linux admin 
+
+==================================================================== 
+machine <== Power on  <== root  <== Practise  ? 
+office ==> linux admin  ==> gaurav  ==> root + password ==> 24 * 7  
+====================================================================
+user management/group management/Permission/Password policy
+====================================================================
+Rights  ==> 1- Particular user ==> seperate seperate  ==> as per needs  
+            2- Particular group ==> Apply on group's members
+
+Types or rights/permissions ?
+
+1- File/Directory based permissions            ==> data Controlling OR management
+2- command based execution rights/permission   ==> Command management OR controlling 
+
+====================================================================
+
+
+soniya  ==> $ useradd deep  ==> will not execute by default  ==> we need to give the rights to execute useradd command  
+
+=================
+Private place or home directory
+public place or out side of the home directory
+=================
+
+~ ] #  ==> Full rights + out side of home ==> yes
+~ ] $  ==> Full rights [home rights] + outside of the home directory as per defined rights or current permission
+
+================================================================= /home/soniya/data    and   /tmp/data
+=================================================================
+Types of login method ?
+
+1- Local to local => terminal  <== Username + password 
+2- Remote Login   => terminal  ==> using any XYZ tool  [Example:- putty and other as well ] <== network reachable 
+
+                    <== IP address + user + password + Software to send the request on server machine [EX: Putty and others tools ]
+
+=================================================================
+Who is user ?
+
+1- A user is a person which has uniq identity to enter 
+   into any server machine.
+
+2- With this username he/she can easily operate , configure
+   and monitor any live servers as per defined permissions.
+
+By default during the OS installation time ==>  root user 
+will be automatically created only.
+
+but after the installation we can create users as per demands and we can give right to start the work into any servers.
+
+
+*******************User Management**********************************************
+1- useradd    2- usermod   3- userdel ******************************************
+
+Objective:- 
+
+# useradd  <options>    <username> 
+# usermod  <options>	<username>
+# userdel  <options>	<username>
+# passwd  <options>     <username>
+# id   username 
+# su  -  <username>
+$ exit
+
+# groups  <username>
+
+==========================Group management=========================
+
+# groupadd              groupname
+# groupmod   <options>  groupname
+# groupdel              groupname 
+ 
+
+=================================================================== 
+
+# useradd  sachin
+# passwd   sachin
+
+Type Password: 123
+Retype Passowrd: 123
+
+
+===================================================================    
+   
+Important File ==>
+
+1-  /etc/passwd ==> user's  related information    ==> x  ==> /etc/shadow 
+2-  /etc/group  ==> group's related and group's members related infomation    ==> x  ==> /etc/gshadow 
+3-  /etc/shadow ==> user's password related information + password policy
+
+===================================================================
+
+4-  /etc/gshadow ==> group's password information  ==> ignore 
+ 
+===================================================================
+[root@localhost ~]# history 
+    #  cat  /etc/default/useradd 
+    #  cat  /etc/login.defs 
+
+
+[root@localhost ~]# which useradd 
+/usr/sbin/useradd
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qf  /usr/sbin/useradd
+shadow-utils-4.9-3.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qc  shadow-utils
+/etc/default/useradd
+/etc/login.defs
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+=================================================================== 
+
+Users Related information files ?
+
+1- UID                    ====>  User ID    ==>  0-60000 ==> Three parts ==> 1- super 2- system defined 3- custom users or normal users
+2- GID                    ====>  Group ID   ==>  0-60000 
+
+3- /home/sachin/          ====>  Default Home directory place for all normal users.  
+4- /etc/passwd  	  ====>  It contains all  user's related information. ===> x ==>  /etc/shadow      
+5- /etc/group             ====>  It contains all group's related information. ===> x ==>  /etc/gshadow    
+6- /etc/shadow            ====>  It contains all  users password in encrypted format. +  password policy information
+7- /etc/gshadow           ====>  It contains all group password in encrypted format.  ==> ignore  
+8- /var/spool/mail/sachin ====>  default place for system defined mail alerts.   ==> DONE
+
+
+===========================================
+
+UID and GID Range  ==>  [ 0 - 60000 ]   ==> It devide into three parts
+
+UID   ==>  0  -  60000
+GID   ==>  0  -  60000
+============================================================================= 
+
+UID + GID allocation Concept ?
+
+0 - 60000
+
+===========================================================
+Types of Users ?
+
+1- Super user       ===>  root 
+
+      UID  ==>  0
+      GID  ==>  0
+
+2- System defined users or service defined users   
+   ==> ftp, dns, games, ldap ..etc 
+
+  [ will generate automatically after 
+  installing any application or services  ]  
+
+    UID   ==>  1 - 999  
+    GID   ==>  1 - 999  
+
+3- Normal users or Custom users   ===>  deepak , sumit  ,  rahul
+ 
+                    [ created by any super user or any sudo admin user ]
+
+    UID   ==> 1000  - 60000
+    GID   ==> 1000  - 60000
+
+=========================================================  
+  # cat  /etc/login.defs  
+
+  # cat  /etc/default/useradd 
+
+=========================================================
+
+
+
+Note:
+
+1- All Unix based OS always works on UPG [ User primary group ] Scheme.
+2- IT means User will  reserve one UID and ONE GID.
+3- but group only will reserve one GID only
+
+4- UID of any user always remains one but GID of any users bydefault will be one
+ but it can be more then one when you will associate same user with in 
+ the multiple group membership.
+
+============================================================================
+
+# id username
+# groups  username     ==> to find out the details about group membership with UID and GID number details
+     
+    OR
+
+# cat  /etc/passwd
+# cat  /etc/group 
+
+
+============================================
+
+
+
+============================================
+
+# ls  /home
+
+# cat  /etc/default/useradd    <== HOME=/home 
+                                  
+
+Note:   we can change user home directory location if we want.
+
+
+===========================================
+
+#  cat   /etc/passwd     ===>    7 Fields     
+
+   root    :    x    :    0  :    0    :    root   :    /root        :   /bin/bash  ==> Example of root user
+
+   student :    x    :  1000 :   1000  : :   /home/student :   /bin/bash  ==> Example of normal user
+
+===========================================
+1- Username
+2- password Pointer  ==>  /etc/shadow 
+3- UID
+4- GID
+5- Comment OR Fullname OR GECOS OR Profilename  [optional] ==> This fields can be blank there is no issue
+6- home directory
+7- Login Shell  ==> we can change this shell if we want.
+
+*********************************************************************************
+
+#   cat  /etc/group      ==>  4 fields
+
+ groupname : x :  GID Number :  Secondary Members Name
+
+
+1- groupname
+2- password pointer == /etc/gshadow
+3- GID Number
+4- Members name OR additional Members
+
+=================================      
+
+Example-1
+
+# groupadd  tcs 
+
+# cat  /etc/group
+ 
+tcs:x:1001: 
+
+
+=================================
+
+Example-2
+
+# useradd   -G   tcs   user1
+# useradd   -G   tcs   user2
+
+# cat  /etc/group 
+tcs:x:1001: user1,user2
+
+
+# id  user1   ==> UID ==> single   But GID ==> two ==> one itself + second [TCS]
+# id  user2
+
+# groups user1
+
+user1: user1  tcs
+
+# group  user2
+
+user2:  user2  tcs
+
+
+
+
+===========================================
+# cat  /etc/shadow      ==>    9 Fields
+
+ username : Encrypted-password :  next seven Fields -- password related policy information 
+
+  1          2                         7 Fields  ==> we need to explain it 
+===========================================
+Algo ==> developer ==> input  ==> accept ==> convert  ==> new format ==> change ==> store ==>  /etc/shadow
+===========================================
+
+# cat  /etc/login.defs
+
+===========================================
+Types of Algo ==>  1-   MD-5     2- SHA  ==>  SHA-256  & SHA-512 { in rhel-7 + rhel-8 + RHEL-9}
+ 
+
+===========================================
+/home/sachin
+/var/spool/mail/sachin  
+===========================================
+
+$ mail     ==> this command will calls mails from the 
+      OR
+$ cat  /var/spool/mail/username 
+
+******************************************************************
+# userdel deepak        ==> delete the only user account but without home directory + mail box
+        OR
+# userdel  -r  deepak   ==> delete the user acccount cleanly with home directory data + mail box as well.
+
+===================================================================
+# rm -rf  /home/deepak
+# rm -rf  /var/spool/mail/deepak
+===================================================================
+# useradd deepak  
+
+===================================================================
+
+
+
+
+
+
+
+
+

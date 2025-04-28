@@ -1,0 +1,15 @@
+Task-3 How we can change login shell of any user ?  
+
+Task-6 How to add any user with any special UID and GID ? 
+
+autoexecute command ===> .bashrc
+
+
+
+[root@localhost ~]# ls -l   /usr/local/bin/myinfo 
+-rw-r--r--. 1 root root 30 Apr  5 11:36 /usr/local/bin/myinfo
+[root@localhost ~]# 
+[root@localhost ~]# chmod  +x /usr/local/bin/myinfo
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# myinfo 

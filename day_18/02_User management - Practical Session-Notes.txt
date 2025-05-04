@@ -400,6 +400,10 @@ uid=3000(mac) gid=3000(mac) groups=3000(mac)
 Task-7 How we can rename any user account  ?
 
 
+
+
+
+
 [root@localhost ~]# tail -n 1  /etc/passwd
 rajeev:x:1008:1008::/home/rajeev:/bin/bash
 [root@localhost ~]# 
@@ -481,7 +485,7 @@ BAD PASSWORD: The password is shorter than 8 characters
 Retype new password: 
 passwd: all authentication tokens updated successfully.
 [root@localhost ~]# 
-[root@localhost ~]# passwd  -S kapil  
+[root@localhost ~]# passwd  -S kapil  # display the status of the user's password 
 kapil PS 2025-04-05 0 99999 7 -1 (Password set, SHA512 crypt.)
 [root@localhost ~]# 
 [root@localhost ~]# 
@@ -585,6 +589,9 @@ logout
 
 [root@localhost ~]# useradd guest  
 
+!! ===> password not set
+!  ===> password lock
+$_ ===> password set
 
 [root@localhost ~]# grep guest  /etc/passwd
 guest:x:1011:1011::/home/guest:/bin/bash

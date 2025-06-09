@@ -1,0 +1,722 @@
+==============================================
+What is use of SUDO ?  Super User DO
+==============================================
+
+Machine <=== Operating system  <== Application  <== Manage <== user create <== as per timings <==  login  <== as per need
+
+<=== task perform  <====
+
+1- Data Controlling    ==> Current permissions + change 
+2- Command Controlling ==> Current permissions + change 
+
+
+Super user   ==> root              ==> #  ==> having full rights
+Normal user  ==> amit sumit Deepak ==> $  ==> limited rights but we can customized these permissions
+
+==============================================
+
+How we can find out the location of any available command in my machine  ?
+
+[root@localhost ~]# which  useradd 
+/usr/sbin/useradd
+[root@localhost ~]# 
+[root@localhost ~]# which  usermod  
+/usr/sbin/usermod
+[root@localhost ~]# which  userdel  
+/usr/sbin/userdel
+[root@localhost ~]# 
+[root@localhost ~]# which  fdisk 
+/usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# which  clear
+/usr/bin/clear
+[root@localhost ~]# which  date
+/usr/bin/date
+[root@localhost ~]# which  cal  
+/usr/bin/cal
+[root@localhost ~]# 
+
+
+==============================================
+[soniya @ localhost ~ ]$ clear
+[soniya @ localhost ~ ]$ date
+[soniya @ localhost ~ ]$ cal
+[soniya @ localhost ~ ]$ free -h 
+[soniya @ localhost ~ ]$ lsblk
+ 
+[soniya @ localhost ~ ]$ fdisk -l       ===> by default will not execute  
+[soniya @ localhost ~ ]$ sudo fdisk -l  ===> need to mention this comammand username in SUDO Configuration file first.
+
+==============================================
+
+1- using SUDO concept we can give command execution rights to any user or any group members.
+
+2- configuration file of SUDO is  /etc/sudoers  [Main configuration] 
+                                     OR
+                                /etc/sudoers.d/deepak   
+                                     OR
+                                /etc/sudoers.d/rajeev
+
+
+
+3- /etc/sudoers    ===> 
+
+  username   ==> Example of user
+  %team      ==> Example of group
+
+
+=========================================================================================
+Syntax:-
+
+1- ALL
+2- This,this,this
+3- ALL,!this,!this,!this
+
+=========================================================================================
+
+Log File ==>  /var/log/secure
+
+========================================================================================
+What is the concept of wheel group in SUDOERS File  ?
+========================================================================================
+
+Example:-
+
+[root@localhost ~]# grep wheel /etc/group 
+wheel:x:10:
+[root@localhost ~]# 
+[root@localhost ~]# wc -l   /etc/sudoers
+120 /etc/sudoers
+[root@localhost ~]# 
+[root@localhost ~]# grep -n   wheel     /etc/sudoers
+106:## Allows people in group wheel to run all commands
+107:%wheel	ALL=(ALL)	ALL
+110:# %wheel	ALL=(ALL)	NOPASSWD: ALL
+[root@localhost ~]# 
+[root@localhost ~]# useradd -G wheel  suraj
+[root@localhost ~]# passwd suraj
+Changing password for user suraj.
+New password: 
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+[root@localhost ~]# 
+[root@localhost ~]# groups suraj  
+suraj : suraj wheel
+[root@localhost ~]# 
+
+[root@localhost ~]# su - suraj 
+[suraj@localhost ~]$ 
+[suraj@localhost ~]$ 
+[suraj@localhost ~]$ date
+Tue Jul 15 10:41:29 AM IST 2025
+[suraj@localhost ~]$ cal  
+      July 2025     
+Su Mo Tu We Th Fr Sa
+       1  2  3  4  5
+ 6  7  8  9 10 11 12
+13 14 15 16 17 18 19
+20 21 22 23 24 25 26
+27 28 29 30 31      
+                    
+[suraj@localhost ~]$ 
+[suraj@localhost ~]$ fdisk -l  
+fdisk: cannot open /dev/sda: Permission denied
+fdisk: cannot open /dev/sr0: Permission denied
+fdisk: cannot open /dev/mapper/rhel-root: Permission denied
+fdisk: cannot open /dev/mapper/rhel-swap: Permission denied
+[suraj@localhost ~]$ 
+[suraj@localhost ~]$ 
+
+suraj@localhost ~]$ sudo fdisk -l  
+
+We trust you have received the usual lecture from the local System
+Administrator. It usually boils down to these three things:
+
+    #1) Respect the privacy of others.
+    #2) Think before you type.
+    #3) With great power comes great responsibility.
+
+[sudo] password for suraj: 
+Disk /dev/sda: 30 GiB, 32212254720 bytes, 62914560 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x969f8d03
+
+Device     Boot   Start      End  Sectors Size Id Type
+/dev/sda1  *       2048  2099199  2097152   1G 83 Linux
+/dev/sda2       2099200 62914559 60815360  29G 8e Linux LVM
+
+[suraj@localhost ~]$ sudo useradd deepu  
+[suraj@localhost ~]$ sudo userdel -rf   deepu  
+[suraj@localhost ~]$ sudo systemctl restart crond  
+[suraj@localhost ~]$ 
+
+[suraj@localhost ~]$ sudo -l
+Matching Defaults entries for suraj on localhost:
+    !visiblepw, always_set_home, match_group_by_gid, always_query_group_plugin, env_reset, env_keep="COLORS DISPLAY HOSTNAME HISTSIZE
+    KDEDIR LS_COLORS", env_keep+="MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE", env_keep+="LC_COLLATE LC_IDENTIFICATION
+    LC_MEASUREMENT LC_MESSAGES", env_keep+="LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE", env_keep+="LC_TIME LC_ALL LANGUAGE
+    LINGUAS _XKB_CHARSET XAUTHORITY", secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
+
+User suraj may run the following commands on localhost:
+    (ALL) ALL
+[suraj@localhost ~]$ 
+[suraj@localhost ~]$ 
+[suraj@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+[root@localhost ~]# gpasswd -d suraj wheel  
+Removing user suraj from group wheel
+[root@localhost ~]# 
+[root@localhost ~]# groups suraj  
+suraj : suraj
+[root@localhost ~]# 
+[root@localhost ~]# grep suraj /etc/sudoers
+[root@localhost ~]# 
+[root@localhost ~]# su - suraj  
+[suraj@localhost ~]$ sudo fdisk -l  
+suraj is not in the sudoers file.  This incident will be reported.
+[suraj@localhost ~]$ 
+[suraj@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+[root@localhost ~]# cat  /var/log/secure
+
+========================================================================================
+How we can create SUDO User or SUDO group manually as per our need ?
+
+
+[root@localhost ~]# which  useradd 
+/usr/sbin/useradd
+[root@localhost ~]# which  usermod
+/usr/sbin/usermod
+[root@localhost ~]# 
+[root@localhost ~]# which  userdel  
+/usr/sbin/userdel
+[root@localhost ~]# which  fdisk 
+/usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# useradd user1
+[root@localhost ~]# useradd user2
+[root@localhost ~]# useradd user3
+[root@localhost ~]# 
+[root@localhost ~]# passwd user1
+Changing password for user user1.
+New password: 
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+[root@localhost ~]# 
+[root@localhost ~]# passwd user2
+Changing password for user user2.
+New password: 
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+[root@localhost ~]# 
+
+[root@localhost ~]# passwd user3
+Changing password for user user3.
+New password: 
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+[root@localhost ~]# 
+
+[root@localhost ~]# useradd deepu
+[root@localhost ~]# passwd deepu
+Changing password for user deepu.
+New password: 
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# groupadd  ibm  
+[root@localhost ~]# 
+[root@localhost ~]# useradd  -G  ibm u1
+[root@localhost ~]# useradd  -G  ibm u2
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# passwd u1
+Changing password for user u1.
+New password: 
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+[root@localhost ~]# 
+[root@localhost ~]# passwd u2
+Changing password for user u2.
+New password: 
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# vim /etc/sudoers  
+
+root    ALL=(ALL)       ALL
+user1   ALL=(ALL)       ALL
+user2   ALL=(ALL)       /usr/sbin/useradd,/usr/sbin/usermod,/usr/sbin/fdisk
+user3   ALL=(ALL)       ALL,!/usr/sbin/fdisk,!/usr/sbin/reboot
+
+%wheel  ALL=(ALL)       ALL
+%ibm    ALL=(ALL)       NOPASSWD: /usr/sbin/fdisk
+
+
+:wq!
+
+
+[root@localhost ~]# vim /etc/sudoers.d/deepu  
+
+
+deepu   ALL=(ALL)       NOPASSWD: /usr/sbin/fdisk
+
+
+:wq!
+
+[user1@localhost ~]$ sudo fdisk -l
+
+We trust you have received the usual lecture from the local System
+Administrator. It usually boils down to these three things:
+
+    #1) Respect the privacy of others.
+    #2) Think before you type.
+    #3) With great power comes great responsibility.
+
+[sudo] password for user1: 
+Disk /dev/sda: 30 GiB, 32212254720 bytes, 62914560 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x969f8d03
+
+Device     Boot   Start      End  Sectors Size Id Type
+/dev/sda1  *       2048  2099199  2097152   1G 83 Linux
+/dev/sda2       2099200 62914559 60815360  29G 8e Linux LVM
+
+
+Disk /dev/mapper/rhel-root: 26 GiB, 27913093120 bytes, 54517760 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/mapper/rhel-swap: 3 GiB, 3221225472 bytes, 6291456 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+[user1@localhost ~]$ 
+[user1@localhost ~]$ exit
+logout
+[root@localhost ~]# su - user1
+[user1@localhost ~]$ 
+[user1@localhost ~]$ sudo  -l  
+Matching Defaults entries for user1 on localhost:
+    !visiblepw, always_set_home, match_group_by_gid, always_query_group_plugin, env_reset, env_keep="COLORS DISPLAY HOSTNAME HISTSIZE
+    KDEDIR LS_COLORS", env_keep+="MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE", env_keep+="LC_COLLATE LC_IDENTIFICATION
+    LC_MEASUREMENT LC_MESSAGES", env_keep+="LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE", env_keep+="LC_TIME LC_ALL LANGUAGE
+    LINGUAS _XKB_CHARSET XAUTHORITY", secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
+
+User user1 may run the following commands on localhost:
+    (ALL) ALL
+[user1@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+[root@localhost ~]# su - user2
+[user2@localhost ~]$ 
+[user2@localhost ~]$ ls /home  
+deepak  deepu  kapil  ravi  sachin  soniya  student  suraj  u1  u2  user1  user2  user3  vinit
+[user2@localhost ~]$ 
+[user2@localhost ~]$ sudo  userdel -rf ravi 
+
+We trust you have received the usual lecture from the local System
+Administrator. It usually boils down to these three things:
+
+    #1) Respect the privacy of others.
+    #2) Think before you type.
+    #3) With great power comes great responsibility.
+
+[sudo] password for user2: 
+Sorry, user user2 is not allowed to execute '/sbin/userdel -rf ravi' as root on localhost.localdomain.
+[user2@localhost ~]$ 
+[user2@localhost ~]$ 
+[user2@localhost ~]$ sudo -l 
+[sudo] password for user2: 
+Matching Defaults entries for user2 on localhost:
+    !visiblepw, always_set_home, match_group_by_gid, always_query_group_plugin, env_reset, env_keep="COLORS DISPLAY HOSTNAME HISTSIZE
+    KDEDIR LS_COLORS", env_keep+="MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE", env_keep+="LC_COLLATE LC_IDENTIFICATION
+    LC_MEASUREMENT LC_MESSAGES", env_keep+="LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE", env_keep+="LC_TIME LC_ALL LANGUAGE
+    LINGUAS _XKB_CHARSET XAUTHORITY", secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
+
+User user2 may run the following commands on localhost:
+    (ALL) /usr/sbin/useradd, /usr/sbin/usermod, /usr/sbin/fdisk
+[user2@localhost ~]$ 
+[user2@localhost ~]$ 
+[user2@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# su - user3
+[user3@localhost ~]$ 
+[user3@localhost ~]$ 
+[user3@localhost ~]$ sudo fdisk -l 
+
+We trust you have received the usual lecture from the local System
+Administrator. It usually boils down to these three things:
+
+    #1) Respect the privacy of others.
+    #2) Think before you type.
+    #3) With great power comes great responsibility.
+
+[sudo] password for user3: 
+Sorry, user user3 is not allowed to execute '/sbin/fdisk -l' as root on localhost.localdomain.
+[user3@localhost ~]$ 
+[user3@localhost ~]$ sudo -l
+[sudo] password for user3: 
+Matching Defaults entries for user3 on localhost:
+    !visiblepw, always_set_home, match_group_by_gid, always_query_group_plugin, env_reset, env_keep="COLORS DISPLAY HOSTNAME HISTSIZE
+    KDEDIR LS_COLORS", env_keep+="MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE", env_keep+="LC_COLLATE LC_IDENTIFICATION
+    LC_MEASUREMENT LC_MESSAGES", env_keep+="LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE", env_keep+="LC_TIME LC_ALL LANGUAGE
+    LINGUAS _XKB_CHARSET XAUTHORITY", secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
+
+User user3 may run the following commands on localhost:
+    (ALL) ALL, !/usr/sbin/fdisk, !/usr/sbin/reboot
+[user3@localhost ~]$ 
+
+[user3@localhost ~]$ sudo useradd ravi1
+[user3@localhost ~]$ exit
+logout
+[root@localhost ~]# su - deepu 
+[deepu@localhost ~]$ 
+[deepu@localhost ~]$ 
+[deepu@localhost ~]$ sudo fdisk -l
+Disk /dev/sda: 30 GiB, 32212254720 bytes, 62914560 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x969f8d03
+
+Device     Boot   Start      End  Sectors Size Id Type
+/dev/sda1  *       2048  2099199  2097152   1G 83 Linux
+/dev/sda2       2099200 62914559 60815360  29G 8e Linux LVM
+
+
+Disk /dev/mapper/rhel-root: 26 GiB, 27913093120 bytes, 54517760 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/mapper/rhel-swap: 3 GiB, 3221225472 bytes, 6291456 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+[deepu@localhost ~]$ 
+
+[deepu@localhost ~]$ sudo -l
+Matching Defaults entries for deepu on localhost:
+    !visiblepw, always_set_home, match_group_by_gid, always_query_group_plugin, env_reset, env_keep="COLORS DISPLAY HOSTNAME HISTSIZE
+    KDEDIR LS_COLORS", env_keep+="MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE", env_keep+="LC_COLLATE LC_IDENTIFICATION
+    LC_MEASUREMENT LC_MESSAGES", env_keep+="LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE", env_keep+="LC_TIME LC_ALL LANGUAGE
+    LINGUAS _XKB_CHARSET XAUTHORITY", secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
+
+User deepu may run the following commands on localhost:
+    (ALL) NOPASSWD: /usr/sbin/fdisk
+[deepu@localhost ~]$ 
+[deepu@localhost ~]$ 
+[deepu@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# su -  u1 
+[u1@localhost ~]$ 
+[u1@localhost ~]$ 
+[u1@localhost ~]$ groups u1  
+u1 : u1 ibm
+[u1@localhost ~]$ 
+[u1@localhost ~]$ sudo fdisk -l
+Disk /dev/sda: 30 GiB, 32212254720 bytes, 62914560 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x969f8d03
+
+Device     Boot   Start      End  Sectors Size Id Type
+/dev/sda1  *       2048  2099199  2097152   1G 83 Linux
+/dev/sda2       2099200 62914559 60815360  29G 8e Linux LVM
+
+
+Disk /dev/mapper/rhel-root: 26 GiB, 27913093120 bytes, 54517760 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/mapper/rhel-swap: 3 GiB, 3221225472 bytes, 6291456 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+[u1@localhost ~]$ 
+[u1@localhost ~]$ sudo useradd neeraj
+
+We trust you have received the usual lecture from the local System
+Administrator. It usually boils down to these three things:
+
+    #1) Respect the privacy of others.
+    #2) Think before you type.
+    #3) With great power comes great responsibility.
+
+[sudo] password for u1: 
+Sorry, user u1 is not allowed to execute '/sbin/useradd neeraj' as root on localhost.localdomain.
+[u1@localhost ~]$ exit
+
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf  /etc/sudoers.d/deepu 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# vim /etc/sudoers 
+
+#%ibm    ALL=(ALL)      NOPASSWD: /usr/sbin/fdisk
+
+:wq!
+
+========================================================================================
+
+How we can create command aliases as a Bulk SUDO power  ===> SMART concept
+
+
+[root@localhost ~]# vim /etc/sudoers 
+Cmnd_Alias NETWORKING = /sbin/route, /sbin/ifconfig, /bin/ping, /sbin/dhclient, /usr/bin/net, /sbin/iptables, /usr/bin/rfcomm, /usr/bin/wvdial, /sbin/iwconfig, /sbin/mii-tool
+
+Cmnd_Alias STORAGE = /sbin/fdisk, /sbin/sfdisk, /sbin/parted, /sbin/partprobe, /bin/mount, /bin/umount
+
+
+deepu    ALL=(ALL)              STORAGE,SERVICES
+
+
+:wq!
+
+
+========================================================================================
+
+Differece between SUDO Concept and SUID concept  ?
+
+[root@localhost ~]# which fdisk 
+/usr/sbin/fdisk
+[root@localhost ~]# ls -l  /usr/sbin/fdisk
+-rwxr-xr-x. 1 root root 115424 Feb 24  2022 /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# chmod  u+s  /usr/sbin/fdisk  ===> to apply the SUID on this command now all users can execute this command with super user power
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /usr/sbin/fdisk
+-rwsr-xr-x. 1 root root 115424 Feb 24  2022 /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# ls /home 
+deepak  deepu  kapil  ravi  ravi1  sachin  soniya  student  suraj  u1  u2  user1  user2  user3  vinit
+[root@localhost ~]# 
+
+[root@localhost ~]# useradd neeraj  
+[root@localhost ~]# 
+[root@localhost ~]# su - neeraj  
+[neeraj@localhost ~]$ 
+[neeraj@localhost ~]$ fdisk -l 
+Disk /dev/sda: 30 GiB, 32212254720 bytes, 62914560 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x969f8d03
+
+[root@localhost ~]# useradd mani
+[root@localhost ~]# 
+[root@localhost ~]# su - mani  
+[mani@localhost ~]$ 
+[mani@localhost ~]$ fdisk -l 
+Disk /dev/sda: 30 GiB, 32212254720 bytes, 62914560 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x969f8d03
+
+Device     Boot   Start      End  Sectors Size Id Type
+/dev/sda1  *       2048  2099199  2097152   1G 83 Linux
+/dev/sda2       2099200 62914559 60815360  29G 8e Linux LVM
+
+
+[root@localhost ~]# ls -l  /usr/sbin/fdisk 
+-rwsr-xr-x. 1 root root 115424 Feb 24  2022 /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# chmod  u-s  /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /usr/sbin/fdisk 
+-rwxr-xr-x. 1 root root 115424 Feb 24  2022 /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# su - neeraj  
+[neeraj@localhost ~]$ cd
+[neeraj@localhost ~]$ 
+[neeraj@localhost ~]$ fdisk -l
+fdisk: cannot open /dev/sda: Permission denied
+fdisk: cannot open /dev/sr0: Permission denied
+fdisk: cannot open /dev/mapper/rhel-root: Permission denied
+fdisk: cannot open /dev/mapper/rhel-swap: Permission denied
+[neeraj@localhost ~]$ exit
+exit
+[root@localhost ~]# 
+
+========================================================================================
+[root@localhost ~]# ls -l  /usr/sbin/fdisk 
+-rwxr-xr-x. 1 root root 115424 Feb 24  2022 /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod   u+s  /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /usr/sbin/fdisk 
+-rwsr-xr-x. 1 root root 115424 Feb 24  2022 /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod   u-s  /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /usr/sbin/fdisk 
+-rwxr-xr-x. 1 root root 115424 Feb 24  2022 /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# parted  /dev/sda  print 
+Model: ATA VMware Virtual S (scsi)
+Disk /dev/sda: 32.2GB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags: 
+
+Number  Start   End     Size    Type     File system  Flags
+ 1      1049kB  1075MB  1074MB  primary  xfs          boot
+ 2      1075MB  32.2GB  31.1GB  primary               lvm
+
+[root@localhost ~]# 
+
+[root@localhost ~]# su - neeraj 
+[neeraj@localhost ~]$ 
+[neeraj@localhost ~]$ parted  /dev/sda print  
+WARNING: You are not superuser.  Watch out for permissions.
+Error: Error opening /dev/sda: Permission denied
+Retry/Cancel?                                                             
+Retry/Cancel? ^C                                                          
+[neeraj@localhost ~]$ 
+
+[neeraj@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# which parted  
+/usr/sbin/parted
+[root@localhost ~]# 
+[root@localhost ~]# which parted  
+/usr/sbin/parted
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod  u+s  /usr/sbin/parted
+[root@localhost ~]# 
+[root@localhost ~]# ls -l    /usr/sbin/parted
+-rwsr-xr-x. 1 root root 90848 Aug 10  2021 /usr/sbin/parted
+[root@localhost ~]# 
+[root@localhost ~]# su - neeraj 
+[neeraj@localhost ~]$ 
+[neeraj@localhost ~]$ parted  /dev/sda print  
+WARNING: You are not superuser.  Watch out for permissions.
+Model: ATA VMware Virtual S (scsi)
+Disk /dev/sda: 32.2GB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags: 
+
+Number  Start   End     Size    Type     File system  Flags
+ 1      1049kB  1075MB  1074MB  primary  xfs          boot
+ 2      1075MB  32.2GB  31.1GB  primary               lvm
+
+[neeraj@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# ls -l   /usr/sbin/parted
+-rwsr-xr-x. 1 root root 90848 Aug 10  2021 /usr/sbin/parted
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# setfacl -m  u:neeraj:---  /usr/sbin/parted  # neeraj still not access even chmod u+s
+[root@localhost ~]# 
+[root@localhost ~]# ls /home  
+deepak  kapil  neeraj  ravi1   soniya   suraj  u2     user2  vinit
+deepu   mani   ravi    sachin  student  u1     user1  user3
+[root@localhost ~]# 
+[root@localhost ~]# su - neeraj 
+[neeraj@localhost ~]$ parted  /dev/sda print  
+-bash: /usr/sbin/parted: Permission denied
+[neeraj@localhost ~]$ exit
+logout
+[root@localhost ~]# setfacl --remove-all   /usr/sbin/parted
+[root@localhost ~]# 
+[root@localhost ~]# su - neeraj 
+[neeraj@localhost ~]$ parted  /dev/sda print  
+WARNING: You are not superuser.  Watch out for permissions.
+Model: ATA VMware Virtual S (scsi)
+Disk /dev/sda: 32.2GB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags: 
+
+Number  Start   End     Size    Type     File system  Flags
+ 1      1049kB  1075MB  1074MB  primary  xfs          boot
+ 2      1075MB  32.2GB  31.1GB  primary               lvm
+
+[neeraj@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# find /  -perm  /u=s 
+
+[root@localhost ~]# find /  -perm  /u=s |  wc -l  
+
+
+[root@localhost ~]# 
+[root@localhost ~]# ls  -l /usr/bin/passwd
+-rwsr-xr-x. 1 root root 32648 Aug 10  2021 /usr/bin/passwd
+[root@localhost ~]# 
+[root@localhost ~]# ls  -l /usr/bin/su  
+-rwsr-xr-x. 1 root root 57616 Feb 24  2022 /usr/bin/su
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod  u-s /usr/bin/su
+[root@localhost ~]# 
+[root@localhost ~]# ls  -l /usr/bin/su  
+-rwxr-xr-x. 1 root root 57616 Feb 24  2022 /usr/bin/su
+[root@localhost ~]# 
+[root@localhost ~]# chmod  u+s /usr/bin/su
+[root@localhost ~]# 
+[root@localhost ~]# ls  -l /usr/bin/su  
+-rwsr-xr-x. 1 root root 57616 Feb 24  2022 /usr/bin/su
+[root@localhost ~]# 
+
+========================================================================================
+========================================================================================
+
+

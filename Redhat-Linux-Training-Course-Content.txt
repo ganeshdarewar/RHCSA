@@ -1,0 +1,116 @@
+===============================================================================================================================================
+Expected topics Required in Linux & Cloud & DevOps admin Related Interviews
+===============================================================================================================================================
+
+✅ Basic Linux Fundamentals Related Topics  & ✅ Linux Administration Related Topics
+
+===============================================================================================================================================
+ Redhat Officials - RHCSA - Course Content - First  Book (RH124) & Second Book (RH134)
+===============================================================================================================================================
+Live Class
+===============================================================================================================================================
+
+	1-  Discussion About Basic Terms & About Linux and Unix and Windows Operating system before start Linux Training
+	2-  OS Installation Planning & Redhat Linux Installation - LAB Creation Steps
+	3-  Discussion About Short keys and Command Syntax Rules Understanding-help and man command examples
+	4-  Data Managing Concept in Windows and Linux OS
+	5-  Examples of pwd-ls-cd-touch-mkdir-tree-Commands
+	6-  File Management & Creation Command using gedit-VI-VIM
+	7-  Examples of cp-rm-mv-rename-rsync-inodes
+	8-  Examples of echo-cat-tac-wc-tee-and usages of symbols ; | > >> in Linux Command line
+	9-  Examples of head-tail-basic-sed-commands and Basic cut and awk Examples
+	10- Examples of grep-egrep-fgrep-uniq-commands
+	11- Examples of aliases-bashrc-motd-issue-Types of Quotes
+	12- Examples of FIND-Locate-STDIN-STDOUT-STDERR Operator in Linux Command line
+	13- Examples of Link-Soft-hard-Link and Data Compression Examples using tar-gzip-bzip2-xz Commands
+	14- Device Mounting-Unmounting Concept and USB Access Steps in Linux with Command line
+	15- File Hierarchy Structure and Examples date-cal-timedatectl-NTP Client Configuration
+
+===============================================================================================================================================
+
+        16- RPM Package Management with rpm Command & with yum OR dnf 
+        17- Advance Practise with YUM for application installation - online redhat repository and EPEL Repo concept in Linux
+        18- Managing Services and Daemons using systemctl Command & init & systemd Concept
+        19- Run level, Targets, Single User Mode, GRUB Password Configuration
+        20- Job Scheduling with at and crontab Utility
+        21- Basic Bash Shell Scripting Concept
+        22- User & Group Management, Password Policy Configuration, SUDO Configuration
+        23- File & Directory Permissions Management-chmod-chown-chgrp-umask-setfacl-getfacl-SUID-SGID-STICKY-BIT-Chattr-lsattr Examples 
+        24- Standard Partition Creation Concept During the OS installation and using Command Line
+        25- SWAP Partition Creation Steps - using Partition and File based method
+        26- Logical Volume Management (LVM) Configuration and LVM based Operation with Examples and BASIC RAID Configuration Concept
+        27- Linux Booting Process and OS Troubleshooting Steps using Rescue kernel-Resuce Mode-Single Usermode-Maintinance Mode-Examples
+        28- Network Theory Session - about IP addressing and Basic Network Devices
+        29- Network Configuration Command with Examples – nmcli-nmtui-hostnamectl-scp-rsync-netstat-ip-route-dns-dhcp-concept
+        30- SSH Server-Client Configuration – Password Less Access Authentication -Keypair Creation  
+        31- Network Security Management using firewalld and iptables and TCP-wrappers ==> Theory & Practical Configuration
+        32- Enhanced Security with SE-Linux and Role of SELINUX and FIREWALLD in any linux machine
+        33- Explain about Cockpit Tool, SOS Report Creation Step, Redhat Login ID Creation & Usages of Red Hat Insights-redhat Support Case open
+        34- Performance Optimization with Tuned Daemon Profiles & kernel Parameters
+        35- Process Management in Linux ==> ps-top-kill-bg-fg-jobs-nice-renice examples
+        36- Configure Virtual Machine using KVM [Kernel based Virtual Machine] Concept
+        37- NFS File Sharing Server and NFS Client Configuration and with AutoFS Mounting Concept
+        38- Kickstart and Network-Based Installation Server Configuration 
+        39- Basic Container Concept 
+        40- Log Management & Troubleshooting Understanding about any services  
+
+===============================================================================================================================================
+SELF Learning 
+===============================================================================================================================================
+
+🔹 Server and Client Configuration in Red Hat Linux 
+
+        1-  YUM Configuration
+	2-  NFS Server and Client Configuration 
+	3-  SAMBA Server and Client Configuration 
+	4-  FTP server and Client Configuration
+	5-  DNS Server and Client Configuration
+	6-  DHCP Server and Client Configuration
+	7-  Apache Web Server Client Configuration
+	8-  SSH Server and Client Configuration
+	9-  MariaDB Database Server and Client Configuration
+	10- NTP Server and Client Configuration
+        11- PXE Boot and Kickstart Server Configuration
+        12- POSTFIX Email Server Configuration
+
+===============================================================================================================================================
+SELF Learning
+===============================================================================================================================================
+
+🔹 Monitoring & Observability Tools 
+
+        1- Nagios     – Monitoring Tool Installation 
+        2- Zabbix     – Monitoring Tool Installation
+        3- Kibana     – Monitoring Tool Installation 
+        4- Grafana    – Monitoring Tool Installation 
+        5- Prometheus – Monitoring Tool Installation 
+
+
+===============================================================================================================================================
+Base Track
+
+1- Redhat Linux + Server & Client Configuration  + basic database + basic Network + Monitoring Tools + Bash scripting  + AWS Cloud  
+
+===============================================================================================================================================
+
+Cloud Platform ===>  AWS Cloud/Azure/Google cloud 
+
+===============================================================================================================================================
+
+2- Docker + kubernetes  + Openshift-CL280 +  openshift virtualization [316] ===> Container Technology [Special profile]
+        
+===============================================================================================================================================
+Bash scripting
+Ansible Trainng  ===> Playbook ==>yaml ==> deploy ===> automation 
+terraform
+GIT jenkins
+Monitoring Tools
+Docker
+kubernetes   ===> DevOps Tools
+===============================================================================================================================================
+Private Cloud  ==> Openstack Cloud Training [CL110 + CL210]  OR Private Cloud 
+===============================================================================================================================================
+BASH scripting ===> Redhat ansible [RHCE] ===> Terraform  
+[ 12 Days  ]              32 Hours             
+===============================================================================================================================================
+===============================================================================================================================================

@@ -1,0 +1,934 @@
+=======================================================================
+How we can manage the permission of any file or directory in Linux ?
+=======================================================================
+
+How we can read the Permission ?
+
+How we can change the Permission ?
+
+=======================================================================
+[root@localhost ~]# cat  /etc/redhat-release 
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# umask 
+0022
+[root@localhost ~]# 
+
+=======================================================================
+
+[root@localhost ~]# 
+[root@localhost ~]# touch  /abc 
+[root@localhost ~]# 
+[root@localhost ~]# ls /
+abc  bin   data  etc   lib    media  opt     proc  run   srv  tmp  var
+afs  boot  dev   home  lib64  mnt    oracle  root  sbin  sys  usr  xyz
+[root@localhost ~]# 
+[root@localhost ~]# ls -l /abc   
+-rw-r--r--. 1 root root 0 Apr 12 11:03 /abc
+[root@localhost ~]# 
+[root@localhost ~]# ls -i  /abc  
+1777639 /abc
+[root@localhost ~]# mkdir /linux 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /linux 
+drwxr-xr-x. 2 root root 6 Apr 12 11:04 /linux
+[root@localhost ~]# 
+[root@localhost ~]# cd /linux
+[root@localhost linux]# ls -a  
+.  ..
+[root@localhost linux]# 
+[root@localhost linux]# cd
+[root@localhost ~]# 
+[root@localhost ~]# cd  /linux
+[root@localhost linux]# 
+[root@localhost linux]# mkdir d1 d2 d3 
+[root@localhost linux]# touch a1 a2 a3
+[root@localhost linux]# ls  
+a1  a2  a3  d1  d2  d3
+[root@localhost linux]# cd
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /linux
+drwxr-xr-x. 5 root root 66 Apr 12 11:09 /linux
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /home  
+drwxr-xr-x. 6 root root 61 Apr 12 10:06 /home
+[root@localhost ~]# 
+[root@localhost ~]# ls /home  
+amit  deepak  soniya  student
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /linux
+drwxr-xr-x. 5 root root 66 Apr 12 11:09 /linux
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /linux/d1 
+drwxr-xr-x. 2 root root 6 Apr 12 11:08 /linux/d1
+[root@localhost ~]# 
+[root@localhost ~]# mkdir  /linux/d1/raju  
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /linux
+drwxr-xr-x. 5 root root 66 Apr 12 11:09 /linux
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld    /linux/d1
+drwxr-xr-x. 3 root root 18 Apr 12 11:11 /linux/d1
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /etc  
+drwxr-xr-x. 132 root root 8192 Apr 12 10:06 /etc
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /linux
+drwxr-xr-x. 5 root root 66 Apr 12 11:09 /linux
+[root@localhost ~]# 
+
+=================================================================================
+[root@localhost ~]# ls -l  /abc 
+-rw-r--r--. 1 root root 0 Apr 12 11:03 /abc
+[root@localhost ~]# 
+[root@localhost ~]# ln  /abc /tmp/mybackup 
+[root@localhost ~]# 
+[root@localhost ~]# ls -i  /abc 
+1777639 /abc
+[root@localhost ~]# 
+[root@localhost ~]# ls -i /tmp/mybackup 
+1777639 /tmp/mybackup
+[root@localhost ~]# 
+[root@localhost ~]# echo  hello india > /abc 
+[root@localhost ~]# cat /abc 
+hello india
+[root@localhost ~]# cat /tmp/mybackup 
+hello india
+[root@localhost ~]# 
+[root@localhost ~]# du -sh /abc
+4.0K	/abc
+[root@localhost ~]# du -sh /tmp/mybackup 
+4.0K	/tmp/mybackup
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /abc  
+-rw-r--r--. 2 root root 12 Apr 12 11:15 /abc
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /tmp/mybackup 
+-rw-r--r--. 2 root root 12 Apr 12 11:15 /tmp/mybackup
+[root@localhost ~]# 
+[root@localhost ~]# ls -i  /abc 
+1777639 /abc
+[root@localhost ~]# find /  -inum  1777639
+/tmp/mybackup
+/abc
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf  /abc 
+[root@localhost ~]# 
+[root@localhost ~]# cat /tmp/mybackup 
+hello india
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /linux 
+drwxr-xr-x. 5 root root 66 Apr 12 11:09 /linux
+[root@localhost ~]# 
+[root@localhost ~]# touch /linux/abc{1..3}
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /linux
+drwxr-xr-x. 5 root root 102 Apr 12 11:18 /linux
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /linux/abc1 
+-rw-r--r--. 1 root root 0 Apr 12 11:18 /linux/abc1
+[root@localhost ~]# 
+[root@localhost ~]# ls -l   /linux
+total 0
+-rw-r--r--. 1 root root  0 Apr 12 11:09 a1
+-rw-r--r--. 1 root root  0 Apr 12 11:09 a2
+-rw-r--r--. 1 root root  0 Apr 12 11:09 a3
+-rw-r--r--. 1 root root  0 Apr 12 11:18 abc1
+-rw-r--r--. 1 root root  0 Apr 12 11:18 abc2
+-rw-r--r--. 1 root root  0 Apr 12 11:18 abc3
+drwxr-xr-x. 3 root root 18 Apr 12 11:11 d1
+drwxr-xr-x. 2 root root  6 Apr 12 11:08 d2
+drwxr-xr-x. 2 root root  6 Apr 12 11:08 d3
+[root@localhost ~]# 
+[root@localhost ~]# ll   /linux
+total 0
+-rw-r--r--. 1 root root  0 Apr 12 11:09 a1
+-rw-r--r--. 1 root root  0 Apr 12 11:09 a2
+-rw-r--r--. 1 root root  0 Apr 12 11:09 a3
+-rw-r--r--. 1 root root  0 Apr 12 11:18 abc1
+-rw-r--r--. 1 root root  0 Apr 12 11:18 abc2
+-rw-r--r--. 1 root root  0 Apr 12 11:18 abc3
+drwxr-xr-x. 3 root root 18 Apr 12 11:11 d1
+drwxr-xr-x. 2 root root  6 Apr 12 11:08 d2
+drwxr-xr-x. 2 root root  6 Apr 12 11:08 d3
+[root@localhost ~]# 
+
+=================================================================================
+Examples of softlink and hard link ===> HOLD
+=================================================================================
+[root@localhost ~]# 
+[root@localhost ~]# mkdir /java  
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java
+drwxr-xr-x. 2 root root 6 Apr 12 11:19 /java
+[root@localhost ~]# 
+[root@localhost ~]# ls /home 
+amit  deepak  soniya  student
+[root@localhost ~]# 
+[root@localhost ~]# su - deepak  
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ cd /java
+[deepak@localhost java]$ ls
+[deepak@localhost java]$ cd
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ exit
+logout
+[root@localhost ~]# chmod  751  /java  
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /java 
+drwxr-x--x. 2 root root 6 Apr 12 11:19 /java
+[root@localhost ~]# 
+[root@localhost ~]# su - deepak  
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ ls -ld /java 
+drwxr-x--x. 2 root root 6 Apr 12 11:19 /java
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ ls /java 
+ls: cannot open directory '/java': Permission denied
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ cd  /java 
+[deepak@localhost java]$ ls
+ls: cannot open directory '.': Permission denied
+[deepak@localhost java]$ exit
+logout
+[root@localhost ~]# chmod  754  /java 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java 
+drwxr-xr--. 2 root root 6 Apr 12 11:19 /java
+[root@localhost ~]# 
+[root@localhost ~]# su - deepak  
+[deepak@localhost ~]$ cd /java
+-bash: cd: /java: Permission denied
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ ls  /java
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# chmod  755  /java 
+[root@localhost ~]# 
+[root@localhost ~]# su - deepak  
+[deepak@localhost ~]$ ls /java
+[deepak@localhost ~]$ cd  /java
+[deepak@localhost java]$ ls
+[deepak@localhost java]$ exit
+logout
+[root@localhost ~]# chmod  756  /java 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java  
+drwxr-xrw-. 2 root root 6 Apr 12 11:19 /java
+[root@localhost ~]# 
+[root@localhost ~]# su - deepak  
+[deepak@localhost ~]$ ls /java  
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ cd /java  
+-bash: cd: /java: Permission denied
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ touch /java/abc
+touch: cannot touch '/java/abc': Permission denied
+[deepak@localhost ~]$ exit
+logout
+[root@localhost ~]# chmod  757  /java 
+[root@localhost ~]# 
+[root@localhost ~]# su - deepak  
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ ls -ld /java  
+drwxr-xrwx. 2 root root 6 Apr 12 11:19 /java
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ cd /java
+[deepak@localhost java]$ touch abc1
+[deepak@localhost java]$ exit
+logout
+[root@localhost ~]# su - soniya  
+[soniya@localhost ~]$ cd /java  
+
+[soniya@localhost java]$ ls
+abc1
+[soniya@localhost java]$ touch  abc2
+[soniya@localhost java]$ ls
+abc1  abc2
+[soniya@localhost java]$ exit
+logout
+[root@localhost ~]# chmod  755  /java 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java  
+drwxr-xr-x. 2 root root 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java 
+drwxr-xr-x. 2 root root 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# ls /home 
+amit  deepak  soniya  student
+[root@localhost ~]# 
+[root@localhost ~]# chown soniya  /java 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /java 
+drwxr-xr-x. 2 soniya root 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# chmod  757 /java  
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /java 
+drwxr-xrwx. 2 soniya root 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# su - soniya
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls -ld  /java 
+drwxr-xrwx. 2 soniya root 30 Apr 12 11:25 /java
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ cd /java  
+[soniya@localhost java]$ ls
+abc1  abc2
+[soniya@localhost java]$ exit
+logout
+[root@localhost ~]# su - deepak  
+[deepak@localhost ~]$ ls -ld  /java 
+drwxr-xrwx. 2 soniya root 30 Apr 12 11:25 /java
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ cd /java 
+[deepak@localhost java]$ ls
+abc1  abc2
+[deepak@localhost java]$ cd
+
+[deepak@localhost ~]$ ls -ld /java 
+drwxr-xrwx. 2 soniya root 30 Apr 12 11:25 /java
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ chmod 770  /java  
+chmod: changing permissions of '/java': Operation not permitted
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# su - soniya  
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ chmod  750  /java 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls -ld /java
+drwxr-x---. 2 soniya root 30 Apr 12 11:25 /java
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ chown deepak  /java 
+chown: changing ownership of '/java': Operation not permitted
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ chgrp  deepak  /java 
+chgrp: changing group of '/java': Operation not permitted
+[soniya@localhost ~]$ exit
+[root@localhost ~]# ls -ld /java  
+drwxr-x---. 2 soniya root 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java  
+drwxr-x---. 2 soniya root 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# chown  deepak /java 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java  
+drwxr-x---. 2 deepak root 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# su - soniya  
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls -ld  /java  
+drwxr-x---. 2 deepak root 30 Apr 12 11:25 /java
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls  /java  
+ls: cannot open directory '/java': Permission denied
+
+[soniya@localhost ~]$ cd   /java  
+-bash: cd: /java: Permission denied
+
+[soniya@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+[root@localhost ~]# ls -ld /java 
+drwxr-x---. 2 deepak root 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# su - deepak 
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ chmod  055  /java  
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ ls -ld /java 
+d---r-xr-x. 2 deepak root 30 Apr 12 11:25 /java
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ cd /java 
+-bash: cd: /java: Permission denied
+[deepak@localhost ~]$ ls  /java 
+ls: cannot open directory '/java': Permission denied
+[deepak@localhost ~]$ chmod  755  /java 
+[deepak@localhost ~]$ ls  /java 
+abc1  abc2
+[deepak@localhost ~]$ cd   /java 
+[deepak@localhost java]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java 
+drwxr-xr-x. 2 deepak root 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# chown  root  /java  
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java 
+drwxr-xr-x. 2 root root 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java 
+drwxr-xr-x. 2 deepak root 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# chown  root  /java  
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java 
+drwxr-xr-x. 2 root root 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# groupadd tcs  
+[root@localhost ~]# 
+[root@localhost ~]# useradd -G tcs user1
+[root@localhost ~]# useradd -G tcs user2
+[root@localhost ~]# 
+[root@localhost ~]# ls /home  
+amit  deepak  soniya  student  user1  user2
+[root@localhost ~]# 
+[root@localhost ~]# ls /home  
+amit  deepak  soniya  student  user1  user2
+[root@localhost ~]# 
+[root@localhost ~]# chgrp  tcs  /java  
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java  
+drwxr-xr-x. 2 root tcs 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# su - deepak 
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ groups deepak  
+deepak : deepak
+[deepak@localhost ~]$ ls -ld /java  
+drwxr-xr-x. 2 root tcs 30 Apr 12 11:25 /java
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ exit
+logout
+[root@localhost ~]# chmod  705  /java  
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /java  
+drwx---r-x. 2 root tcs 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# chmod  705  /java  
+[root@localhost ~]# su - deepak 
+[deepak@localhost ~]$ ls -ld /java  
+drwx---r-x. 2 root tcs 30 Apr 12 11:25 /java
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ ls /java 
+abc1  abc2
+[deepak@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# su - user1  
+[user1@localhost ~]$ 
+[user1@localhost ~]$ groups  user1
+user1 : user1 tcs
+[user1@localhost ~]$ 
+[user1@localhost ~]$ ls /java 
+ls: cannot open directory '/java': Permission denied
+[user1@localhost ~]$ cd  /java 
+-bash: cd: /java: Permission denied
+[user1@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java
+drwx---r-x. 2 root tcs 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# useradd -G  tcs  user3  
+[root@localhost ~]# 
+[root@localhost ~]# su - user3 
+[user3@localhost ~]$ 
+[user3@localhost ~]$ ls -ld  /java  
+drwx---r-x. 2 root tcs 30 Apr 12 11:25 /java
+[user3@localhost ~]$ 
+[user3@localhost ~]$ 
+[user3@localhost ~]$ ls /java 
+ls: cannot open directory '/java': Permission denied
+[user3@localhost ~]$ cd  /java 
+-bash: cd: /java: Permission denied
+[user3@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# gpasswd -d user1 tcs 
+Removing user user1 from group tcs
+[root@localhost ~]# 
+[root@localhost ~]# gpasswd -d user2 tcs
+Removing user user2 from group tcs
+[root@localhost ~]# 
+[root@localhost ~]# gpasswd -d user3 tcs
+Removing user user3 from group tcs
+[root@localhost ~]# 
+[root@localhost ~]# groups user1
+user1 : user1
+[root@localhost ~]# groups user2
+user2 : user2
+[root@localhost ~]# groups user3
+user3 : user3
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java  
+drwx---r-x. 2 root tcs 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# grep tcs  /etc/group  
+tcs:x:1004:
+[root@localhost ~]# 
+[root@localhost ~]# su - user1 
+[user1@localhost ~]$ 
+[user1@localhost ~]$ ls -ld /java  
+drwx---r-x. 2 root tcs 30 Apr 12 11:25 /java
+[user1@localhost ~]$ 
+[user1@localhost ~]$ groups user1  
+user1 : user1
+[user1@localhost ~]$ ls /java 
+abc1  abc2
+[user1@localhost ~]$ cd  /java 
+[user1@localhost java]$ cd
+[user1@localhost ~]$ 
+[user1@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+[root@localhost ~]# su - user1 
+[user1@localhost ~]$ 
+[user1@localhost ~]$ ls -ld /java  
+drwx---r-x. 2 root tcs 30 Apr 12 11:25 /java
+[user1@localhost ~]$ 
+[user1@localhost ~]$ groups user1  
+user1 : user1
+[user1@localhost ~]$ ls /java 
+abc1  abc2
+[user1@localhost ~]$ cd  /java 
+[user1@localhost java]$ cd
+[user1@localhost ~]$ 
+[user1@localhost ~]$ exit
+logout
+[root@localhost ~]# chgrp  root /java  
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /java  
+drwx---r-x. 2 root root 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# chown soniya  /java 
+[root@localhost ~]# chgrp soniya  /java 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /java 
+drwx---r-x. 2 soniya soniya 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# su - soniya  
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls -ld /java  
+drwx---r-x. 2 soniya soniya 30 Apr 12 11:25 /java
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ chmod 755  /java 
+[soniya@localhost ~]$ ls -ld /java 
+drwxr-xr-x. 2 soniya soniya 30 Apr 12 11:25 /java
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls -l  /java
+total 0
+-rw-r--r--. 1 deepak deepak 0 Apr 12 11:25 abc1
+-rw-r--r--. 1 soniya soniya 0 Apr 12 11:25 abc2
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ exit
+logout
+[root@localhost ~]# chown  -R soniya  /java  
+[root@localhost ~]# chgrp  -R soniya  /java  
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java 
+drwxr-xr-x. 2 soniya soniya 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# ll  /java 
+total 0
+-rw-r--r--. 1 soniya soniya 0 Apr 12 11:25 abc1
+-rw-r--r--. 1 soniya soniya 0 Apr 12 11:25 abc2
+
+[root@localhost ~]# ls -ld /java 
+drwxr-xr-x. 2 soniya soniya 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# chown -R     deepak:deepak  /java
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java 
+drwxr-xr-x. 2 deepak deepak 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# chown -R     :soniya   /java
+[root@localhost ~]# chown -R     soniya   /java
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /java 
+drwxr-xr-x. 2 soniya soniya 30 Apr 12 11:25 /java
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mkdir /mybackup  
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /mybackup
+drwxr-xr-x. 2 root root 6 Apr 12 11:53 /mybackup
+[root@localhost ~]# 
+[root@localhost ~]# chown soniya:soniya  /mybackup
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /mybackup
+drwxr-xr-x. 2 soniya soniya 6 Apr 12 11:53 /mybackup
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+=========================================================================================
+Examples of chmod 
+Examples of chown
+Examples of chgrp
+=========================================================================================
+Examples of setfacl and getfacl and chmod ===> MIX  
+=========================================================================================
+Chmod ===> permission Applying method  
+
+
+1- numeric method         ====>  777    755    644    770
+
+2- symbolic method  
+
+=========================================================================================
+Examples of Numeric method
+
+[root@localhost ~]# mkdir  /redhat  
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /redhat
+drwxr-xr-x. 2 root root 6 Apr 12 12:01 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod 777  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /redhat
+drwxrwxrwx. 2 root root 6 Apr 12 12:01 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# chmod 750  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /redhat
+drwxr-x---. 2 root root 6 Apr 12 12:01 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# chmod 755  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /redhat
+drwxr-xr-x. 2 root root 6 Apr 12 12:01 /redhat
+
+=========================================================================================
+
+Examples of Symbolic method
+
+
+[root@localhost ~]# ls -ld /redhat
+drwxr-xr-x. 2 root root 6 Apr 12 12:01 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# chmod  g+w,o+w  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /redhat
+drwxrwxrwx. 2 root root 6 Apr 12 12:01 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# chmod  o-w  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /redhat
+drwxrwxr-x. 2 root root 6 Apr 12 12:01 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# chmod  g-w  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /redhat
+drwxr-xr-x. 2 root root 6 Apr 12 12:01 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# touch hello.py  
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  hello.py 
+-rw-r--r--. 1 root root 0 Apr 12 12:03 hello.py
+[root@localhost ~]# 
+[root@localhost ~]# chmod  u+x  hello.py 
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  hello.py 
+-rwxr--r--. 1 root root 0 Apr 12 12:03 hello.py
+[root@localhost ~]# 
+[root@localhost ~]# chmod  g+x  hello.py 
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  hello.py 
+-rwxr-xr--. 1 root root 0 Apr 12 12:03 hello.py
+[root@localhost ~]# 
+[root@localhost ~]# chmod  o+x  hello.py 
+[root@localhost ~]# ls -l  hello.py 
+-rwxr-xr-x. 1 root root 0 Apr 12 12:03 hello.py
+[root@localhost ~]# 
+[root@localhost ~]# chmod  -x    hello.py 
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  hello.py 
+-rw-r--r--. 1 root root 0 Apr 12 12:03 hello.py
+[root@localhost ~]# 
+[root@localhost ~]# chmod  +x    hello.py 
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  hello.py 
+-rwxr-xr-x. 1 root root 0 Apr 12 12:03 hello.py
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod  a-x    hello.py 
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  hello.py 
+-rw-r--r--. 1 root root 0 Apr 12 12:03 hello.py
+[root@localhost ~]# 
+[root@localhost ~]# chmod  a+x    hello.py 
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  hello.py 
+-rwxr-xr-x. 1 root root 0 Apr 12 12:03 hello.py
+[root@localhost ~]# 
+[root@localhost ~]# chmod  u-x,g-x,o-x  hello.py 
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  hello.py 
+-rw-r--r--. 1 root root 0 Apr 12 12:03 hello.py
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod  u=rwx,g=rwx,o=rwx  hello.py 
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  hello.py 
+-rwxrwxrwx. 1 root root 0 Apr 12 12:03 hello.py
+[root@localhost ~]# 
+[root@localhost ~]# chmod  ugo=rwx   hello.py 
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  hello.py 
+-rwxrwxrwx. 1 root root 0 Apr 12 12:03 hello.py
+[root@localhost ~]# 
+[root@localhost ~]# chmod  a=rwx   hello.py 
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  hello.py 
+-rwxrwxrwx. 1 root root 0 Apr 12 12:03 hello.py
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod  u=rw,g=r,o=r  hello.py 
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  hello.py 
+-rw-r--r--. 1 root root 0 Apr 12 12:03 hello.py
+[root@localhost ~]# 
+=========================================================================================
+[root@localhost ~]# ls -ld /redhat
+drwxr-xr-x. 2 root root 6 Apr 12 12:01 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod  777  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /redhat
+drwxrwxrwx. 2 root root 6 Apr 12 12:01 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /tmp
+drwxrwxrwt. 14 root root 4096 Apr 12 12:01 /tmp
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /redhat
+drwxrwxrwx. 2 root root 6 Apr 12 12:01 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls /home 
+amit  deepak  soniya  student  user1  user2  user3
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# su - user1  
+[user1@localhost ~]$ 
+[user1@localhost ~]$ cd /redhat
+[user1@localhost redhat]$ 
+[user1@localhost redhat]$ echo hello india > abc1
+[user1@localhost redhat]$ ll
+total 4
+-rw-r--r--. 1 user1 user1 12 Apr 12 12:11 abc1
+[user1@localhost redhat]$ 
+[user1@localhost redhat]$ exit
+logout
+[root@localhost ~]# su - user2
+[user2@localhost ~]$ cd  /redhat
+[user2@localhost redhat]$ ls 
+abc1
+[user2@localhost redhat]$ ll
+total 4
+-rw-r--r--. 1 user1 user1 12 Apr 12 12:11 abc1
+[user2@localhost redhat]$ 
+[user2@localhost redhat]$ echo hello world  > abc2  
+[user2@localhost redhat]$ 
+[user2@localhost redhat]$ ll
+total 8
+-rw-r--r--. 1 user1 user1 12 Apr 12 12:11 abc1
+-rw-r--r--. 1 user2 user2 12 Apr 12 12:12 abc2
+[user2@localhost redhat]$ 
+[user2@localhost redhat]$ rm -rf  *
+[user2@localhost redhat]$ ls
+[user2@localhost redhat]$ 
+[user2@localhost redhat]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# chmod   o+t  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /redhat
+drwxrwxrwt. 2 root root 6 Apr 12 12:12 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /tmp
+drwxrwxrwt. 14 root root 4096 Apr 12 12:12 /tmp
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# su - user1 
+[user1@localhost ~]$ cd /redhat
+[user1@localhost redhat]$ 
+[user1@localhost redhat]$ echo hello india > abc1
+[user1@localhost redhat]$ ll
+total 4
+-rw-r--r--. 1 user1 user1 12 Apr 12 12:15 abc1
+[user1@localhost redhat]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# su - user2
+[user2@localhost ~]$ 
+[user2@localhost ~]$ cd /redhat
+[user2@localhost redhat]$ ls
+abc1
+[user2@localhost redhat]$ 
+[user2@localhost redhat]$ echo hello world  > abc2  
+[user2@localhost redhat]$ ll
+total 8
+-rw-r--r--. 1 user1 user1 12 Apr 12 12:15 abc1
+-rw-r--r--. 1 user2 user2 12 Apr 12 12:15 abc2
+[user2@localhost redhat]$ 
+[user2@localhost redhat]$ cat abc1
+hello india
+[user2@localhost redhat]$ cat abc2
+hello world
+[user2@localhost redhat]$ 
+[user2@localhost redhat]$ rm -rf abc2
+[user2@localhost redhat]$ 
+[user2@localhost redhat]$ ls
+abc1
+[user2@localhost redhat]$ rm -rf  *  
+rm: cannot remove 'abc1': Operation not permitted
+[user2@localhost redhat]$ 
+[user2@localhost redhat]$ cd
+[user2@localhost ~]$ 
+[user2@localhost ~]$ rm -rf  /redhat 
+rm: cannot remove '/redhat/abc1': Operation not permitted
+[user2@localhost ~]$ 
+[user2@localhost ~]$ exit  
+logout
+[root@localhost ~]# 
+[root@localhost ~]# ls  -ld  /redhat
+drwxrwxrwt. 2 root root 18 Apr 12 12:15 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# chmod o-t  /redhat 
+[root@localhost ~]# 
+[root@localhost ~]# ls  -ld  /redhat
+drwxrwxrwx. 2 root root 18 Apr 12 12:15 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls  -ld  /redhat
+drwxrwxrwt. 2 root root 18 Apr 12 12:15 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# chmod o-t  /redhat 
+[root@localhost ~]# 
+[root@localhost ~]# ls  -ld  /redhat
+drwxrwxrwx. 2 root root 18 Apr 12 12:15 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod  1777  /redhat
+[root@localhost ~]# ls  -ld  /redhat
+drwxrwxrwt. 2 root root 18 Apr 12 12:15 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# chmod  0777  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls  -ld  /redhat
+drwxrwxrwx. 2 root root 18 Apr 12 12:15 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls  -ld  /redhat
+drwxrwxrwx. 2 root root 18 Apr 12 12:15 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# chmod  o+t  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls  -ld  /redhat
+drwxrwxrwt. 2 root root 18 Apr 12 12:15 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod o-x  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls  -ld  /redhat
+drwxrwxrwT. 2 root root 18 Apr 12 12:15 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# su - user1 
+[user1@localhost ~]$ cd /redhat
+-bash: cd: /redhat: Permission denied
+[user1@localhost ~]$ 
+[user1@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+
+[root@localhost ~]# chmod  o+x  /redhat
+[root@localhost ~]# ls  -ld  /redhat
+drwxrwxrwt. 2 root root 18 Apr 12 12:15 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls /
+afs  boot  dev  home  lib    linux  mnt       opt     proc    root  sbin  sys  usr  xyz
+bin  data  etc  java  lib64  media  mybackup  oracle  redhat  run   srv   tmp  var
+[root@localhost ~]# 
+[root@localhost ~]# chmod  o-t  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls /
+afs  boot  dev  home  lib    linux  mnt       opt     proc    root  sbin  sys  usr  xyz
+bin  data  etc  java  lib64  media  mybackup  oracle  redhat  run   srv   tmp  var
+[root@localhost ~]# 
+[root@localhost ~]# setfacl -m u:deepak:r-x  /redhat  
+[root@localhost ~]# 
+[root@localhost ~]# ls  -ld  /redhat
+drwxrwxrwt+ 2 root root 18 Apr 12 12:15 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# su - deepak  
+[deepak@localhost ~]$ cd  /redhat
+[deepak@localhost redhat]$ touch abc3
+touch: cannot touch 'abc3': Permission denied
+[deepak@localhost redhat]$ cd
+[deepak@localhost ~]$ ls -ld  /redhat
+drwxrwxrwt+ 2 root root 18 Apr 12 12:15 /redhat
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ getfacl /redhat  |  grep deepak  
+getfacl: Removing leading '/' from absolute path names
+user:deepak:r-x
+[deepak@localhost ~]$ getfacl /redhat  |  grep other
+getfacl: Removing leading '/' from absolute path names
+other::rwx
+[deepak@localhost ~]$ 
+[root@localhost ~]# 
+[root@localhost ~]# setfacl  --remove-all  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /redhat
+drwxrwxrwt. 2 root root 18 Apr 12 12:15 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# chmod  o-t  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /redhat
+drwxrwxrwx. 2 root root 18 Apr 12 12:15 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# chmod   755  /redhat
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /redhat
+drwxr-xr-x. 2 root root 18 Apr 12 12:15 /redhat
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+=========================================================================================
+setfacl + chmod ===> advance level ===> connect ==> explain
+=========================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

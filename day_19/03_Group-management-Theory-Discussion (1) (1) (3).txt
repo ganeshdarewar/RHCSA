@@ -1,0 +1,69 @@
+==================================
+    Group management
+==================================
+How we can add/remove any users from any from/into into groups ?
+==================================
+Basic group management
+
+# groupadd  <groupnament>
+
+# groupmod  <options>  <groupname>
+
+# groupdel  <groupname>
+
+
+===================================
+User  ==> UID + GID
+Group ==>      only GID
+===================================
+Advance group management
+
+Types of User's assigning Techniques into any group 
+
+1- As a  Primary group membership
+2- As a  Secondary group membership or additional group membership or suplementory group 
+
+
+
+Note:- 
+
+1- user can have min or max one primary group membership but secondary can be more then one.
+2- if any users already exist in any group as a secondary and again if we are going to assign in new group as
+   a secondary we need add  -a   option so that it can be append without overwritting.
+3- a group can not be directly deleted if it has any one primary members but it is possible in secodary cases.
+
+===================================
+Permissions:-
+
+1- Particular user
+2- Group or group members
+
+==================================
+
+Basic Group Management Notes
+
+[root@localhost ~]# groupadd team 
+[root@localhost ~]# 
+[root@localhost ~]# grep team  /etc/group  
+team:x:1001:
+[root@localhost ~]# 
+[root@localhost ~]# grep team  /etc/passwd
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# groupmod -g 1050  team  
+
+[root@localhost ~]# 
+[root@localhost ~]# grep team  /etc/group  
+team:x:1050:
+[root@localhost ~]# groupmod   -n  newteam  team  
+[root@localhost ~]# 
+[root@localhost ~]# grep newteam  /etc/group  
+newteam:x:1050:
+[root@localhost ~]# 
+[root@localhost ~]# groupdel   newteam  
+[root@localhost ~]# 
+
+
+=================================
+Advance group management
+=================================

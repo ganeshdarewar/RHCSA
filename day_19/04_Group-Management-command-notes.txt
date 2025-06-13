@@ -1,0 +1,92 @@
+   69  groupadd network
+   70  grep  network  /etc/group
+   71  groupmod -g 1010 network
+   72  grep  network  /etc/group
+   73  groupmod -n networking network
+   74  grep  networking   /etc/group
+   75  groupdel networking
+   76  useradd kapil
+   77  passwd kapil
+   78  grep kapil /etc/passwd
+   79  grep kapil /etc/group
+   80  groupadd  network
+   81  groups kapil
+   82  id kapil
+   83  usermod  -G  network kapil
+   84  groups kapil
+   85  id kapil
+   86  grep network /etc/group
+   87  useradd rahul
+   88  groups rahul
+   89  usermod -G  network rahul
+   90  groups rahul
+   91  groups kapil
+   92  id kapil
+   93  id rahul
+   94  grep network /etc/group
+   95  groupadd  tcs1
+   96  groupadd  tcs2
+   97  usermod   -a -G    tcs1   kapil
+   98  groups kapil
+   99  usermod   -aG    tcs2   kapil
+  100  groups kapil
+  101  groupadd tcs3
+  102  usermod   -G    tcs3   kapil
+  103  groups kapil
+  104  gpasswd  -d   kapil  tcs3
+  105  groups kapil
+  106  groups rahul
+  107  usermod -a  -G  tcs1   rahul
+  108  groups rahul
+  109  gpasswd -d rahul tcs1
+  110  groups rahul
+  111  gpasswd -d  rahul  network
+  112  groups rahul
+  113  groups kapil
+  114  groupadd network
+  115  groupdel   network
+  116  groupdel   tcs1
+  117  groupdel   tcs2
+  118  userdel -rf sachin
+  119  userdel -rf kapil
+  120  userdel -rf rahul
+  121  groupadd  java
+  122  groupadd   php
+  123  groupadd   oracle
+  124  useradd  -G   java,php,oracle   sunil
+  125  groups sunil
+  126  groupadd pascal
+  127  usermod  -aG  pascal sunil
+  128  groups sunil
+  129  id sunil
+  130  groupadd  XML
+  131  grep  XML  /etc/group
+  132  usermod -g  XML  sunil   # primary group
+  133  groups sunil
+  134  id sunil
+
+  136  gpasswd   -d  sunil oracle
+  137  gpasswd   -d  sunil pascal
+  138  gpasswd   -d  sunil php
+  139  gpasswd   -d  sunil java
+  140  groups sunil
+  141  id sunil
+  142  groupdel XML
+  143  groupdel oracle
+  144  usermod -g  sunil sunil
+  145  groups sunil
+  146  id sunil
+  147  groupdel XML
+  148  groupadd  cloud
+  149  useradd raju
+  150  grep cloud  /etc/group
+  151  groups raju
+  152  usermod -G cloud raju
+  153  groups raju
+  154  groupadd networkcloud
+  155  usermod -aG networkcloud  raju
+  156  groups raju
+  157  groupdel cloud
+  158  groups raju
+  159  useradd -g  networkcloud   ravi
+  160  groupdel networkcloud

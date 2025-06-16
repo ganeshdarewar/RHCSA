@@ -1,0 +1,330 @@
+=====================================================
+Task ?
+=====================================================
+
+1- Copy  /etc/crontab file into /tmp Directory.
+2- check the permissions of /tmp/crontab file.
+3- set the default permission 770.
+4- create users with name  user11  user12 user13
+5- create First group with  tech-1 and second group tech-2
+6- add user in tech-1 group with p1 p2 p3 username.
+7- add user in tech-2 group with o1 o2 o3 username.
+8- set acl for user ==> user11  ==>  - - -
+9- set acl for user ==> user12  ==>  r - -
+10- set acl for user ==> user13 ==>  r w x
+11- set accl for group ==> tech-1  ==>   - - -
+12- set acl for group  ==> tech-2  ==>   r - -
+13- create one more user ==> soniya 
+14- give ownership to soniya on /tmp/crontab file.
+15- create one user with name deep
+16- set acl on deep user with soniya account ==> rw-
+
+=====================================================
+Ans:-
+
+
+
+[root@localhost ~]# cp  /etc/crontab  /tmp
+[root@localhost ~]# 
+[root@localhost ~]# ll  /tmp/crontab 
+-rw-r--r--. 1 root root 451 Sep 10 12:38 /tmp/crontab
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /tmp/crontab 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/crontab
+# owner: root
+# group: root
+user::rw-
+group::r--
+other::r--
+
+[root@localhost ~]# 
+
+
+[root@localhost ~]# chmod  770  /tmp/crontab 
+[root@localhost ~]# 
+[root@localhost ~]# ll  /tmp/crontab 
+-rwxrwx---. 1 root root 451 Sep 10 12:38 /tmp/crontab
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /tmp/crontab 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/crontab
+# owner: root
+# group: root
+user::rwx
+group::rwx
+other::---
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# useradd  user11
+[root@localhost ~]# useradd  user12
+[root@localhost ~]# useradd  user13
+[root@localhost ~]# 
+[root@localhost ~]# groupadd  tech-1
+[root@localhost ~]# groupadd  tech-2
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# useradd  -G tech-1   p1
+[root@localhost ~]# useradd  -G tech-1   p2
+[root@localhost ~]# useradd  -G tech-1   p3
+[root@localhost ~]# 
+
+
+
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# useradd  -G tech-2   o1
+[root@localhost ~]# useradd  -G tech-2   o2
+[root@localhost ~]# useradd  -G tech-2   o3
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# setfacl  -m u:user11:---   /tmp/crontab 
+[root@localhost ~]# setfacl  -m u:user12:r--   /tmp/crontab 
+[root@localhost ~]# setfacl  -m u:user13:rwx   /tmp/crontab 
+[root@localhost ~]# 
+[root@localhost ~]# ll /tmp/crontab 
+-rwxrwx---+ 1 root root 451 Sep 10 12:38 /tmp/crontab
+[root@localhost ~]# 
+
+
+
+[root@localhost ~]# getfacl  /tmp/crontab 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/crontab
+# owner: root
+# group: root
+user::rwx
+user:user11:---
+user:user12:r--
+user:user13:rwx
+group::rwx
+mask::rwx
+other::---
+
+[root@localhost ~]# 
+[root@localhost ~]# setfacl  -m g:tech-1:---   /tmp/crontab 
+[root@localhost ~]# 
+
+
+
+[root@localhost ~]# 
+[root@localhost ~]# setfacl  -m g:tech-2:4    /tmp/crontab 
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /tmp/crontab 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/crontab
+# owner: root
+# group: root
+user::rwx
+user:user11:---
+user:user12:r--
+user:user13:rwx
+group::rwx
+group:tech-1:---
+group:tech-2:r--
+mask::rwx
+other::---
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# useradd soniya  
+
+[root@localhost ~]# ll /tmp/crontab 
+-rwxrwx---+ 1 root root 451 Sep 10 12:38 /tmp/crontab
+[root@localhost ~]# 
+[root@localhost ~]# chown  soniya  /tmp/crontab 
+[root@localhost ~]# 
+[root@localhost ~]# ll /tmp/crontab 
+-rwxrwx---+ 1 soniya root 451 Sep 10 12:38 /tmp/crontab
+
+[root@localhost ~]# useradd  deep
+[root@localhost ~]# 
+
+
+
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# su - soniya 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ setfacl  -m u:deep:rw-   /tmp/crontab 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ getfacl  /tmp/crontab 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/crontab
+# owner: soniya
+# group: root
+user::rwx
+user:user11:---
+user:user12:r--
+user:user13:rwx
+user:deep:rw-
+group::rwx
+group:tech-1:---
+group:tech-2:r--
+mask::rwx
+other::---
+
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# su - user11
+[user11@localhost ~]$ 
+[user11@localhost ~]$ cat /tmp/crontab 
+cat: /tmp/crontab: Permission denied
+[user11@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# su - user12
+[user12@localhost ~]$ 
+[user12@localhost ~]$ cat /tmp/crontab 
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+
+# For details see man 4 crontabs
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+
+[user12@localhost ~]$ 
+[user12@localhost ~]$ 
+[user12@localhost ~]$ 
+[user12@localhost ~]$ 
+[user12@localhost ~]$ 
+[user12@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# su - p1  
+[p1@localhost ~]$ 
+[p1@localhost ~]$ cat /tmp/crontab 
+cat: /tmp/crontab: Permission denied
+[p1@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# su - o1
+[o1@localhost ~]$ 
+[o1@localhost ~]$ cat /tmp/crontab 
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+
+# For details see man 4 crontabs
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+
+[o1@localhost ~]$ 
+[o1@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# su - deep
+[deep@localhost ~]$ 
+[deep@localhost ~]$ echo  hello india >> /tmp/crontab 
+[deep@localhost ~]$ 
+[deep@localhost ~]$ cat  /tmp/crontab 
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+
+# For details see man 4 crontabs
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+
+hello india
+[deep@localhost ~]$ 
+[deep@localhost ~]$ 
+[deep@localhost ~]$ 
+[deep@localhost ~]$ 
+[deep@localhost ~]$ 
+[deep@localhost ~]$ 
+[deep@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+####################################Complete##################
+
+[root@localhost ~]# 
+
+[root@localhost ~]# chown root /tmp/crontab 
+[root@localhost ~]# 
+[root@localhost ~]# ll /tmp/crontab 
+-rwxrwx---+ 1 root root 463 Sep 10 12:42 /tmp/crontab
+[root@localhost ~]# 
+[root@localhost ~]# setfacl  --remove-all  /tmp/crontab 
+[root@localhost ~]# 
+[root@localhost ~]# ll /tmp/crontab 
+-rwxrwx---. 1 root root 463 Sep 10 12:42 /tmp/crontab
+[root@localhost ~]# 
+
+
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod   644  /tmp/crontab 
+[root@localhost ~]# 
+[root@localhost ~]# ll /tmp/crontab 
+-rw-r--r--. 1 root root 463 Sep 10 12:42 /tmp/crontab
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+=======================================================
+

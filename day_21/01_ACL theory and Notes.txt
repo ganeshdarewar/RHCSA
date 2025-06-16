@@ -1,0 +1,978 @@
+============================================================================================================
+
+                              ACL [ Access Control List ]
+
+============================================================================================================
+# ls -l 
+# ls -ld 
+
+First Section ==> Permissions Block ==> 10 bits  
+
+Owner group other
+
+# chmod    owner group others    <File or Directoryname>
+
+============================================================================================================
+
+ACL  ==> it is used to apply permission on any files and directory with particular username/groupname.
+
+     ==> basically we use ACL only in case of named based permissions.
+
+1- umask
+2- chmod 
+2- setfacl and getfacl 
+
+============================================================================================================ 
+
+# setfacl  -m  u:username:permissions     <filename or directoryname>
+# setfacl  -m  g:groupname:permissions    <filename or directoryname>
+
+# setfacl  -m  o:permissions     <filename or directoryname>
+
+# ls -l   <filename or directoryname>
+# ls -ld 
+
+permissions  .  ==> basic permissions [using chmod based permissions ]
+             +  ==> chmod + setfacl 
+
+# getfacl  <filename or directoryname>
+
+============================================================================================================
+Examples of setfacl and getfacl and chmod  ===> Permissions management planning  
+============================================================================================================
+
+Examples:
+
+[root@localhost ~]# echo  hello india  >  /tmp/india  
+[root@localhost ~]# 
+[root@localhost ~]# ll  /tmp/india
+-rw-r--r--. 1 root root 12 Apr 13 09:32 /tmp/india
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# getfacl /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rw-
+group::r--
+other::r--
+
+[root@localhost ~]# chmod  770  /tmp/india 
+[root@localhost ~]# 
+[root@localhost ~]# ll  /tmp/india
+-rwxrwx---. 1 root root 12 Apr 13 09:32 /tmp/india
+[root@localhost ~]# 
+[root@localhost ~]# getfacl /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+group::rwx
+other::---
+
+[root@localhost ~]# 
+[root@localhost ~]# useradd harry 
+[root@localhost ~]# useradd natasha
+[root@localhost ~]# useradd sarah
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ll  /tmp/india 
+-rwxrwx---. 1 root root 12 Apr 13 09:32 /tmp/india
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# setfacl -m u:harry:---  /tmp/india 
+[root@localhost ~]# 
+[root@localhost ~]# setfacl -m u:natasha:r--  /tmp/india 
+[root@localhost ~]# 
+[root@localhost ~]# setfacl -m u:sarah:rwx  /tmp/india 
+[root@localhost ~]# 
+[root@localhost ~]# useradd alok 
+[root@localhost ~]# 
+[root@localhost ~]# setfacl -m u:alok:4   /tmp/india 
+[root@localhost ~]# ll  /tmp/india 
+-rwxrwx---+ 1 root root 12 Apr 13 09:32 /tmp/india
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /tmp/india 
+-rwxrwx---+ 1 root root 12 Apr 13 09:32 /tmp/india
+
+
+
+[root@localhost ~]# ls /home  
+alok  harry  natasha  sarah  student
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# getfacl /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+user:harry:---
+user:natasha:r--
+user:sarah:rwx
+user:alok:r--
+group::rwx
+mask::rwx
+other::---
+
+[root@localhost ~]# getfacl /tmp/india  | grep mask  
+getfacl: Removing leading '/' from absolute path names
+mask::rwx
+[root@localhost ~]# getfacl /tmp/india  | grep rwx  
+getfacl: Removing leading '/' from absolute path names
+user::rwx
+user:sarah:rwx
+group::rwx
+mask::rwx   # mask is the maximmum should give to any user
+[root@localhost ~]# 
+
+[root@localhost ~]# groupadd team1
+[root@localhost ~]# groupadd team2
+[root@localhost ~]# 
+[root@localhost ~]# grep team1 /etc/group 
+team1:x:1005:
+[root@localhost ~]# 
+[root@localhost ~]# grep team2 /etc/group 
+team2:x:1006:
+[root@localhost ~]# 
+[root@localhost ~]# useradd  -G  team1  u1
+[root@localhost ~]# useradd  -G  team1  u2
+[root@localhost ~]# 
+[root@localhost ~]# useradd  -G  team2  u5
+[root@localhost ~]# useradd  -G  team2  u6
+[root@localhost ~]# 
+[root@localhost ~]# grep team1 /etc/group 
+team1:x:1005:u1,u2
+[root@localhost ~]# 
+[root@localhost ~]# grep team2 /etc/group 
+team2:x:1006:u5,u6
+[root@localhost ~]# 
+[root@localhost ~]# ll  /tmp/india
+-rwxrwx---+ 1 root root 12 Apr 13 09:32 /tmp/india
+[root@localhost ~]# 
+[root@localhost ~]# getfacl /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+user:harry:---
+user:natasha:r--
+user:sarah:rwx
+user:alok:r--
+group::rwx
+mask::rwx
+other::---
+
+[root@localhost ~]# 
+
+[root@localhost ~]# 
+[root@localhost ~]# setfacl  -m  g:team1:--- /tmp/india 
+[root@localhost ~]# setfacl  -m  g:team2:r-- /tmp/india 
+[root@localhost ~]# 
+[root@localhost ~]# ll  /tmp/india 
+-rwxrwx---+ 1 root root 12 Apr 13 09:32 /tmp/india
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+user:harry:---
+user:natasha:r--
+user:sarah:rwx
+user:alok:r--
+group::rwx
+group:team1:---
+group:team2:r--
+mask::rwx
+other::---
+
+[root@localhost ~]# setfacl  -m o:---  /tmp/india 
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+user:harry:---
+user:natasha:r--
+user:sarah:rwx
+user:alok:r--
+group::rwx
+group:team1:---
+group:team2:r--
+mask::rwx
+other::---
+
+[root@localhost ~]# 
+=========================================ACL Implement===================================================================
+
+============================================================================================================
+
+How we can verify these permissions is it working or not ?
+
+
+[root@localhost ~]# su - harry  
+[harry@localhost ~]$ 
+[harry@localhost ~]$ ll  /tmp/india 
+-rwxrwx---+ 1 root root 12 Apr 13 09:32 /tmp/india
+[harry@localhost ~]$ 
+[harry@localhost ~]$ groups harry
+harry : harry
+[harry@localhost ~]$ getfacl  /tmp/india | grep  harry
+getfacl: Removing leading '/' from absolute path names
+user:harry:---
+[harry@localhost ~]$ getfacl  /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+user:harry:---
+user:natasha:r--
+user:sarah:rwx
+user:alok:r--
+group::rwx
+group:team1:---
+group:team2:r--
+mask::rwx
+other::---
+
+[harry@localhost ~]$ cat  /tmp/india 
+cat: /tmp/india: Permission denied
+[harry@localhost ~]$ 
+[harry@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# su - natasha
+[natasha@localhost ~]$ 
+[natasha@localhost ~]$ ll /tmp/india 
+-rwxrwx---+ 1 root root 12 Apr 13 09:32 /tmp/india
+[natasha@localhost ~]$ 
+[natasha@localhost ~]$ getfacl  /tmp/india | grep natasha
+getfacl: Removing leading '/' from absolute path names
+user:natasha:r--
+[natasha@localhost ~]$ 
+[natasha@localhost ~]$ cat  /tmp/india 
+hello india
+[natasha@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+[root@localhost ~]# su - sarah 
+[sarah@localhost ~]$ 
+[sarah@localhost ~]$ ll /tmp/india 
+-rwxrwx---+ 1 root root 12 Apr 13 09:32 /tmp/india
+[sarah@localhost ~]$ 
+[sarah@localhost ~]$ groups sarah 
+sarah : sarah
+[sarah@localhost ~]$ getfacl /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+user:harry:---
+user:natasha:r--
+user:sarah:rwx
+user:alok:r--
+group::rwx
+group:team1:---
+group:team2:r--
+mask::rwx
+other::---
+
+[sarah@localhost ~]$ echo  hello world  >> /tmp/india 
+[sarah@localhost ~]$ 
+[sarah@localhost ~]$ cat /tmp/india 
+hello india
+hello world
+[sarah@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+[root@localhost ~]# su - u1  
+[u1@localhost ~]$ 
+[u1@localhost ~]$ groups u1  
+u1 : u1 team1
+[u1@localhost ~]$ 
+[u1@localhost ~]$ ll /tmp/india 
+-rwxrwx---+ 1 root root 24 Apr 13 09:50 /tmp/india
+[u1@localhost ~]$ 
+[u1@localhost ~]$ getfacl /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+user:harry:---
+user:natasha:r--
+user:sarah:rwx
+user:alok:r--
+group::rwx
+group:team1:---
+group:team2:r--
+mask::rwx
+other::---
+
+[u1@localhost ~]$ 
+[u1@localhost ~]$ getfacl /tmp/india  |  grep  u1 
+getfacl: Removing leading '/' from absolute path names
+[u1@localhost ~]$ 
+[u1@localhost ~]$ getfacl /tmp/india  |  grep  team1
+getfacl: Removing leading '/' from absolute path names
+group:team1:---
+[u1@localhost ~]$ 
+[u1@localhost ~]$ cat  /tmp/india 
+cat: /tmp/india: Permission denied
+[u1@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+[root@localhost ~]# su - u5
+[u5@localhost ~]$ 
+[u5@localhost ~]$ groups u5
+u5 : u5 team2
+[u5@localhost ~]$ 
+[u5@localhost ~]$ ll /tmp/india 
+-rwxrwx---+ 1 root root 24 Apr 13 09:50 /tmp/india
+[u5@localhost ~]$ 
+[u5@localhost ~]$ getfacl  /tmp/india |  grep u5 
+getfacl: Removing leading '/' from absolute path names
+[u5@localhost ~]$ 
+[u5@localhost ~]$ getfacl  /tmp/india |  grep team2
+getfacl: Removing leading '/' from absolute path names
+group:team2:r--
+[u5@localhost ~]$ 
+[u5@localhost ~]$ cat  /tmp/india 
+hello india
+hello world
+[u5@localhost ~]$ 
+[u5@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+[root@localhost ~]# useradd deepak
+[root@localhost ~]# 
+[root@localhost ~]# getfacl /tmp/india | grep deepak  
+getfacl: Removing leading '/' from absolute path names
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# groups deepak  
+deepak : deepak
+[root@localhost ~]# 
+[root@localhost ~]# su - deepak  
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ cat  /tmp/india 
+cat: /tmp/india: Permission denied
+[deepak@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+============================================================================================================
+[root@localhost ~]# useradd -G  team1,team2   sumit 
+[root@localhost ~]# 
+[root@localhost ~]# groups sumit  
+sumit : sumit team1 team2
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /tmp/india |  grep sumit  
+getfacl: Removing leading '/' from absolute path names
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /tmp/india |  grep team1
+getfacl: Removing leading '/' from absolute path names
+group:team1:---
+[root@localhost ~]# getfacl  /tmp/india |  grep team2
+getfacl: Removing leading '/' from absolute path names
+group:team2:r--
+[root@localhost ~]# 
+
+[root@localhost ~]# su - sumit 
+[sumit@localhost ~]$ 
+[sumit@localhost ~]$ cat /tmp/india 
+hello india
+hello world
+[sumit@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+
+[root@localhost ~]# setfacl -m u:sumit:---   /tmp/india 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# getfacl /tmp/india | grep sumit  
+getfacl: Removing leading '/' from absolute path names
+user:sumit:---
+[root@localhost ~]# 
+[root@localhost ~]# groups  sumit 
+sumit : sumit team1 team2
+[root@localhost ~]# 
+[root@localhost ~]# getfacl /tmp/india | grep team1
+getfacl: Removing leading '/' from absolute path names
+group:team1:---
+[root@localhost ~]# getfacl /tmp/india | grep team2
+getfacl: Removing leading '/' from absolute path names
+group:team2:r--
+[root@localhost ~]# 
+[root@localhost ~]# getfacl /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+user:harry:---
+user:natasha:r--
+user:sarah:rwx
+user:alok:r--
+user:sumit:---
+group::rwx
+group:team1:---
+group:team2:r--
+mask::rwx
+other::---
+
+[root@localhost ~]# 
+[root@localhost ~]# su - sumit 
+[sumit@localhost ~]$ 
+[sumit@localhost ~]$ cat /tmp/india 
+cat: /tmp/india: Permission denied
+[sumit@localhost ~]$ 
+[sumit@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+[root@localhost ~]# groups sarah  
+sarah : sarah
+[root@localhost ~]# 
+[root@localhost ~]# usermod -G  team1  sarah 
+[root@localhost ~]# 
+[root@localhost ~]# groups sarah  
+sarah : sarah team1
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+user:harry:---
+user:natasha:r--
+user:sarah:rwx
+user:alok:r--
+user:sumit:---
+group::rwx
+group:team1:---
+group:team2:r--
+mask::rwx
+other::---
+
+[root@localhost ~]# 
+[root@localhost ~]# su - sarah 
+[sarah@localhost ~]$ 
+[sarah@localhost ~]$ 
+[sarah@localhost ~]$ cat /tmp/india 
+hello india
+hello world
+[sarah@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+[root@localhost ~]# 
+[root@localhost ~]# setfacl -x  u:sarah   /tmp/india 
+[root@localhost ~]# 
+[root@localhost ~]# getfacl /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+user:harry:---
+user:natasha:r--
+user:alok:r--
+user:sumit:---
+group::rwx
+group:team1:---
+group:team2:r--
+mask::rwx
+other::---
+
+[root@localhost ~]# groups sarah
+sarah : sarah team1
+[root@localhost ~]# gpasswd -d sarah team1
+Removing user sarah from group team1
+[root@localhost ~]# 
+[root@localhost ~]# groups sarah
+sarah : sarah
+[root@localhost ~]# 
+[root@localhost ~]# getfacl /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+user:harry:---
+user:natasha:r--
+user:alok:r--
+user:sumit:---
+group::rwx
+group:team1:---
+group:team2:r--
+mask::rwx
+other::---
+
+[root@localhost ~]# 
+[root@localhost ~]# groups sumit 
+sumit : sumit team1 team2
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+user:harry:---
+user:natasha:r--
+user:alok:r--
+user:sumit:---
+group::rwx
+group:team1:---
+group:team2:r--
+mask::rwx
+other::---
+
+[root@localhost ~]# 
+[root@localhost ~]# ll /tmp/india 
+-rwxrwx---+ 1 root root 24 Apr 13 09:50 /tmp/india
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls  /home  
+alok  deepak  harry  natasha  sarah  student  sumit  u1  u2  u5  u6
+[root@localhost ~]# 
+[root@localhost ~]# useradd soniya 
+[root@localhost ~]# 
+[root@localhost ~]# chown  soniya  /tmp/india 
+[root@localhost ~]# 
+[root@localhost ~]# ll /tmp/india 
+-rwxrwx---+ 1 soniya root 24 Apr 13 09:50 /tmp/india
+[root@localhost ~]# 
+[root@localhost ~]# chown  root  /tmp/india 
+[root@localhost ~]# ll /tmp/india 
+-rwxrwx---+ 1 root root 24 Apr 13 09:50 /tmp/india
+
+[root@localhost ~]# setfacl -x  u:natasha  /tmp/india 
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+user:harry:---
+user:alok:r--
+user:sumit:---
+group::rwx
+group:team1:---
+group:team2:r--
+mask::rwx
+other::---
+
+[root@localhost ~]# groups natasha
+natasha : natasha
+[root@localhost ~]# setfacl -x  g:team1  /tmp/india 
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+user:harry:---
+user:alok:r--
+user:sumit:---
+group::rwx
+group:team2:r--
+mask::rwx
+other::---
+
+[root@localhost ~]# 
+[root@localhost ~]# setfacl  --remove-all  /tmp/india 
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+group::rwx
+other::---
+
+[root@localhost ~]# setfacl  -b    /tmp/india  # to remove all acl entries
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+group::rwx
+other::---
+
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /tmp/india 
+getfacl: Removing leading '/' from absolute path names
+# file: tmp/india
+# owner: root
+# group: root
+user::rwx
+group::rwx
+other::---
+
+[root@localhost ~]# ll  /tmp/india 
+-rwxrwx---. 1 root root 24 Apr 13 09:50 /tmp/india
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod   644 /tmp/india 
+[root@localhost ~]# 
+[root@localhost ~]# ll  /tmp/india 
+-rw-r--r--. 1 root root 24 Apr 13 09:50 /tmp/india
+[root@localhost ~]# 
+
+============================================================================================================
+
+
+Example of ACL on any directory ?
+
+[root@localhost ~]# mkdir /share 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /share
+drwxr-xr-x. 2 root root 6 Apr 13 10:18 /share
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /share
+getfacl: Removing leading '/' from absolute path names
+# file: share
+# owner: root
+# group: root
+user::rwx
+group::r-x
+other::r-x
+
+[root@localhost ~]# 
+[root@localhost ~]# chmod  770  /share
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /share
+drwxrwx---. 2 root root 6 Apr 13 10:18 /share
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /share
+getfacl: Removing leading '/' from absolute path names
+# file: share
+# owner: root
+# group: root
+user::rwx
+group::rwx
+other::---
+
+[root@localhost ~]# 
+[root@localhost ~]# setfacl  -m u:harry:0   /share
+[root@localhost ~]# setfacl  -m u:natasha:5   /share
+[root@localhost ~]# setfacl  -m u:sarah:7   /share
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# su - harry  
+[harry@localhost ~]$ 
+[harry@localhost ~]$ ls /share
+ls: cannot open directory '/share': Permission denied
+[harry@localhost ~]$ cd  /share
+-bash: cd: /share: Permission denied
+[harry@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# su - natasha
+[natasha@localhost ~]$ 
+[natasha@localhost ~]$ ls /share
+[natasha@localhost ~]$ cd  /share
+[natasha@localhost share]$ ls
+[natasha@localhost share]$ 
+[natasha@localhost share]$ touch abc
+touch: cannot touch 'abc': Permission denied
+[natasha@localhost share]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# su - sarah  
+[sarah@localhost ~]$ cd /share
+[sarah@localhost share]$ 
+[sarah@localhost share]$ ls
+[sarah@localhost share]$ 
+[sarah@localhost share]$ exit
+logout
+[root@localhost ~]# setfacl  --remove-all  /share
+[root@localhost ~]# 
+[root@localhost ~]# chmod  755 /share
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /share
+drwxr-xr-x. 2 root root 6 Apr 13 10:18 /share
+[root@localhost ~]# 
+
+
+============================================================================================================
+============================================================================================================
+Types of ACL ?
+
+
+1- ACCESS ACL                    ===> we have already covered this concept ===> can be apply on any file or on any particular directory 
+
+2- Default ACL OR automatic ACL  ===> can be apply only on any Directory but no any file.
+
+===================================================================
+
+# setfacl  -m  u:username:permissions   <file or directoryname>          ===> syntax of Access ACL
+
+
+# setfacl -d  -m u:username:permissons  <directoryname>                  ===> syntax of DEFAULT ACL
+
+===================================================================
+
+[root@localhost ~]# ls -ld /share
+drwxr-xr-x. 2 root root 6 Apr 13 10:18 /share
+[root@localhost ~]# 
+[root@localhost ~]# chmod 770  /share
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /share
+drwxrwx---. 2 root root 6 Apr 13 10:18 /share
+[root@localhost ~]# 
+[root@localhost ~]# getfacl /share
+getfacl: Removing leading '/' from absolute path names
+# file: share
+# owner: root
+# group: root
+user::rwx
+group::rwx
+other::---
+
+[root@localhost ~]# setfacl  -m u:harry:rwx  /share
+[root@localhost ~]# setfacl  -m u:natasha:r-x  /share
+[root@localhost ~]# 
+[root@localhost ~]# setfacl  -d  -m  u:harry:r-x  /share
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /share
+getfacl: Removing leading '/' from absolute path names
+# file: share
+# owner: root
+# group: root
+user::rwx
+user:harry:rwx
+user:natasha:r-x
+group::rwx
+mask::rwx
+other::---
+default:user::rwx
+default:user:harry:r-x
+default:group::rwx
+default:mask::rwx
+default:other::---
+
+[root@localhost ~]# mkdir /share/mydata 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /share
+drwxrwx---+ 3 root root 20 Apr 13 10:31 /share
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /share/mydata
+drwxrwx---+ 2 root root 6 Apr 13 10:31 /share/mydata
+[root@localhost ~]# 
+[root@localhost ~]# getfacl /share
+getfacl: Removing leading '/' from absolute path names
+# file: share
+# owner: root
+# group: root
+user::rwx
+user:harry:rwx
+user:natasha:r-x
+group::rwx
+mask::rwx
+other::---
+default:user::rwx
+default:user:harry:r-x
+default:group::rwx
+default:mask::rwx
+default:other::---
+
+[root@localhost ~]# getfacl /share/mydata
+getfacl: Removing leading '/' from absolute path names
+# file: share/mydata
+# owner: root
+# group: root
+user::rwx
+user:harry:r-x
+group::rwx
+mask::rwx
+other::---
+default:user::rwx
+default:user:harry:r-x
+default:group::rwx
+default:mask::rwx
+default:other::---
+
+[root@localhost ~]# 
+
+[natasha@localhost ~]$ ls /share
+mydata
+[natasha@localhost ~]$ ls /share/mydata
+ls: cannot open directory '/share/mydata': Permission denied
+[natasha@localhost ~]$ 
+[natasha@localhost ~]$ exit
+logout
+[root@localhost ~]# mkdir /share/mybackup 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /share
+drwxrwx---+ 4 root root 36 Apr 13 10:34 /share
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /share/mydata
+drwxrwx---+ 2 root root 6 Apr 13 10:31 /share/mydata
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /share/mybackup
+drwxrwx---+ 2 root root 6 Apr 13 10:34 /share/mybackup
+[root@localhost ~]# 
+[root@localhost ~]# su - harry 
+[harry@localhost ~]$ 
+[harry@localhost ~]$ cd /share
+[harry@localhost share]$ ls
+mybackup  mydata
+[harry@localhost share]$ 
+[harry@localhost share]$ mkdir data 
+[harry@localhost share]$ 
+[harry@localhost share]$ ls -l
+total 0
+drwxrwx---+ 2 harry harry 6 Apr 13 10:35 data
+drwxrwx---+ 2 root  root  6 Apr 13 10:34 mybackup
+drwxrwx---+ 2 root  root  6 Apr 13 10:31 mydata
+[harry@localhost share]$ 
+[harry@localhost share]$ cd mybackup
+[harry@localhost mybackup]$ ls
+[harry@localhost mybackup]$ 
+[harry@localhost mybackup]$ mkdir data 
+mkdir: cannot create directory ‘data’: Permission denied
+[harry@localhost mybackup]$ cd
+[harry@localhost ~]$ 
+[harry@localhost ~]$ 
+[harry@localhost ~]$ getfacl /share
+getfacl: Removing leading '/' from absolute path names
+# file: share
+# owner: root
+# group: root
+user::rwx
+user:harry:rwx
+user:natasha:r-x
+group::rwx
+mask::rwx
+other::---
+default:user::rwx
+default:user:harry:r-x
+default:group::rwx
+default:mask::rwx
+default:other::---
+
+[harry@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+
+===================================================================
+
+[root@localhost ~]# setfacl  -R -d     --remove-all  /share 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /share
+drwxrwx---. 5 root root 48 Apr 13 10:35 /share
+[root@localhost ~]# 
+[root@localhost ~]# ls -l /share
+total 0
+drwxrwx---. 2 harry harry 6 Apr 13 10:35 data
+drwxrwx---. 2 root  root  6 Apr 13 10:34 mybackup
+drwxrwx---. 2 root  root  6 Apr 13 10:31 mydata
+[root@localhost ~]# 
+
+===================================================================
+
+[root@localhost ~]# which fdisk
+/usr/sbin/fdisk
+[root@localhost ~]# ls -l  /usr/sbin/fdisk
+-rwxr-xr-x. 1 root root 115424 Feb 24  2022 /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# chmod  u+s  /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /usr/sbin/fdisk
+-rwsr-xr-x. 1 root root 115424 Feb 24  2022 /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# setfacl  -m u:deepak:---  /usr/sbin/fdisk
+[root@localhost ~]# setfacl  -m u:sumit:---  /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /usr/sbin/fdisk
+-rwsr-xr-x+ 1 root root 115424 Feb 24  2022 /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# getfacl  /usr/sbin/fdisk
+getfacl: Removing leading '/' from absolute path names
+# file: usr/sbin/fdisk
+# owner: root
+# group: root
+# flags: s--
+user::rwx
+user:deepak:---
+user:sumit:---
+group::r-x
+mask::r-x
+other::r-x
+
+[root@localhost ~]# su - deepak 
+[deepak@localhost ~]$ fdisk -l
+-bash: /usr/sbin/fdisk: Permission denied
+[deepak@localhost ~]$ exit
+logout
+[root@localhost ~]# setfacl  --remove-all  /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# chmod  u-s /usr/sbin/fdisk
+[root@localhost ~]# 
+[root@localhost ~]# ll  /usr/sbin/fdisk 
+-rwxr-xr-x. 1 root root 115424 Feb 24  2022 /usr/sbin/fdisk
+[root@localhost ~]# 
+======================================================================================================================================
+
+[root@localhost ~]# ls -ld /share
+drwxrwx---. 5 root root 48 Apr 13 10:35 /share
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod 000  /share
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /share
+d---------. 5 root root 48 Apr 13 10:35 /share
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# touch /share/abc
+[root@localhost ~]# rm -rf /share
+[root@localhost ~]# 
+[root@localhost ~]# 
+======================================================================================================================================
+
+chattr + lsattr command 
+
+======================================================================================================================================
+[root@localhost ~]# mkdir /share 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /share
+drwxr-xr-x. 2 root root 6 Apr 13 10:50 /share
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chattr   +i  /share
+[root@localhost ~]# 
+[root@localhost ~]# touch /share/abc  
+touch: setting times of '/share/abc': No such file or directory
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf   /share   
+rm: cannot remove '/share': Operation not permitted
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf   /share   
+[root@localhost ~]# 
+======================================================================================================================================
+

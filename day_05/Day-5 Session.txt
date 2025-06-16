@@ -74,7 +74,7 @@ Syntax:-
    40  cat -n /etc/crontab 
    41  cat -b  /etc/crontab 
    42  cat -n  /etc/passwd
-   43  cat -b    /etc/passwd
+   43  cat -b    /etc/passwd  # dont count blank line
    44  pwd
    45  ls 
    46  cat  anaconda-ks.cfg 

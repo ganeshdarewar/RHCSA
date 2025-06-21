@@ -1,0 +1,316 @@
+==========================================
+
+    Chattr  [  Change attributes ]
+
+==========================================
+
+chattr   => attribute  ==> apply+remove 
+
+lsattr   => attribute  ==> information display
+
+==========================================
+
+1- chattr basically use to apply very high level permissions on any file and directory.
+
+2- chattr also will applicable on super user account plus normal user account.
+
+3- chattr basically restirct the direct and indirect attack [changes ] into any area.
+
+4- chattr (Change Attribute) is a command line Linux utility that is used to set/unset certain 
+   attributes to a file in Linux system to secure accidental deletion or modification of important 
+   files and folders, even though you are logged in as a root user.
+
+5- You cannot delete or modify file/folder once attributes are sets with chattr command, 
+   even though one have full permissions on it.
+
+=========================================
+
+
+=======================================   
+
+# lsattr   ==> information get
+
+# chattr   ==> apply or remove
+
+=======================================
+operator  ==>   +   ==> apply
+          ==>   -   ==> remove
+
+
+Attributes  ==> we have some set of attributes to apply on file and directory.
+
+==> a ==> allow only read,copy and append but not edit,delete,modify,rename,move,link..so on
+==> i ==> allow only read and copy only but not append also.
+
+======================================= 
+Before chattr OR without chattr  
+
+[root@localhost ~]# mkdir /data  
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /data
+drwxr-xr-x. 2 root root 6 Jan 14 09:14 /data
+[root@localhost ~]# 
+[root@localhost ~]# chmod  000  /data
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld /data
+d---------. 2 root root 6 Jan 14 09:14 /data
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf /data
+
+======================================
+
+After Apply attributes using chattr command as per needs ?
+
+First Example on any Personal file ?
+
+   12  echo hello india  >  xyz  
+   13  ll xyz 
+   14  cat xyz 
+   15  lsattr  xyz 
+   16  chattr +a xyz 
+   17  lsattr  xyz 
+   18  cat xyz 
+   19  cp xyz  /tmp
+   20  ls /tmp
+   21  echo hello world >  xyz # this is not permitted
+   22  echo hello world >>  xyz 
+   23  cat xyz 
+   24  ll xyz 
+   25  mv xyz abc   # this is not permitted
+   26  chattr -a  xyz 
+   27  lsattr xyz 
+   28  chattr +i xyz 
+   29  lsattr xyz 
+   30  cat xyz 
+   31  mkdir  /data
+   32  cp xyz  /data
+   33  rm -rf xyz 
+   34  echo hello world  > xyz 
+   35  echo hello world  >> xyz 
+   36  rm -rf xyz 
+   37  chattr -i xyz 
+   39  mkdir privatedata
+   40  ls
+   41  touch privatedata/abc{1..3}
+   42  ls -ld  privatedata
+   43  chattr  +i  privatedata
+   44  lsattr -d    privatedata
+   45  rm -rf privatedata
+   46  chattr  -i  privatedata
+   47  touch privatedata/abc4
+   48  ls privatedata
+   49  chattr  +i  privatedata
+   50  lsattr -d    privatedata
+   51  ls 
+   52  chattr  -i  privatedata
+   53  lsattr -d    privatedata
+
+======================================
+
+Second Example on any System defined Data ?
+
+   56  lsattr   /etc/passwd
+   57  useradd raju
+   58  userdel -rf   raju
+   59  chattr +i  /etc/passwd
+   60  lsattr   /etc/passwd
+   61  useradd raju
+   62  tail -n 1  /etc/passwd
+   63  usermod  -s /sbin/nologin student  
+   64  chattr -i  /etc/passwd
+   65  chattr  +i  /etc/shadow
+   66  passwd 
+   67  chattr -i  /etc/shadow
+
+
+[root@localhost ~]# 
+[root@localhost ~]# lsattr  -d  /home
+---------------------- /home
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /home 
+drwxr-xr-x. 3 root root 21 Jan 14 09:44 /home
+[root@localhost ~]# 
+[root@localhost ~]# chattr  -R  +i  /home
+[root@localhost ~]# 
+[root@localhost ~]# lsattr   /home 
+----i----------------- /home/student
+[root@localhost ~]# 
+[root@localhost ~]# lsattr   -d  /home 
+----i----------------- /home
+[root@localhost ~]# 
+[root@localhost ~]# su - student 
+[student@localhost ~]$ ls
+[student@localhost ~]$ ls -a 
+.  ..  .bash_logout  .bash_profile  .bashrc  .mozilla
+[student@localhost ~]$ 
+[student@localhost ~]$ echo hello india  > xyz
+-bash: xyz: Operation not permitted
+[student@localhost ~]$ exit
+logout
+[root@localhost ~]# chattr  -R  -i  /home
+[root@localhost ~]# 
+[root@localhost ~]# su - student 
+[student@localhost ~]$ 
+[student@localhost ~]$ touch xyz 
+[student@localhost ~]$ echo hello india > xyz 
+[student@localhost ~]$ 
+[student@localhost ~]$ cat xyz 
+hello india
+[student@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+====================================================
+
+[root@localhost ~]# su - student  
+[student@localhost ~]$ 
+[student@localhost ~]$ ls 
+xyz
+[student@localhost ~]$ lsattr xyz 
+---------------------- xyz
+[student@localhost ~]$ 
+[student@localhost ~]$ 
+
+[student@localhost ~]$ chattr +i xyz 
+chattr: Operation not permitted while setting flags on xyz
+[student@localhost ~]$ 
+[student@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# 
+    
+===================================================
+
+How we can give execution right to any user so that they can apply the chattr command on any personal data ?
+
+
+choice-1 we can give SUDO power on chattr command to any particular user and group members
+choice-2 we can directly apply the SUID on this chattr command so that all existing user and all upcomming users can user chattr utility to              secure any personal data which is created  by any users if they want. 
+
+==================================================
+
+Choice-1
+
+Example with SUDO ?
+
+[root@localhost ~]# which  chattr  
+/usr/bin/chattr
+[root@localhost ~]# 
+[root@localhost ~]# useradd deepak
+[root@localhost ~]# passwd deepak
+Changing password for user deepak.
+New password: 
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+[root@localhost ~]# 
+[root@localhost ~]# vim  /etc/sudoers.d/deepak
+
+
+deepak      ALL=(ALL)     /usr/bin/chattr
+
+:wq!
+
+[root@localhost ~]# su - deepak 
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ echo hello india  > xyz  
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ cat xyz 
+hello india
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ ll xyz 
+-rw-r--r--. 1 deepak deepak 12 Jan 14 10:02 xyz
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ lsattr xyz 
+---------------------- xyz
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ chattr +i xyz 
+chattr: Operation not permitted while setting flags on xyz
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ sudo chattr +i xyz 
+
+We trust you have received the usual lecture from the local System
+Administrator. It usually boils down to these three things:
+
+    #1) Respect the privacy of others.
+    #2) Think before you type.
+    #3) With great power comes great responsibility.
+
+[sudo] password for deepak: 
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ lsattr xyz 
+----i----------------- xyz
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ rm -rf xyz 
+rm: cannot remove 'xyz': Operation not permitted
+[deepak@localhost ~]$ 
+[deepak@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf /home/deepak/xyz 
+rm: cannot remove '/home/deepak/xyz': Operation not permitted
+[root@localhost ~]# 
+[root@localhost ~]# lsattr   /home/deepak/xyz 
+----i----------------- /home/deepak/xyz
+[root@localhost ~]# 
+[root@localhost ~]# chattr -i  /home/deepak/xyz 
+[root@localhost ~]# lsattr   /home/deepak/xyz 
+---------------------- /home/deepak/xyz
+[root@localhost ~]# rm -rf /etc/sudoers.d/deepak 
+
+
+=================================================
+
+Choice-2  using SUID concept  
+
+
+   89  ll /usr/bin/chattr 
+   90  chmod  u+s  /usr/bin/chattr
+   91  ll /usr/bin/chattr 
+   92  su - deepak 
+   93  su - student  
+   94  ls /home 
+   95  ll  /usr/bin/chattr 
+   96  setfacl  -m u:deepak:---  /usr/bin/chattr
+   97  ll  /usr/bin/chattr 
+   98  getfacl  /usr/bin/chattr
+   99  su - deepak 
+  100  setfacl  --remove-all  /usr/bin/chattr  
+  101  su - deepak 
+  102  ls -l  /usr/bin/chattr
+  103  chmod  u-s  /usr/bin/chattr
+  104  ls -l  /usr/bin/chattr
+
+[root@localhost ~]# ll  /usr/bin/chattr 
+-rwxr-xr-x. 1 root root 16224 Feb  3  2022 /usr/bin/chattr
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod  4755  /usr/bin/chattr
+[root@localhost ~]# 
+[root@localhost ~]# ll  /usr/bin/chattr 
+-rwsr-xr-x. 1 root root 16224 Feb  3  2022 /usr/bin/chattr
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod  0755  /usr/bin/chattr
+[root@localhost ~]# 
+[root@localhost ~]# ll  /usr/bin/chattr 
+-rwxr-xr-x. 1 root root 16224 Feb  3  2022 /usr/bin/chattr
+[root@localhost ~]# 
+[root@localhost ~]# chmod  u+s  /usr/bin/chattr
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ll  /usr/bin/chattr 
+-rwsr-xr-x. 1 root root 16224 Feb  3  2022 /usr/bin/chattr
+[root@localhost ~]# 
+[root@localhost ~]# chmod  u-s  /usr/bin/chattr
+[root@localhost ~]# 
+[root@localhost ~]# ll  /usr/bin/chattr 
+-rwxr-xr-x. 1 root root 16224 Feb  3  2022 /usr/bin/chattr
+
+==========================================================
+
+
+
+
+
+

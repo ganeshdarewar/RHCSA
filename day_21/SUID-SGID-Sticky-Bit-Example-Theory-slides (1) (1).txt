@@ -1,0 +1,235 @@
+=========================================
+   Basic permissions
+
+1- umask + chmod ==> chown + chgrp 
+
+
+=========================================  
+
+
+Special permissions
+
+
+1- SUID        ==> set  user ID or super user ID    ==>  4    OR  u+s
+
+2- SGID        ==> set Group ID OR super group ID   ==>  2    OR  g+s
+
+3- Sticky Bit  ==> Sticky bit                       ==>  1    OR  o+t
+
+
+                                                       Numeric
+                                                       Code
+
+===================================# chmod  0755  /data  OR  # chmod  755  /data  ==>Both sare same
+                                   # chmod 1777  /data  ==> meaning change  ==> three block + Sticky Bit
+[root@localhost ~]# umask 
+0022
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# expr  0777 -  0022
+0755
+[root@localhost ~]# expr 0666 - 0022
+0644
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mkdir /data
+[root@localhost ~]# 
+[root@localhost ~]# ls -ld  /data
+drwxr-xr-x. 2 root root 6 Jan  9 09:20 /data
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf /data
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+===========================================================
+# chmod four block    <file or directoryname>
+
+First Block  ==> reservsed for Special permissions  ==> by default is 0
+Second Block ==> Owner
+Third  Block ==> group or group member
+Forth  Block ==> other
+
+===========================================================
+We can ignore first block if we are not going to apply Special permissions
+===========================================================
+read      ==> 4
+write     ==> 2
+execute   ==> 1
+
+===================================   
+ ---  ---  ---  ==> Lowest
+
+ rwx  rwx  rwx  .  ==> hightest   ==> only chmod based 
+
+ rwx  rwx rwx   +  ==> chmod + setfacl
+ 
+===================================Special permissions ==> Replaced with X fields
+     rws       rws     rwt
+     Owner    group    Others
+     SUID      SGID    Sticky bit
+===================================
+
+      rwS       rwS     rwT
+
+     Owner     group    Others
+     SUID      SGID    Sticky bit
+
+In backend  x permissions is not working
+we need to add x permissions then it will display in small lettters
+
+==================================
+     rws       rws     rwt
+     Owner    group    Others
+     SUID      SGID    Sticky bit
+
+Example in Symbolic Method + Numeric Method
+
+u+s  OR  u-s    ==> SUID         ==> 4
+g+s  OR  g-s    ==> SGID         ==> 2
+o+t  OR  o-t    ==> Sticky Bit   ==> 1
+
+=====================================
+
+# chmod     three block     <file or directoryname>  ==> NO SUID   NO SGID   NO Sticky bit
+          [ Owner group others ]
+               OR
+
+# chmod     four block     < file or directoryname>  
+ 
+          [ Specialpermissions Owner group others ]
+
+# chmod  4755  ==> example of SUID         OR    u+s
+# chmod  2755  ==> example of SGID         OR    g+s
+# chmod  1755  ==> example of sticky Bit   OR    o+t
+
+# chmod  755   ==> Without SUID + SGID + Sticky bit   ===> normal permissions for only owner  group others
+          OR
+        0755
+
+# mkdir /data ==>  755
+
+# chmod 0777  /data
+      OR
+# chmod  777  /data
+
+==============================================================
+
+Example  of SUID 
+
+[root@localhost ~]# which fdisk
+/usr/sbin/fdisk
+[root@localhost ~]# ls -l /usr/sbin/fdisk
+-rwxr-xr-x. 1 root root 115424 Feb 24  2022 /usr/sbin/fdisk
+[root@localhost ~]# chmod 4755 /usr/sbin/fdisk
+[root@localhost ~]# ls -l /usr/sbin/fdisk
+-rwsr-xr-x. 1 root root 115424 Feb 24  2022 /usr/sbin/fdisk
+[root@localhost ~]# su - natasha
+[natasha@localhost ~]$ fdisk -l
+Disk /dev/sda: 30 GiB, 32212254720 bytes, 62914560 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: A9B85C1F-3C75-4972-B76C-49B19F370427
+
+Device       Start      End  Sectors  Size Type
+/dev/sda1     2048  1230847  1228800  600M EFI System
+/dev/sda2  1230848  3327999  2097152    1G Linux filesystem
+/dev/sda3  3328000 62912511 59584512 28.4G Linux LVM
+
+
+Disk /dev/mapper/rhel-root: 25.44 GiB, 27317501952 bytes, 53354496 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/mapper/rhel-swap: 2.97 GiB, 3187671040 bytes, 6225920 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+[natasha@localhost ~]$
+
+
+==============================================================
+
+
+
+Example  of SGID ==> it is used to apply inheritance permissions
+
+[root@localhost ~]# mkdir /exam
+[root@localhost ~]# chmod 770 /exam
+[root@localhost ~]# groupadd admin
+[root@localhost ~]# ls -ld /exam
+drwxrwx---. 2 root root 6 Jun 17 00:44 /exam
+[root@localhost ~]# chgrp admin /exam
+[root@localhost ~]# ls -ld /exam
+drwxrwx---. 2 root admin 6 Jun 17 00:44 /exam
+[root@localhost ~]# chmod 2770 /exam
+[root@localhost ~]# ls -ld /exam
+drwxrws---. 2 root admin 6 Jun 17 00:44 /exam
+[root@localhost ~]# touch /exam/abc{1..2}
+[root@localhost ~]# ll /exam
+total 0
+-rw-r--r--. 1 root admin 0 Jun 17 00:46 abc1
+-rw-r--r--. 1 root admin 0 Jun 17 00:46 abc2
+[root@localhost ~]#
+
+
+
+
+Example of Sticky Bit   ===>  in sticky bit only owner of the file can edit modified and delete data,but others can only view data
+
+
+
+[root@localhost ~]# mkdir /share
+[root@localhost ~]# ls -ld /share
+drwxr-xr-x. 2 root root 6 Jun 17 00:55 /share
+[root@localhost ~]# chmod 1777 /share
+[root@localhost ~]# ls -ld /share
+drwxrwxrwt. 2 root root 6 Jun 17 00:55 /share
+[root@localhost ~]# touch /share/abc{1..3}
+[root@localhost ~]# su - natasha
+[natasha@localhost ~]$ touch /share/xyz{1..3}
+[natasha@localhost ~]$ ll /share
+total 0
+-rw-r--r--. 1 root    root    0 Jun 17 00:57 abc1
+-rw-r--r--. 1 root    root    0 Jun 17 00:57 abc2
+-rw-r--r--. 1 root    root    0 Jun 17 00:57 abc3
+-rw-r--r--. 1 natasha natasha 0 Jun 17 00:58 xyz1
+-rw-r--r--. 1 natasha natasha 0 Jun 17 00:58 xyz2
+-rw-r--r--. 1 natasha natasha 0 Jun 17 00:58 xyz3
+[natasha@localhost ~]$ ll /share
+total 0
+-rw-r--r--. 1 root    root    0 Jun 17 00:57 abc1
+-rw-r--r--. 1 root    root    0 Jun 17 00:57 abc2
+-rw-r--r--. 1 root    root    0 Jun 17 00:57 abc3
+-rw-r--r--. 1 natasha natasha 0 Jun 17 00:58 xyz1
+-rw-r--r--. 1 natasha natasha 0 Jun 17 00:58 xyz2
+-rw-r--r--. 1 natasha natasha 0 Jun 17 00:58 xyz3
+[natasha@localhost ~]$ rm -rf /share/xyz1 # here user can delete 
+[natasha@localhost ~]$ rm -rf /share/abc1 # here user cannot delete other user data
+rm: cannot remove '/share/abc1': Operation not permitted
+
+==============================================================
+==============================================================
+
+
+
+
+[root@localhost ~]# find / -type f -perm /200 -size -1k -size +10k -exec cp -rf {} /tmp/examdata \;
+find: ‘/proc/2976/task/2976/fdinfo/6’: No such file or directory
+find: ‘/proc/2976/fdinfo/5’: No such file or directory
+[root@localhost ~]#
+
+vipw
+vigr
+
+
+
+
+
+
+
+

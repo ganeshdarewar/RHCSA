@@ -1,0 +1,250 @@
+============================================================================================================
+             
+         Storage Related Concept in Linux
+
+                  OR
+            
+           Storage Management
+============================================================================================================
+
+How data store in Windows/Linux ?
+
+What is the concept of mounting and unmounting devices in Linux ?
+
+
+Computer ==> RAM + CPU + Motherboard + NIC + keyboard + mouse + monitor + DISK 
+
+============================================================================================================
+
+In windows/Linux
+
+1- During the OS installation ==> OS defined data OR OS managing Directory  ==> Mandatory Partition
+
+2- After the OS installation ==> available disk ==> free space ==> cut  ==> save ==> data store ==> start 
+
+============================================================================================================
+
+In Windows  ==> We always use the concept of C: D: E: F drive
+In Linux    ==> There is no concept of C: D: E: F:
+
+In Linux we have single parent directory to control complete Linux data ==> OS data + Custom data
+
+/  ==> parent directory or root partition or parent partition
+
+DISK  ==> partition ==> need to create mount point on any directory to start the data writing into any partition
+
+/dev   ==> control all h/W related devices
+
+/dev/sda 
+
+/dev/sda1
+/dev/sda2
+/dev/sda3
+
+
+# cd /dev/sda  ==>NO
+# ls  /dev/sda ==> NO
+# cd /dev/sda1 ==> NO
+# ls   ==> NO
+
+cd ===> change directory
+ls ===> to check data listing of any directory
+
+
+===========================================================================================================
+
+# lsblk 
+
+
+Devicename                          mountpoint 
+
+/dev/sda1         XYZ-SIZE           /            <=== complete directory will take the space from this directory
+
+/dev/sda2                           /boot
+/dev/sda3                           /storage
+/dev/sda4                           /movie
+==========================================================================================================
+
+
+# cd /dev/sda1
+# cd /dev/sda2
+
+# ls /            ===> exccept of  /boot   ===>  /dev/sda1
+# ls /boot        ===> /dev/sda2 
+
+# df -h 
+
+
+============================================================================================================
+Fresh Computer ==> Motherboard + RAM + DISK + CPU + Monitor + keyboard + mouse 
+============================================================================================================
+In DISK ==> Windows Installation ==> Mandatory partition
+
+We can control complete windows OS using  ==> only  ==> C:\  Drive  ==> OS related data + Custom data store
+
+but 
+
+for Recommended
+
+C:\    ==> please use this drive only for os and application related data
+Remaining's D:  E:   ==> use these drives to store your any personal data
+ 
+============================================================================================================
+Linux Installation
+
+During the OS installation
+
+Choice-1  automatic partition creation  ==> space design + required partition automatic create  [Smart method]
+
+Choice-2  Custom partition OR manually  ==> we can define the size of the partition + we will decide how many partition we needed + Type
+                                            As a standard OR as a LVM + SWAP partition[you can not store the data]
+
+SWAP  ==> Choice-1  During the OS installation time
+
+      ==> Choice-2  After the OS installation using command line as per needs.
+
+SWAP  ==> optional Partition but recommended. 
+
+============================================================================================================
+
+/  ==> complete Linux controlling directory  ==> OS Defined data + Custom data
+
+============================================================================================================
+
+
+# du -sh  /     ==> around used 4 GB    ==> Server with GUI 
+
+                 [ less then 5GB ] ==> against of the pre installed application
+
+
+As a Standard Concept  ==> Fixed Size concept 
+As a LVM based 
+
+
+During the OS installation Partition Creation ?
+
+1- As a STANDARD  ===> Theory + Practical 
+2- As A LVM based setup ==> Theory + Practical 
+
+======================================================= Storage Planning ===> custom 
+
+Note:- Today we will install rhel OS with Standard partition concept  
+
+NEXT TIME ==> LVM theory + lVM practical  ===> LVM based installation
+
+=============================================================================================================
+/dev/sda  ==> DISK NAME ==> Cut ==>  /    ==> as per need space allocate  ==> Continue ==> OS installation
+
+# lsblk  
+
+/dev/sda     DISK
+
+/dev/sda1    PART    /
+
+
+/  ====> OS defined data  + Custom data
+
+but yes we can also create the new partitions per need and we can create the mount point every partitions as per needs.
+
+=============================================================================================================
+
+How many partition required to installation Linux ?
+
+1:-   /      ==> OS defined data + Custom data   ===> As a NORMAL partition OR As A LVM based ==> we have these two choices
+
+2:-   swap   ==> advance concept of secondary memory or additional memory ==> memory management ==> 
+
+
+=============================================================================================================
+
+Recommended ==> to store os booting files in seperate partition
+
+3:-   /boot                             ==> 1 GB   [ More then enough ]
+  
+=============================================================================================================   
+After the OS installation how we can create partition manually from any disk space and how we can use this ?
+
+=============================================================================================================
+
+=============================================================================================================
+Machine ==> fresh ==> partition ==> as a standard OR fixed size   ==> disk  ==> 30GB  ==>  /dev/sda 
+
+1-  /        ==> around  15GB  ==>  /dev/sda1
+2-  /boot    ==> around  1GB   ==>  /dev/sda2
+3-  swap     ==> around  2GB   ==>  /dev/sda3
+
+=============================================================================================================
+Remaining ==> option ==> choices
+
+=============================================================================================================
+Free Space  ==> 12 GB  ==> we can use this space after the OS installation using command line
+=============================================================================================================
+DISK Type
+
+
+1- Primary disk OR main disk
+2- secondary OR additional OR Network based disk ==> can be attached with server machine if we required extra disk space
+
+============================================================================================================= 
+#lsblk  
+
+
+/dev/sda  ===> primary
+
+/dev/sdb  ===> additional disk-1
+
+/dev/sdc  ===> addition disk-2
+
+============================================================================================================
+During the OS installation  ===> first disk  ===> disk label ==> automatically ===> select as per my current firmware
+After the OS installatiion  ===> There is no disk label ===> we can set this manually as per need
+============================================================================================================
+
+How we can install rhel-9 with custom partition method wit standard Technology using BIOS Firmware ?
+How we can install rhel-9 with custom partition method wit standard Technology using UEFI Firmware ?
+
+
+# fdisk -l  /dev/sda  ===> Disk label  ===> dos or msdos  ===> MBR limits apply ===> firmware ===> BIOS
+# fdisk -l  /dev/sda  ===> Disk label  ===> gpt           ===> GPT limits apply ===> firmware ===> UEFI
+
+============================================================================================================
+
+# fdisk -l  /dev/sda  ===> Disk label  ===> dos or msdos  ===> MBR limits apply ===> firmware ===> BIOS
+
+
+/boot
+/
+swap
+
+remainings are optional
+
+
+============================================================================================================
+
+# fdisk -l  /dev/sda  ===> Disk label  ===> gpt           ===> GPT limits apply ===> firmware ===> UEFI
+
+
+/boot
+/boot/efi
+/
+swap
+
+remainings are optional
+
+
+============================================================================================================
+
+After the OS installation  ===> disk ==> enter ===> cut ===> NO
+
+First we will check the disk label and will take the final decision===> disk label ==> dos or msdos or MBR ===> MBR Limit
+First we will check the disk label and will take the final decision===> disk label ==> gpt                 ===> GPT Limit
+
+============================================================================================================
+============================================================================================================
+
+
+
+
+
+
+

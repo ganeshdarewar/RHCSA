@@ -1,0 +1,265 @@
+=========================================================================
+   What is partition and what are the limits of MBR and GPT Concept ?
+=========================================================================
+
+
+Partition:- 
+
+
+
+1- it is a method by which we can break a disk into small small parts.
+2- These Partition can be use to store OS files and personal data files.
+
+===================================================DISK  ==> using any XYZ command ==> Enter ==> to create any partition
+
+===================================================
+DISK ==> Partition Table  ==> Program OR Scheme OR technology ==>  1- MBR scheme   2- GPT Scheme 
+===================================================
+Firmware name  OR partition Creation Scheme 
+
+1- BIOS  ==> MBR
+2- UEFI  ==> GPT
+===================================================
+# fdisk -l 
+
+DISK label ==> read ==> Actions
+
+
+NEW DISK ==> label set as per needs
+
+===================================================
+Current Label + Current partition + Type  ===> final decision  [ Space waste + as per scheme limit exceed]
+===================================================
+Note:- 
+
+1- Every hard drive always managed by BIOS [OLD] or  UEFI  [NEW] technology ?
+                                    [ MBR ]      gpt [ GUID partition Table ] 
+
+2- In first sector we have already installed MBR [master boot record ] technology.
+
+3- MBR Basically Bydefault  allow maximum four partition [including primary + extended] or Four primary Partition 
+   into any disk.
+
+4- MBR basically allow two types of partition .
+
+1- Primary partition [Mandatory OR Recommended]  <== can be use to store os data and personal data.
+
+2- Extended partition [Optional] <== 3- Logical partition [optional]
+                       ==> it is a sub part of extended partition
+
+Extended partition  ==> 
+
+1- we always use when we want to create more then four partition or mounting point into any disk.
+  otherwise there is no need ==> we can do all things on primary partitions.
+
+2- We can not format and mount extended partition directly. it is only use create logical partition only.
+
+3- Logical partition will not count with MBR limits.
+
+=========================================
+MBR  ==> 1- primary [ always we can use this concept ]  2- Extended [optional]
+=========================================
+GPT  ==> There is no concept of Extended and logical cos  it always create only 128 direct primary partition.
+=========================================
+==========================================
+New disk  ==> not have any label ==> fdisk  ==> automatically ==> will use or set ==> dos==> MBR Limits  
+NEW disk  ==> not have any label ==> parted ==> can not set the label automatically we need to set label of the disk manually.
+==========================================
+Partition Cut OR disk Editing tools or Partition Creation tools from any disk
+==========================================
+DISK partition ==> cut ==> enter using fdisk or parted 
+
+fdisk  ==> msdos or MBR
+parted ==> support both technology ==> first set the label of this disk ==> msdos or gpt
+
+==========================================
+
+gpt  ==> we need to set this level manually using parted command first before creating partition.
+
+
+1- level set
+2- partition create as per defined label [msdos or gpt]
+
+==========================================
+==========================================
+dos or msdos ==> MBR Limit or MBR properties  ==> Primary + extended + Logical  ==> including primary + Extended only   ==> 4 
+gpt          ==> GPT limits                   ==> Primary only there is no concept of extended or logical ==> 128 
+=========================================
+MBR Limits  ==> 4 Partition  ==> Including primary + Extended
+=========================================
+
+Primary Limits
+
+1- Min ==> 1 
+2- MAX ==> 4 
+
+Extended Limits  [can be optional ]
+
+1- Min  ==> 0 
+2- Max  ==> 1
+=========================================
+File Editing Command ==> gedit,VI,VIM..so nano
+DISK editing Command ==>  Part-1  ==> cut and save ==> fdisk or parted or others as well
+========================================
+Part-2
+
+1- Standard partition
+2- LVM
+3- SWAP partition
+======================================== 
+fdisk or parted rules ? 
+======================================== 
+
+Note:-1-  if we are going to create partition into any fresh blank disk using fdisk command in that case 
+          there is no need to define disk label  
+          before creating the partition cos it will use automatically dos or MBR technology
+          but if we want to change the label we can do this using available option.
+
+     2-   if we are going to create partition into any fresh blank disk using parted command in that 
+          case we need to set first disk label cos this command support both technologies.
+
+     3-   fdisk command can manage the partition OR DISK till 2 TB only but not more then 2 TB .
+
+     4-   parted command can support less then 2 TB and more then 2 TB as well.
+
+=========================================
+partition creation tools  ==> 1- fdisk 2- parted 3- gdisk [only GPT]
+=========================================
+
+Disk ==> primary    [usable]
+     ==> extended   [ It is use to create only the logical partition OR Extend the MBR limits ]
+     ==> logical    [usable]
+
+========================================= # fdisk -l  ==> using HEX Code or partition ID
+                                          # parted  /dev/sda  print  [display] 
+HEX Code OR partition ID
+
+Primary & Logical  ==>  83 
+Extended           ==>   5
+
+=========================================we should change the hex code just for easy readable outputs.
+
+SWAP  ==>  82
+LVM   ==>  8e
+RAID  ==>  fd
+normal parition or standard partition  ==>  83 [ bydefault ]
+=========================================
+you shoud change the hex code just for easy understanding
+=========================================
+Theory Complete
+=========================================
+===============================================================
+
+
+1- How we can create partition from any disk    ==> PART-1 ==> same 
+ 
+2- How we can use this parition                 ==> PART-2
+                     Topic-1  As a normal partition   [FIZED SIZE]
+                     Topic-2  As a LVM [ Logical Volume management ] [SCALABLE]
+                     Topic-3  as a SWAP
+===============================================================
+===============================================================
+
+Part-1  ==> MBR + GPT
+            fdisk or parted
+
+==========================Partiton Creation==================== 1- space waste 2- limit cross
+
+Part-1   ==>every topic will be same
+
+How we can create Standard Partition OR normal partition Using Fdisk or parted Command ?
+
+Step-1  ==> find out the details about your disk  ==> # lsblk and fdisk -l or parted diskname print ==> Final decision 
+
+Step-2  ==> Now go into hardisk with any command [ fdisk or parted ]
+            create partition as per need and save it  
+
+Step-3  ==> Update the partition table 
+        # partprobe  /dev/sda   ==> using fdisk command 
+                 OR
+        # udevadm settle        ==> using parted command 
+ 
+==============================================================   
+part-2 Standard or LVM or SWAP
+==============================================================
+Against topics
+==============================================================
+
+
+====================================================
+After OS installation ===> Choice-1   fourth Partition AS a partimary    Choice-2 Extend then logical
+====================================================
+
+During the OS installation time  ===>  /dev/sda ==> 30Gb  ===> MBR
+
+
+1- /boot    ===> sda1  ==> P1   ==> 1GB
+2- /        ===> sda2  ==> P2   ==> 15GB
+3- Swap     ===> sda3  ==> P3   ==>  1GB
+
+Free space  ===> OS automatically will create this as extended  ===> sda4  ===> complete free space  ==> 13GB  ==> /dev/sda4
+
+4- home     ===> sda5 ==>   ===> 1GB   ===> logical
+5- var      ===> sda6 ==>   ===> 3GB   ===> Logical
+
+
+
+Free Space  ==> 9GB space  ==> including primary + extended  ==> 4   ==> Already execeed  ==> 
+
+sda6  ==> logical
+sda7  ==> logical
+
+====================================================
+
+
+After the OS installation
+
+# fdisk -l 
+
+you will get Six partition in this case
+
+====================================================
+
+
+NEW DISK ===> primary ==> 0 and extended  ==>  0   ===> compelete choices  ==> as per current LABEL
+
+
+1- msdos  ==> 4 limits  [including primary+ extended
+2- gpt    ==> 128 limit  direct primary partition
+
+====================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

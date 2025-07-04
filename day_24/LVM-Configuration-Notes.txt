@@ -1,0 +1,1501 @@
+==========================================================================================
+LVM Configuration part-1
+==========================================================================================
+
+
+[root@localhost ~]# cat /etc/redhat-release 
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sr0     11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa *lvm*
+llvm-libs-13.0.1-1.el9.x86_64
+lvm2-libs-2.03.14-4.el9.x86_64
+lvm2-2.03.14-4.el9.x86_64
+libblockdev-lvm-2.25-11.el9.x86_64
+udisks2-lvm2-2.9.4-3.el9.x86_64
+[root@localhost ~]# 
+
+
+==========================================================================================
+[root@localhost ~]# lsblk  | grep disk  
+sda      8:0    0   30G  0 disk 
+[root@localhost ~]# 
+
+Note: we can get free space from this disk if we want, othewise we can add one more disk with this
+      machine just to configure LVM.
+
+
+[root@localhost ~]# lsblk  | grep disk  
+sda      8:0    0   30G  0 disk 
+sdb      8:16   0   10G  0 disk 
+[root@localhost ~]# 
+[root@localhost ~]# fdisk -l 
+Disk /dev/sda: 30 GiB, 32212254720 bytes, 62914560 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0xee52214c
+
+Device     Boot    Start      End  Sectors  Size Id Type
+/dev/sda1  *        2048  2099199  2097152    1G 83 Linux
+/dev/sda2        2099200 32819199 30720000 14.6G 83 Linux
+/dev/sda3       32819200 37013503  4194304    2G 82 Linux swap / Solaris
+
+
+Disk /dev/sdb: 10 GiB, 10737418240 bytes, 20971520 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+[root@localhost ~]# 
+
+==========================================================================================
+Part-1  DISK partition Create ===> DOS OR MSDOD   OR GPT
+
+
+Step-1  go into disk this drive using fdisk or parted command and create new partition and save it 
+[root@localhost ~]# fdisk -l  /dev/sdb
+Disk /dev/sdb: 10 GiB, 10737418240 bytes, 20971520 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+[root@localhost ~]# 
+
+[root@localhost ~]# fdisk   /dev/sdb
+
+Welcome to fdisk (util-linux 2.37.4).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+Device does not contain a recognized partition table.
+Created a new DOS disklabel with disk identifier 0x7e17fc17.
+
+Command (m for help): 
+
+Command (m for help): n
+Partition type
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (1-4, default 1): 1
+First sector (2048-20971519, default 2048): 
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-20971519, default 20971519): +3G
+
+Created a new partition 1 of type 'Linux' and of size 3 GiB.
+
+Command (m for help): p
+Disk /dev/sdb: 10 GiB, 10737418240 bytes, 20971520 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x7e17fc17
+
+Device     Boot Start     End Sectors Size Id Type
+/dev/sdb1        2048 6293503 6291456   3G 83 Linux
+
+Command (m for help): t
+
+
+
+step-2  # partprobe  /dev/sdb     [to update the partition table]
+
+==========================================================================================
+Part-2   1- Normal partition  2- SWAP partition  3- LVM based Mount point 
+
+IN this class we are going to cover LVM based Concept
+
+
+Now run LVM based Command 
+
+Step-1 First we will create PV on these partitions
+
+  
+[root@localhost ~]# pvs
+[root@localhost ~]# vgs
+[root@localhost ~]# lvs
+[root@localhost ~]# 
+
+[root@localhost ~]# pvcreate   /dev/sdb1 
+  Physical volume "/dev/sdb1" successfully created.
+  Creating devices file /etc/lvm/devices/system.devices
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# pvs  
+  PV         VG Fmt  Attr PSize PFree
+  /dev/sdb1     lvm2 ---  3.00g 3.00g
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# pvdisplay 
+  "/dev/sdb1" is a new physical volume of "3.00 GiB"
+  --- NEW Physical volume ---
+  PV Name               /dev/sdb1
+  VG Name               
+  PV Size               3.00 GiB
+  Allocatable           NO
+  PE Size               0   
+  Total PE              0
+  Free PE               0
+  Allocated PE          0
+  PV UUID               ivcATX-1aY2-Rc8V-X2j3-1pDG-8ru3-iEoSde
+   
+
+Step-2   Now we will create Volume Group using this PV
+
+[root@localhost ~]# 
+[root@localhost ~]# vgcreate  myvg1  /dev/sdb1 
+  Volume group "myvg1" successfully created
+[root@localhost ~]# 
+[root@localhost ~]# pvs 
+  PV         VG    Fmt  Attr PSize  PFree 
+  /dev/sdb1  myvg1 lvm2 a--  <3.00g <3.00g
+[root@localhost ~]# 
+[root@localhost ~]# pvdisplay 
+  --- Physical volume ---
+  PV Name               /dev/sdb1
+  VG Name               myvg1
+  PV Size               3.00 GiB / not usable 4.00 MiB
+  Allocatable           yes 
+  PE Size               4.00 MiB
+  Total PE              767
+  Free PE               767
+  Allocated PE          0
+  PV UUID               ivcATX-1aY2-Rc8V-X2j3-1pDG-8ru3-iEoSde
+   
+[root@localhost ~]# 
+
+[root@localhost ~]# vgs  
+  VG    #PV #LV #SN Attr   VSize  VFree 
+  myvg1   1   0   0 wz--n- <3.00g <3.00g
+[root@localhost ~]# 
+[root@localhost ~]# vgdisplay 
+  --- Volume group ---
+  VG Name               myvg1
+  System ID             
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  1
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                0
+  Open LV               0
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               <3.00 GiB
+  PE Size               4.00 MiB
+  Total PE              767
+  Alloc PE / Size       0 / 0   
+  Free  PE / Size       767 / <3.00 GiB
+  VG UUID               uP32x3-fKSK-lK7l-K1MB-33m3-AP0B-dfiWB9
+
+Step-3  Now we will create LVM from this VG space
+
+[root@localhost ~]# lvcreate  -L  +1G  -n  mylv1    /dev/myvg1 
+  Logical volume "mylv1" created.
+[root@localhost ~]# 
+[root@localhost ~]# lvcreate  -l  125   -n  mylv2  /dev/myvg1    
+  Logical volume "mylv2" created.
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# pvs 
+  PV         VG    Fmt  Attr PSize  PFree 
+  /dev/sdb1  myvg1 lvm2 a--  <3.00g <1.51g
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# pvdisplay 
+  --- Physical volume ---
+  PV Name               /dev/sdb1
+  VG Name               myvg1
+  PV Size               3.00 GiB / not usable 4.00 MiB
+  Allocatable           yes 
+  PE Size               4.00 MiB
+  Total PE              767
+  Free PE               386
+  Allocated PE          381
+  PV UUID               ivcATX-1aY2-Rc8V-X2j3-1pDG-8ru3-iEoSde
+   
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# vgs 
+  VG    #PV #LV #SN Attr   VSize  VFree 
+  myvg1   1   2   0 wz--n- <3.00g <1.51g
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# vgdisplay 
+  --- Volume group ---
+  VG Name               myvg1
+  System ID             
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  3
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                2
+  Open LV               0
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               <3.00 GiB
+  PE Size               4.00 MiB
+  Total PE              767
+  Alloc PE / Size       381 / <1.49 GiB
+  Free  PE / Size       386 / <1.51 GiB
+  VG UUID               uP32x3-fKSK-lK7l-K1MB-33m3-AP0B-dfiWB9
+   
+[root@localhost ~]# lvs  
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-a-----   1.00g                                                    
+  mylv2 myvg1 -wi-a----- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# lvs  
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-a-----   1.00g                                                    
+  mylv2 myvg1 -wi-a----- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lvdisplay 
+  --- Logical volume ---
+  LV Path                /dev/myvg1/mylv1
+  LV Name                mylv1
+  VG Name                myvg1
+  LV UUID                4rf3LL-4llD-dxVt-rJpR-S3BJ-1F7C-UxZhxO
+  LV Write Access        read/write
+  LV Creation host, time localhost.localdomain, 2025-04-26 10:09:15 +0530
+  LV Status              available
+  # open                 0
+  LV Size                1.00 GiB
+  Current LE             256
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     256
+  Block device           253:0
+   
+  --- Logical volume ---
+  LV Path                /dev/myvg1/mylv2
+  LV Name                mylv2
+  VG Name                myvg1
+  LV UUID                8k6a87-hvKh-acEh-vfTk-21S9-nrjr-AnmJeB
+  LV Write Access        read/write
+  LV Creation host, time localhost.localdomain, 2025-04-26 10:11:03 +0530
+  LV Status              available
+  # open                 0
+  LV Size                500.00 MiB
+  Current LE             125
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     256
+  Block device           253:1
+   
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda               8:0    0   30G  0 disk 
+├─sda1            8:1    0    1G  0 part /boot
+├─sda2            8:2    0 14.6G  0 part /
+└─sda3            8:3    0    2G  0 part [SWAP]
+sdb               8:16   0   10G  0 disk 
+└─sdb1            8:17   0    3G  0 part 
+  ├─myvg1-mylv1 253:0    0    1G  0 lvm  
+  └─myvg1-mylv2 253:1    0  500M  0 lvm  
+sr0              11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# lsblk -f
+NAME            FSTYPE      FSVER    LABEL UUID                                   FSAVAIL FSUSE% MOUNTPOINTS
+sda                                                                                              
+├─sda1          xfs                        42b45bfd-5bd0-4bd1-bd3e-53160fb80261    758.1M    25% /boot
+├─sda2          xfs                        76ed71a6-f71c-41cb-ba39-c337010d3c2c     10.8G    26% /
+└─sda3          swap        1              78a7febc-7880-408e-b626-f8cf611fc583                  [SWAP]
+sdb                                                                                              
+└─sdb1          LVM2_member LVM2 001       ivcATX-1aY2-Rc8V-X2j3-1pDG-8ru3-iEoSde                
+  ├─myvg1-mylv1                                                                                  
+  └─myvg1-mylv2                                                                                  
+sr0                                                                                              
+[root@localhost ~]# 
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mkfs.xfs   /dev/myvg1/mylv1 
+meta-data=/dev/myvg1/mylv1       isize=512    agcount=4, agsize=65536 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=1, rmapbt=0
+         =                       reflink=1    bigtime=1 inobtcount=1
+data     =                       bsize=4096   blocks=262144, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+log      =internal log           bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+[root@localhost ~]# 
+[root@localhost ~]# mkfs.ext4    /dev/myvg1/mylv2
+mke2fs 1.46.5 (30-Dec-2021)
+Creating filesystem with 512000 1k blocks and 128016 inodes
+Filesystem UUID: 25251ee2-a9bd-464e-a83a-347df15fce22
+Superblock backups stored on blocks: 
+	8193, 24577, 40961, 57345, 73729, 204801, 221185, 401409
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (8192 blocks): done
+Writing superblocks and filesystem accounting information: done 
+
+[root@localhost ~]# 
+[root@localhost ~]# lsblk -f
+NAME            FSTYPE      FSVER    LABEL UUID                                   FSAVAIL FSUSE% MOUNTPOINTS
+sda                                                                                              
+├─sda1          xfs                        42b45bfd-5bd0-4bd1-bd3e-53160fb80261    758.1M    25% /boot
+├─sda2          xfs                        76ed71a6-f71c-41cb-ba39-c337010d3c2c     10.8G    26% /
+└─sda3          swap        1              78a7febc-7880-408e-b626-f8cf611fc583                  [SWAP]
+sdb                                                                                              
+└─sdb1          LVM2_member LVM2 001       ivcATX-1aY2-Rc8V-X2j3-1pDG-8ru3-iEoSde                
+  ├─myvg1-mylv1 xfs                        1a378c95-f89d-4209-aaf0-1d26bd7f1538                  
+  └─myvg1-mylv2 ext4        1.0            25251ee2-a9bd-464e-a83a-347df15fce22                  
+sr0                                                                                              
+[root@localhost ~]# 
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-a-----   1.00g                                                    
+  mylv2 myvg1 -wi-a----- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls /
+afs  bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+[root@localhost ~]# 
+[root@localhost ~]# mkdir /lvm-1
+[root@localhost ~]# mkdir /lvm-2
+[root@localhost ~]# 
+[root@localhost ~]# mount /dev/myvg1/mylv1  /lvm-1 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mount /dev/myvg1/mylv2    /lvm-2
+[root@localhost ~]# 
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao----   1.00g                                                    
+  mylv2 myvg1 -wi-ao---- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda               8:0    0   30G  0 disk 
+├─sda1            8:1    0    1G  0 part /boot
+├─sda2            8:2    0 14.6G  0 part /
+└─sda3            8:3    0    2G  0 part [SWAP]
+sdb               8:16   0   10G  0 disk 
+└─sdb1            8:17   0    3G  0 part 
+  ├─myvg1-mylv1 253:0    0    1G  0 lvm  /lvm-1
+  └─myvg1-mylv2 253:1    0  500M  0 lvm  /lvm-2
+sr0              11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# vgs
+  VG    #PV #LV #SN Attr   VSize  VFree 
+  myvg1   1   2   0 wz--n- <3.00g <1.51g
+[root@localhost ~]# 
+
+[root@localhost ~]# blkid 
+/dev/sda2: UUID="76ed71a6-f71c-41cb-ba39-c337010d3c2c" BLOCK_SIZE="512" TYPE="xfs" PARTUUID="ee52214c-02"
+/dev/mapper/myvg1-mylv2: UUID="25251ee2-a9bd-464e-a83a-347df15fce22" BLOCK_SIZE="1024" TYPE="ext4"
+/dev/sdb1: UUID="ivcATX-1aY2-Rc8V-X2j3-1pDG-8ru3-iEoSde" TYPE="LVM2_member" PARTUUID="7e17fc17-01"
+/dev/mapper/myvg1-mylv1: UUID="1a378c95-f89d-4209-aaf0-1d26bd7f1538" BLOCK_SIZE="512" TYPE="xfs"
+/dev/sda3: UUID="78a7febc-7880-408e-b626-f8cf611fc583" TYPE="swap" PARTUUID="ee52214c-03"
+/dev/sda1: UUID="42b45bfd-5bd0-4bd1-bd3e-53160fb80261" BLOCK_SIZE="512" TYPE="xfs" PARTUUID="ee52214c-01"
+[root@localhost ~]# 
+[root@localhost ~]# vim /etc/fstab 
+
+/dev/myvg1/mylv1                          /lvm-1                  xfs     defaults        0 0
+/dev/myvg1/mylv2                          /lvm-2                  ext4    defaults        0 0
+
+:wq!
+
+[root@localhost ~]# systemctl daemon-reload
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# findmnt  --verify  
+Success, no errors or warnings detected
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda               8:0    0   30G  0 disk 
+├─sda1            8:1    0    1G  0 part /boot
+├─sda2            8:2    0 14.6G  0 part /
+└─sda3            8:3    0    2G  0 part [SWAP]
+sdb               8:16   0   10G  0 disk 
+└─sdb1            8:17   0    3G  0 part 
+  ├─myvg1-mylv1 253:0    0    1G  0 lvm  /lvm-1
+  └─myvg1-mylv2 253:1    0  500M  0 lvm  /lvm-2
+sr0              11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# df -Th
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  1.8G     0  1.8G   0% /dev
+tmpfs                   tmpfs     1.9G     0  1.9G   0% /dev/shm
+tmpfs                   tmpfs     740M   15M  725M   2% /run
+/dev/sda2               xfs        15G  3.9G   11G  27% /
+/dev/sda1               xfs      1014M  256M  759M  26% /boot
+tmpfs                   tmpfs     370M  124K  370M   1% /run/user/0
+/dev/mapper/myvg1-mylv1 xfs      1014M   40M  975M   4% /lvm-1
+/dev/mapper/myvg1-mylv2 ext4      459M   14K  430M   1% /lvm-2
+[root@localhost ~]# 
+[root@localhost ~]# df -TH
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  2.0G     0  2.0G   0% /dev
+tmpfs                   tmpfs     2.0G     0  2.0G   0% /dev/shm
+tmpfs                   tmpfs     776M   16M  760M   2% /run
+/dev/sda2               xfs        16G  4.2G   12G  27% /
+/dev/sda1               xfs       1.1G  269M  795M  26% /boot
+tmpfs                   tmpfs     388M  127k  388M   1% /run/user/0
+/dev/mapper/myvg1-mylv1 xfs       1.1G   42M  1.1G   4% /lvm-1
+/dev/mapper/myvg1-mylv2 ext4      481M   15k  451M   1% /lvm-2
+[root@localhost ~]# 
+[root@localhost ~]# lvs 
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao----   1.00g                                                    
+  mylv2 myvg1 -wi-ao---- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa device-mapper
+device-mapper-1.02.183-4.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# ll  /dev/mapper
+total 0
+crw-------. 1 root root 10, 236 Apr 26 10:09 control
+lrwxrwxrwx. 1 root root       7 Apr 26 10:19 myvg1-mylv1 -> ../dm-0
+lrwxrwxrwx. 1 root root       7 Apr 26 10:19 myvg1-mylv2 -> ../dm-1
+[root@localhost ~]# 
+[root@localhost ~]# df  -Th 
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  1.8G     0  1.8G   0% /dev
+tmpfs                   tmpfs     1.9G     0  1.9G   0% /dev/shm
+tmpfs                   tmpfs     740M   15M  725M   2% /run
+/dev/sda2               xfs        15G  3.9G   11G  27% /
+/dev/sda1               xfs      1014M  256M  759M  26% /boot
+tmpfs                   tmpfs     370M  124K  370M   1% /run/user/0
+/dev/mapper/myvg1-mylv1 xfs      1014M   40M  975M   4% /lvm-1
+/dev/mapper/myvg1-mylv2 ext4      459M   14K  430M   1% /lvm-2
+[root@localhost ~]# 
+[root@localhost ~]# du -sh /lvm-1
+0	/lvm-1
+[root@localhost ~]# 
+
+==========================================================================================
+How we can test these LVMs is it working or not ?
+
+[root@localhost ~]# df  -Th
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  1.8G     0  1.8G   0% /dev
+tmpfs                   tmpfs     1.9G     0  1.9G   0% /dev/shm
+tmpfs                   tmpfs     740M   15M  725M   2% /run
+/dev/sda2               xfs        15G  3.9G   11G  27% /
+/dev/sda1               xfs      1014M  256M  759M  26% /boot
+tmpfs                   tmpfs     370M  124K  370M   1% /run/user/0
+/dev/mapper/myvg1-mylv1 xfs      1014M   40M  975M   4% /lvm-1
+/dev/mapper/myvg1-mylv2 ext4      459M   14K  430M   1% /lvm-2
+[root@localhost ~]# 
+[root@localhost ~]# du -sh /etc 
+27M	/etc  
+[root@localhost ~]# 
+[root@localhost ~]# cp -rf  /etc   /lvm-1
+[root@localhost ~]# 
+[root@localhost ~]# df  -Th
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  1.8G     0  1.8G   0% /dev
+tmpfs                   tmpfs     1.9G     0  1.9G   0% /dev/shm
+tmpfs                   tmpfs     740M   15M  725M   2% /run
+/dev/sda2               xfs        15G  3.9G   11G  27% /
+/dev/sda1               xfs      1014M  256M  759M  26% /boot
+tmpfs                   tmpfs     370M  124K  370M   1% /run/user/0
+/dev/mapper/myvg1-mylv1 xfs      1014M   67M  948M   7% /lvm-1
+/dev/mapper/myvg1-mylv2 ext4      459M   14K  430M   1% /lvm-2
+[root@localhost ~]# 
+[root@localhost ~]# ls  /lvm-1
+etc
+[root@localhost ~]# 
+[root@localhost ~]# du -sh /lvm-1
+27M	/lvm-1
+[root@localhost ~]# 
+[root@localhost ~]# cp -rf  /etc   /lvm-2
+[root@localhost ~]# 
+[root@localhost ~]# df  -Th
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  1.8G     0  1.8G   0% /dev
+tmpfs                   tmpfs     1.9G     0  1.9G   0% /dev/shm
+tmpfs                   tmpfs     740M   15M  725M   2% /run
+/dev/sda2               xfs        15G  3.9G   11G  27% /
+/dev/sda1               xfs      1014M  256M  759M  26% /boot
+tmpfs                   tmpfs     370M  124K  370M   1% /run/user/0
+/dev/mapper/myvg1-mylv1 xfs      1014M   67M  948M   7% /lvm-1
+/dev/mapper/myvg1-mylv2 ext4      459M   24M  406M   6% /lvm-2
+[root@localhost ~]# 
+[root@localhost ~]# du  -sh /lvm-2
+24M	/lvm-2
+[root@localhost ~]# 
+[root@localhost ~]# umount  /lvm-1
+[root@localhost ~]# umount  /lvm-2
+[root@localhost ~]# 
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-a-----   1.00g                                                    
+  mylv2 myvg1 -wi-a----- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls /lvm-1
+[root@localhost ~]# ls /lvm-2
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda               8:0    0   30G  0 disk 
+├─sda1            8:1    0    1G  0 part /boot
+├─sda2            8:2    0 14.6G  0 part /
+└─sda3            8:3    0    2G  0 part [SWAP]
+sdb               8:16   0   10G  0 disk 
+└─sdb1            8:17   0    3G  0 part 
+  ├─myvg1-mylv1 253:0    0    1G  0 lvm  
+  └─myvg1-mylv2 253:1    0  500M  0 lvm  
+sr0              11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+
+[root@localhost ~]# lsblk 
+NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda               8:0    0   30G  0 disk 
+├─sda1            8:1    0    1G  0 part /boot
+├─sda2            8:2    0 14.6G  0 part /
+└─sda3            8:3    0    2G  0 part [SWAP]
+sdb               8:16   0   10G  0 disk 
+└─sdb1            8:17   0    3G  0 part 
+  ├─myvg1-mylv1 253:0    0    1G  0 lvm  
+  └─myvg1-mylv2 253:1    0  500M  0 lvm  
+sr0              11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mount  /dev/myvg1/mylv1  /lvm-1
+[root@localhost ~]# mount  /dev/myvg1/mylv2  /lvm-2
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda               8:0    0   30G  0 disk 
+├─sda1            8:1    0    1G  0 part /boot
+├─sda2            8:2    0 14.6G  0 part /
+└─sda3            8:3    0    2G  0 part [SWAP]
+sdb               8:16   0   10G  0 disk 
+└─sdb1            8:17   0    3G  0 part 
+  ├─myvg1-mylv1 253:0    0    1G  0 lvm  /lvm-1
+  └─myvg1-mylv2 253:1    0  500M  0 lvm  /lvm-2
+sr0              11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# df  -Th 
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  1.8G     0  1.8G   0% /dev
+tmpfs                   tmpfs     1.9G     0  1.9G   0% /dev/shm
+tmpfs                   tmpfs     740M   15M  725M   2% /run
+/dev/sda2               xfs        15G  3.9G   11G  27% /
+/dev/sda1               xfs      1014M  256M  759M  26% /boot
+tmpfs                   tmpfs     370M  124K  370M   1% /run/user/0
+/dev/mapper/myvg1-mylv1 xfs      1014M   67M  948M   7% /lvm-1
+/dev/mapper/myvg1-mylv2 ext4      459M   24M  406M   6% /lvm-2
+[root@localhost ~]# 
+
+[root@localhost ~]# blkid  
+/dev/sda2: UUID="76ed71a6-f71c-41cb-ba39-c337010d3c2c" BLOCK_SIZE="512" TYPE="xfs" PARTUUID="ee52214c-02"
+/dev/mapper/myvg1-mylv2: UUID="25251ee2-a9bd-464e-a83a-347df15fce22" BLOCK_SIZE="1024" TYPE="ext4"
+/dev/sdb1: UUID="ivcATX-1aY2-Rc8V-X2j3-1pDG-8ru3-iEoSde" TYPE="LVM2_member" PARTUUID="7e17fc17-01"
+/dev/mapper/myvg1-mylv1: UUID="1a378c95-f89d-4209-aaf0-1d26bd7f1538" BLOCK_SIZE="512" TYPE="xfs"
+/dev/sda3: UUID="78a7febc-7880-408e-b626-f8cf611fc583" TYPE="swap" PARTUUID="ee52214c-03"
+/dev/sda1: UUID="42b45bfd-5bd0-4bd1-bd3e-53160fb80261" BLOCK_SIZE="512" TYPE="xfs" PARTUUID="ee52214c-01"
+[root@localhost ~]# 
+
+[root@localhost ~]# blkid    /dev/myvg1/mylv1
+/dev/myvg1/mylv1: UUID="1a378c95-f89d-4209-aaf0-1d26bd7f1538" BLOCK_SIZE="512" TYPE="xfs"
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# blkid    /dev/myvg1/mylv2
+/dev/myvg1/mylv2: UUID="25251ee2-a9bd-464e-a83a-347df15fce22" BLOCK_SIZE="1024" TYPE="ext4"
+[root@localhost ~]# 
+[root@localhost ~]# vim /etc/fstab 
+
+
+UUID=1a378c95-f89d-4209-aaf0-1d26bd7f1538       /lvm-1                  xfs     defaults          0 0     
+UUID=25251ee2-a9bd-464e-a83a-347df15fce22       /lvm-2                  ext4    defaults          0 0     
+
+
+:wq!
+
+[root@localhost ~]# systemctl daemon-reload 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# findmnt --verify 
+Success, no errors or warnings detected
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# reboot 
+
+
+==========================================================================================
+
+
+[root@localhost ~]# lvs 
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao----   1.00g                                                    
+  mylv2 myvg1 -wi-ao---- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# df  -Th  
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  1.8G     0  1.8G   0% /dev
+tmpfs                   tmpfs     1.9G     0  1.9G   0% /dev/shm
+tmpfs                   tmpfs     740M  9.7M  730M   2% /run
+/dev/sda2               xfs        15G  3.9G   11G  27% /
+/dev/mapper/myvg1-mylv1 xfs      1014M   67M  948M   7% /lvm-1
+/dev/mapper/myvg1-mylv2 ext4      459M   24M  406M   6% /lvm-2
+/dev/sda1               xfs      1014M  256M  759M  26% /boot
+tmpfs                   tmpfs     370M   96K  370M   1% /run/user/0
+[root@localhost ~]# 
+[root@localhost ~]# ls /lvm-1
+etc
+[root@localhost ~]# ls /lvm-2
+etc  lost+found
+[root@localhost ~]# 
+
+==========================================================================================
+LVM Configuration ?
+LVM Monitor  ?
+==========================================================================================
+
+LVM based Operations  ==> as per need  
+
+
+How we can extend VG size using NEW PV if it is required  ?
+
+
+[root@localhost ~]# vgs  
+  VG    #PV #LV #SN Attr   VSize  VFree 
+  myvg1   1   2   0 wz--n- <3.00g <1.51g
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda               8:0    0   30G  0 disk 
+├─sda1            8:1    0    1G  0 part /boot
+├─sda2            8:2    0 14.6G  0 part /
+└─sda3            8:3    0    2G  0 part [SWAP]
+sdb               8:16   0   10G  0 disk 
+└─sdb1            8:17   0    3G  0 part 
+  ├─myvg1-mylv1 253:0    0    1G  0 lvm  /lvm-1
+  └─myvg1-mylv2 253:1    0  500M  0 lvm  /lvm-2
+sr0              11:0    1 1024M  0 rom  
+[root@localhost ~]# 
+[root@localhost ~]# fdisk -l  /dev/sdb
+Disk /dev/sdb: 10 GiB, 10737418240 bytes, 20971520 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x7e17fc17
+
+Device     Boot Start     End Sectors Size Id Type
+/dev/sdb1        2048 6293503 6291456   3G 8e Linux LVM
+[root@localhost ~]# 
+[root@localhost ~]# fdisk  /dev/sdb
+
+Welcome to fdisk (util-linux 2.37.4).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+This disk is currently in use - repartitioning is probably a bad idea.
+It's recommended to umount all file systems, and swapoff all swap
+partitions on this disk.
+
+
+Command (m for help): n
+Partition type
+   p   primary (1 primary, 0 extended, 3 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (2-4, default 2): 2
+First sector (6293504-20971519, default 6293504): 
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (6293504-20971519, default 20971519): +500M
+
+Created a new partition 2 of type 'Linux' and of size 500 MiB.
+
+Command (m for help): t
+Partition number (1,2, default 2): 2
+Hex code or alias (type L to list all): 8e
+
+Changed type of partition 'Linux' to 'Linux LVM'.
+
+Command (m for help): p
+Disk /dev/sdb: 10 GiB, 10737418240 bytes, 20971520 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x7e17fc17
+
+Device     Boot   Start     End Sectors  Size Id Type
+/dev/sdb1          2048 6293503 6291456    3G 8e Linux LVM
+/dev/sdb2       6293504 7317503 1024000  500M 8e Linux LVM
+
+Command (m for help): w
+The partition table has been altered.
+Syncing disks.
+
+[root@localhost ~]# partprobe  /dev/sdb 
+[root@localhost ~]# 
+[root@localhost ~]# pvcreate   /dev/sdb2  
+  Physical volume "/dev/sdb2" successfully created.
+[root@localhost ~]# 
+[root@localhost ~]# pvs
+  PV         VG    Fmt  Attr PSize   PFree  
+  /dev/sdb1  myvg1 lvm2 a--   <3.00g  <1.51g
+  /dev/sdb2        lvm2 ---  500.00m 500.00m
+[root@localhost ~]# 
+[root@localhost ~]# vgextend  myvg1   /dev/sdb2
+  Volume group "myvg1" successfully extended
+[root@localhost ~]# pvs
+  PV         VG    Fmt  Attr PSize   PFree  
+  /dev/sdb1  myvg1 lvm2 a--   <3.00g  <1.51g
+  /dev/sdb2  myvg1 lvm2 a--  496.00m 496.00m
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# vgs 
+  VG    #PV #LV #SN Attr   VSize VFree
+  myvg1   2   2   0 wz--n- 3.48g 1.99g
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+==========================================================================================
+How we can extend LVM size on RUN time without offline the LVM OR without unmount the mount point ?
+==========================================================================================
+
+Condition:-1    if filesystem type of LVM is in XFS 
+
+                Method:-1   using two command pair     ===> 1- lvextend    2- xfs_growfs 
+                Method:-2   using single commmand      ===>    lvresize with -r option     ===> smart utility
+
+
+
+Condition:-2    if filesystem type of LVM is in EXT-2,EXT-3 and EXT-4
+
+                Method:-1   using two command pair     ===> 1- lvextend     2- resize2fs  
+                Method:-2   using single commmand      ===>    lvresize with -r option     ===> smart utility 
+
+==========================================================================================
+
+[root@localhost ~]# 
+[root@localhost ~]# df -Th 
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  1.8G     0  1.8G   0% /dev
+tmpfs                   tmpfs     1.9G     0  1.9G   0% /dev/shm
+tmpfs                   tmpfs     740M  9.7M  730M   2% /run
+/dev/sda2               xfs        15G  3.9G   11G  27% /
+/dev/mapper/myvg1-mylv1 xfs      1014M   67M  948M   7% /lvm-1
+/dev/mapper/myvg1-mylv2 ext4      459M   24M  406M   6% /lvm-2
+/dev/sda1               xfs      1014M  256M  759M  26% /boot
+tmpfs                   tmpfs     370M   96K  370M   1% /run/user/0
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lvextend -L  +200M  /dev/myvg1/mylv1 
+  Size of logical volume myvg1/mylv1 changed from 1.00 GiB (256 extents) to <1.20 GiB (306 extents).
+  Logical volume myvg1/mylv1 successfully resized.
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# xfs_growfs   /dev/myvg1/mylv1  
+meta-data=/dev/mapper/myvg1-mylv1 isize=512    agcount=4, agsize=65536 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=1, rmapbt=0
+         =                       reflink=1    bigtime=1 inobtcount=1
+data     =                       bsize=4096   blocks=262144, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+log      =internal log           bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+data blocks changed from 262144 to 313344
+[root@localhost ~]# 
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao----  <1.20g                                                    
+  mylv2 myvg1 -wi-ao---- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# df -Th 
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  1.8G     0  1.8G   0% /dev
+tmpfs                   tmpfs     1.9G     0  1.9G   0% /dev/shm
+tmpfs                   tmpfs     740M  9.7M  730M   2% /run
+/dev/sda2               xfs        15G  3.9G   11G  27% /
+/dev/mapper/myvg1-mylv1 xfs       1.2G   68M  1.2G   6% /lvm-1
+/dev/mapper/myvg1-mylv2 ext4      459M   24M  406M   6% /lvm-2
+/dev/sda1               xfs      1014M  256M  759M  26% /boot
+tmpfs                   tmpfs     370M   96K  370M   1% /run/user/0
+[root@localhost ~]# 
+
+
+[root@localhost ~]# lvextend  -L +200M  /dev/myvg1/mylv2  
+  Size of logical volume myvg1/mylv2 changed from 500.00 MiB (125 extents) to 700.00 MiB (175 extents).
+  Logical volume myvg1/mylv2 successfully resized.
+[root@localhost ~]# 
+[root@localhost ~]# resize2fs   /dev/myvg1/mylv2 
+resize2fs 1.46.5 (30-Dec-2021)
+Filesystem at /dev/myvg1/mylv2 is mounted on /lvm-2; on-line resizing required
+old_desc_blocks = 4, new_desc_blocks = 6
+The filesystem on /dev/myvg1/mylv2 is now 716800 (1k) blocks long.
+
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao----  <1.20g                                                    
+  mylv2 myvg1 -wi-ao---- 700.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# df  -TH
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  2.0G     0  2.0G   0% /dev
+tmpfs                   tmpfs     2.0G     0  2.0G   0% /dev/shm
+tmpfs                   tmpfs     776M   11M  766M   2% /run
+/dev/sda2               xfs        16G  4.2G   12G  27% /
+/dev/mapper/myvg1-mylv1 xfs       1.3G   72M  1.3G   6% /lvm-1
+/dev/mapper/myvg1-mylv2 ext4      680M   28M  614M   5% /lvm-2
+/dev/sda1               xfs       1.1G  269M  795M  26% /boot
+tmpfs                   tmpfs     388M   99k  388M   1% /run/user/0
+[root@localhost ~]# 
+
+
+
+=======================================================================================
+[root@localhost ~]# lvresize  -L  1500M  -r   /dev/myvg1/mylv1     
+  Size of logical volume myvg1/mylv1 changed from <1.20 GiB (306 extents) to 1.46 GiB (375 extents).
+  Logical volume myvg1/mylv1 successfully resized.
+meta-data=/dev/mapper/myvg1-mylv1 isize=512    agcount=5, agsize=65536 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=1, rmapbt=0
+         =                       reflink=1    bigtime=1 inobtcount=1
+data     =                       bsize=4096   blocks=313344, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+log      =internal log           bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+data blocks changed from 313344 to 384000
+[root@localhost ~]# 
+
+
+[root@localhost ~]# lvresize  -L  1700M     /dev/myvg1/mylv1     
+  Size of logical volume myvg1/mylv1 changed from 1.46 GiB (375 extents) to 1.66 GiB (425 extents).
+  Logical volume myvg1/mylv1 successfully resized.
+[root@localhost ~]# 
+[root@localhost ~]# lvresize  -L  1700M   -r   /dev/myvg1/mylv1     
+  Size of logical volume myvg1/mylv1 unchanged from 1.66 GiB (425 extents).
+  Logical volume myvg1/mylv1 successfully resized.
+meta-data=/dev/mapper/myvg1-mylv1 isize=512    agcount=6, agsize=65536 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=1, rmapbt=0
+         =                       reflink=1    bigtime=1 inobtcount=1
+data     =                       bsize=4096   blocks=384000, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+log      =internal log           bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+data blocks changed from 384000 to 435200
+[root@localhost ~]# lvresize  -L  2000M     /dev/myvg1/mylv1     
+  Size of logical volume myvg1/mylv1 changed from 1.66 GiB (425 extents) to 1.95 GiB (500 extents).
+  Logical volume myvg1/mylv1 successfully resized.
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# xfs_growfs    /dev/myvg1/mylv1
+meta-data=/dev/mapper/myvg1-mylv1 isize=512    agcount=7, agsize=65536 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=1, rmapbt=0
+         =                       reflink=1    bigtime=1 inobtcount=1
+data     =                       bsize=4096   blocks=435200, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+log      =internal log           bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+data blocks changed from 435200 to 512000
+[root@localhost ~]# 
+[root@localhost ~]# lvs 
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao----   1.95g                                                    
+  mylv2 myvg1 -wi-ao---- 700.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# df -Th  
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  1.8G     0  1.8G   0% /dev
+tmpfs                   tmpfs     1.9G     0  1.9G   0% /dev/shm
+tmpfs                   tmpfs     740M  9.7M  730M   2% /run
+/dev/sda2               xfs        15G  3.9G   11G  27% /
+/dev/mapper/myvg1-mylv1 xfs       2.0G   74M  1.9G   4% /lvm-1
+/dev/mapper/myvg1-mylv2 ext4      649M   27M  585M   5% /lvm-2
+/dev/sda1               xfs      1014M  256M  759M  26% /boot
+tmpfs                   tmpfs     370M   96K  370M   1% /run/user/0
+[root@localhost ~]# 
+[root@localhost ~]# lvs  
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao----   1.95g                                                    
+  mylv2 myvg1 -wi-ao---- 700.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# lvresize   -L  900M  -r  /dev/myvg1/mylv2  
+  Size of logical volume myvg1/mylv2 changed from 700.00 MiB (175 extents) to 900.00 MiB (225 extents).
+  Logical volume myvg1/mylv2 successfully resized.
+resize2fs 1.46.5 (30-Dec-2021)
+Filesystem at /dev/mapper/myvg1-mylv2 is mounted on /lvm-2; on-line resizing required
+old_desc_blocks = 6, new_desc_blocks = 8
+The filesystem on /dev/mapper/myvg1-mylv2 is now 921600 (1k) blocks long.
+
+[root@localhost ~]# 
+[root@localhost ~]# lvresize   -L  1000M    /dev/myvg1/mylv2  
+  Size of logical volume myvg1/mylv2 changed from 900.00 MiB (225 extents) to 1000.00 MiB (250 extents).
+  Logical volume myvg1/mylv2 successfully resized.
+[root@localhost ~]# 
+[root@localhost ~]# lvresize   -L  1000M   -r   /dev/myvg1/mylv2  
+  Size of logical volume myvg1/mylv2 unchanged from 1000.00 MiB (250 extents).
+  Logical volume myvg1/mylv2 successfully resized.
+resize2fs 1.46.5 (30-Dec-2021)
+Filesystem at /dev/mapper/myvg1-mylv2 is mounted on /lvm-2; on-line resizing required
+old_desc_blocks = 8, new_desc_blocks = 8
+The filesystem on /dev/mapper/myvg1-mylv2 is now 1024000 (1k) blocks long.
+
+[root@localhost ~]# 
+[root@localhost ~]# lvresize   -L  1100M    /dev/myvg1/mylv2  
+  Size of logical volume myvg1/mylv2 changed from 1000.00 MiB (250 extents) to 1.07 GiB (275 extents).
+  Logical volume myvg1/mylv2 successfully resized.
+[root@localhost ~]# 
+[root@localhost ~]# resize2fs   /dev/myvg1/mylv2 
+resize2fs 1.46.5 (30-Dec-2021)
+Filesystem at /dev/myvg1/mylv2 is mounted on /lvm-2; on-line resizing required
+old_desc_blocks = 8, new_desc_blocks = 9
+The filesystem on /dev/myvg1/mylv2 is now 1126400 (1k) blocks long.
+
+[root@localhost ~]# 
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao---- 1.95g                                                    
+  mylv2 myvg1 -wi-ao---- 1.07g                                                    
+[root@localhost ~]# 
+
+
+=======================================================================================
+
+How we can reduce LVM size if it is not required ?
+
+
+1- if file system type is in EXT-2-3-and-EXT-4 we can directly reduce the LVM size if it is required.
+2- it support in offline mode 
+
+but if we are using XFS file system type  we can not directly reduce the LVM size cos XFS filesystem
+does not supoort shrinking operation
+
+XFS does not support shrinking:-
+
+=======================================================================================
+
+
+[root@localhost ~]# df  -Th 
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  1.8G     0  1.8G   0% /dev
+tmpfs                   tmpfs     1.9G     0  1.9G   0% /dev/shm
+tmpfs                   tmpfs     740M  9.7M  730M   2% /run
+/dev/sda2               xfs        15G  3.9G   11G  27% /
+/dev/mapper/myvg1-mylv1 xfs       2.0G   74M  1.9G   4% /lvm-1
+/dev/mapper/myvg1-mylv2 ext4      1.0G   27M  945M   3% /lvm-2
+/dev/sda1               xfs      1014M  256M  759M  26% /boot
+tmpfs                   tmpfs     370M   96K  370M   1% /run/user/0
+[root@localhost ~]# 
+[root@localhost ~]# vgs
+  VG    #PV #LV #SN Attr   VSize VFree  
+  myvg1   2   2   0 wz--n- 3.48g 464.00m
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+[root@localhost ~]# lvresize -L  300M   -r  /dev/myvg1/mylv2  
+Do you want to unmount "/lvm-2" ? [Y|n] y
+fsck from util-linux 2.37.4
+/dev/mapper/myvg1-mylv2: 1794/280416 files (0.1% non-contiguous), 105911/1126400 blocks
+resize2fs 1.46.5 (30-Dec-2021)
+Resizing the filesystem on /dev/mapper/myvg1-mylv2 to 307200 (1k) blocks.
+The filesystem on /dev/mapper/myvg1-mylv2 is now 307200 (1k) blocks long.
+
+  Size of logical volume myvg1/mylv2 changed from 1.07 GiB (275 extents) to 300.00 MiB (75 extents).
+  Logical volume myvg1/mylv2 successfully resized.
+[root@localhost ~]# 
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao----   1.95g                                                    
+  mylv2 myvg1 -wi-ao---- 300.00m                                                    
+[root@localhost ~]# 
+
+[root@localhost ~]# lvresize -L  800M   -r  /dev/myvg1/mylv2  
+  Size of logical volume myvg1/mylv2 changed from 300.00 MiB (75 extents) to 800.00 MiB (200 extents).
+  Logical volume myvg1/mylv2 successfully resized.
+resize2fs 1.46.5 (30-Dec-2021)
+Filesystem at /dev/mapper/myvg1-mylv2 is mounted on /lvm-2; on-line resizing required
+old_desc_blocks = 3, new_desc_blocks = 7
+The filesystem on /dev/mapper/myvg1-mylv2 is now 819200 (1k) blocks long.
+
+[root@localhost ~]# 
+[root@localhost ~]# lvresize -L  500M   -r  /dev/myvg1/mylv2  
+Do you want to unmount "/lvm-2" ? [Y|n] y
+fsck from util-linux 2.37.4
+/dev/mapper/myvg1-mylv2: 1794/203200 files (0.1% non-contiguous), 86260/819200 blocks
+resize2fs 1.46.5 (30-Dec-2021)
+Resizing the filesystem on /dev/mapper/myvg1-mylv2 to 512000 (1k) blocks.
+The filesystem on /dev/mapper/myvg1-mylv2 is now 512000 (1k) blocks long.
+
+  Size of logical volume myvg1/mylv2 changed from 800.00 MiB (200 extents) to 500.00 MiB (125 extents).
+  Logical volume myvg1/mylv2 successfully resized.
+
+[root@localhost ~]# 
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao----   1.95g                                                    
+  mylv2 myvg1 -wi-ao---- 500.00m                                                    
+[root@localhost ~]# 
+
+[root@localhost ~]# ls  /lvm-2
+etc  lost+found
+[root@localhost ~]# 
+[root@localhost ~]# df -Th  
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  1.8G     0  1.8G   0% /dev
+tmpfs                   tmpfs     1.9G     0  1.9G   0% /dev/shm
+tmpfs                   tmpfs     740M  9.7M  730M   2% /run
+/dev/sda2               xfs        15G  3.9G   11G  27% /
+/dev/mapper/myvg1-mylv1 xfs       2.0G   74M  1.9G   4% /lvm-1
+/dev/sda1               xfs      1014M  256M  759M  26% /boot
+tmpfs                   tmpfs     370M   96K  370M   1% /run/user/0
+/dev/mapper/myvg1-mylv2 ext4      461M   27M  410M   6% /lvm-2
+[root@localhost ~]# 
+
+[root@localhost ~]# vgs
+  VG    #PV #LV #SN Attr   VSize VFree 
+  myvg1   2   2   0 wz--n- 3.48g <1.04g
+[root@localhost ~]# 
+
+[root@localhost ~]# df  -Th 
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  1.8G     0  1.8G   0% /dev
+tmpfs                   tmpfs     1.9G     0  1.9G   0% /dev/shm
+tmpfs                   tmpfs     740M  9.7M  730M   2% /run
+/dev/sda2               xfs        15G  3.9G   11G  27% /
+/dev/mapper/myvg1-mylv1 xfs       2.0G   74M  1.9G   4% /lvm-1
+/dev/sda1               xfs      1014M  256M  759M  26% /boot
+tmpfs                   tmpfs     370M   96K  370M   1% /run/user/0
+/dev/mapper/myvg1-mylv2 ext4      461M   27M  410M   6% /lvm-2
+[root@localhost ~]# 
+[root@localhost ~]# lvresize  -L  500M -r  /dev/myvg1/mylv1 
+fsadm: Xfs filesystem shrinking is unsupported.
+  /usr/sbin/fsadm failed: 1
+  Filesystem resize failed.
+[root@localhost ~]# 
+
+=======================================================================================
+
+Note: we can follow these steps on XFS based file system type 
+
+https://www.ucartz.com/clients/knowledgebase/822/How-to-reduce-or-shrink-the-size-of-a-LVM-partition-formatted-with-XFS-Filesystem.html
+
+=======================================================================================
+
+[root@localhost ~]# rpm -qa xfsdump 
+xfsdump-3.1.10-1.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# xfsdump -f   /tmp/test.dump   /lvm-1  
+
+Press Blank ENTER
+
+
+Press Blank ENTER
+
+[root@localhost ~]# du -sh /tmp/test.dump 
+25M	/tmp/test.dump
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# umount /lvm-1
+[root@localhost ~]# 
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao----   1.95g                                                    
+  mylv2 myvg1 -wi-a----- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# lvreduce -L 700M /dev/myvg1/mylv1 
+  WARNING: Reducing active and open logical volume to 700.00 MiB.
+  THIS MAY DESTROY YOUR DATA (filesystem etc.)
+Do you really want to reduce myvg1/mylv1? [y/n]: y
+  Size of logical volume myvg1/mylv1 changed from 1.95 GiB (500 extents) to 700.00 MiB (175 extents).
+  Logical volume myvg1/mylv1 successfully resized.
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mkfs.xfs -f /dev/myvg1/mylv1 
+meta-data=/dev/myvg1/mylv1       isize=512    agcount=4, agsize=44800 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=1, rmapbt=0
+         =                       reflink=1    bigtime=1 inobtcount=1
+data     =                       bsize=4096   blocks=179200, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+log      =internal log           bsize=4096   blocks=1566, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+[root@localhost ~]# 
+[root@localhost ~]# mount /dev/myvg1/mylv1    /lvm-1 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls /lvm-1
+[root@localhost ~]# 
+
+[root@localhost ~]# xfsrestore -f /tmp/test.dump /lvm-1 
+[root@localhost ~]# ls /lvm-1 
+etc
+[root@localhost ~]# 
+[root@localhost ~]# lvs  
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao---- 700.00m                                                    
+  mylv2 myvg1 -wi-ao---- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# df -Th 
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  1.8G     0  1.8G   0% /dev
+tmpfs                   tmpfs     1.9G     0  1.9G   0% /dev/shm
+tmpfs                   tmpfs     740M  9.7M  730M   2% /run
+/dev/sda2               xfs        15G  3.9G   11G  27% /
+/dev/sda1               xfs      1014M  256M  759M  26% /boot
+tmpfs                   tmpfs     370M   96K  370M   1% /run/user/0
+/dev/mapper/myvg1-mylv1 xfs       694M   65M  630M  10% /lvm-1
+/dev/mapper/myvg1-mylv2 ext4      461M   27M  410M   6% /lvm-2
+[root@localhost ~]# 
+
+==============================================================================================
+How we can offline and online any LVMs if it is required ?   OR  deactivate and reactivate ?
+==============================================================================================
+pvchange    ===> -an OR -ay
+vgchange    ===> -an OR -ay
+lvchange    ===> -an OR -ay  
+
+
+-an  ===> deactivate  
+-ay  ===> activate  
+
+
+[root@localhost ~]# umount /lvm-2  
+[root@localhost ~]# 
+[root@localhost ~]# lvs 
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao---- 700.00m                                                    
+  mylv2 myvg1 -wi-a----- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# mount /dev/myvg1/mylv2 /lvm-2
+[root@localhost ~]# 
+[root@localhost ~]# lvs 
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao---- 700.00m                                                    
+  mylv2 myvg1 -wi-ao---- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# umount /lvm-2
+[root@localhost ~]# 
+[root@localhost ~]# lvchange  -an  /dev/myvg1/mylv2  
+[root@localhost ~]# 
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao---- 700.00m                                                    
+  mylv2 myvg1 -wi------- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mount /dev/myvg1/mylv2 /lvm-2
+mount: /lvm-2: special device /dev/myvg1/mylv2 does not exist.
+[root@localhost ~]# 
+[root@localhost ~]# lvchange  -ay   /dev/myvg1/mylv2  
+[root@localhost ~]# 
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao---- 700.00m                                                    
+  mylv2 myvg1 -wi-a----- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# mount  /dev/myvg1/mylv2  /lvm-2 
+[root@localhost ~]# 
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao---- 700.00m                                                    
+  mylv2 myvg1 -wi-ao---- 500.00m                                                    
+[root@localhost ~]# 
+
+==============================================================================================
+How we can merge two volume groups if it is required ?  ===>? vgmerge 
+
+let supopose we have two VG in my machine  
+
+
+[root@localhost ~]# vgs 
+  VG    #PV #LV #SN Attr   VSize VFree 
+  myvg1   2   2   0 wz--n- 3.48g <2.31g
+[root@localhost ~]# 
+
+we will create this environment in my machine to do this task  
+
+[root@localhost ~]# fdisk -l  /dev/sdb 
+Disk /dev/sdb: 10 GiB, 10737418240 bytes, 20971520 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x7e17fc17
+
+Device     Boot   Start     End Sectors  Size Id Type
+/dev/sdb1          2048 6293503 6291456    3G 8e Linux LVM
+/dev/sdb2       6293504 7317503 1024000  500M 8e Linux LVM
+[root@localhost ~]# 
+[root@localhost ~]# fdisk   /dev/sdb
+
+Welcome to fdisk (util-linux 2.37.4).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+This disk is currently in use - repartitioning is probably a bad idea.
+It's recommended to umount all file systems, and swapoff all swap
+partitions on this disk.
+
+
+Command (m for help): n
+Partition type
+   p   primary (2 primary, 0 extended, 2 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (3,4, default 3): 3
+First sector (7317504-20971519, default 7317504): 
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (7317504-20971519, default 20971519): +1G
+
+Created a new partition 3 of type 'Linux' and of size 1 GiB.
+
+Command (m for help): t
+Partition number (1-3, default 3): 3
+Hex code or alias (type L to list all): 8e
+
+Changed type of partition 'Linux' to 'Linux LVM'.
+
+Command (m for help): w
+The partition table has been altered.
+Syncing disks.
+
+[root@localhost ~]# 
+
+
+[root@localhost ~]# partprobe  /dev/sdb  
+[root@localhost ~]# 
+[root@localhost ~]# pvcreate   /dev/sdb3
+  Physical volume "/dev/sdb3" successfully created.
+[root@localhost ~]# 
+[root@localhost ~]# vgcreate   myvg2  /dev/sdb3
+  Volume group "myvg2" successfully created
+[root@localhost ~]# 
+[root@localhost ~]# lvcreate -L  +500M -n  mylv3  /dev/myvg2 
+  Logical volume "mylv3" created.
+[root@localhost ~]# 
+[root@localhost ~]# mkfs.xfs  /dev/myvg2/mylv3 
+meta-data=/dev/myvg2/mylv3       isize=512    agcount=4, agsize=32000 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=1, rmapbt=0
+         =                       reflink=1    bigtime=1 inobtcount=1
+data     =                       bsize=4096   blocks=128000, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+log      =internal log           bsize=4096   blocks=1368, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+[root@localhost ~]# 
+
+
+[root@localhost ~]# mkdir /lvm-3  
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mount /dev/myvg2/mylv3  /lvm-3
+[root@localhost ~]# 
+[root@localhost ~]# blkid /dev/myvg2/mylv3 
+/dev/myvg2/mylv3: UUID="354f3677-3509-40a5-8bcb-b1e1b4c4becf" BLOCK_SIZE="512" TYPE="xfs"
+[root@localhost ~]# 
+[root@localhost ~]# vim  /etc/fstab 
+
+
+UUID=354f3677-3509-40a5-8bcb-b1e1b4c4becf       /lvm-3                  xfs     defaults           0 0 
+
+
+:wq!
+
+
+[root@localhost ~]# systemctl daemon-reload   
+
+[root@localhost ~]# 
+[root@localhost ~]# df  -Th  
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  1.8G     0  1.8G   0% /dev
+tmpfs                   tmpfs     1.9G     0  1.9G   0% /dev/shm
+tmpfs                   tmpfs     740M  9.7M  730M   2% /run
+/dev/sda2               xfs        15G  3.9G   11G  27% /
+/dev/sda1               xfs      1014M  256M  759M  26% /boot
+tmpfs                   tmpfs     370M   96K  370M   1% /run/user/0
+/dev/mapper/myvg1-mylv1 xfs       694M   65M  630M  10% /lvm-1
+/dev/mapper/myvg1-mylv2 ext4      461M   27M  410M   6% /lvm-2
+/dev/mapper/myvg2-mylv3 xfs       495M   29M  466M   6% /lvm-3
+[root@localhost ~]# 
+
+[root@localhost ~]# vgs 
+  VG    #PV #LV #SN Attr   VSize    VFree  
+  myvg1   2   2   0 wz--n-    3.48g  <2.31g
+  myvg2   1   1   0 wz--n- 1020.00m 520.00m
+[root@localhost ~]# 
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao---- 700.00m                                                    
+  mylv2 myvg1 -wi-ao---- 500.00m                                                    
+  mylv3 myvg2 -wi-ao---- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# umount  /lvm-3 
+[root@localhost ~]# 
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao---- 700.00m                                                    
+  mylv2 myvg1 -wi-ao---- 500.00m                                                    
+  mylv3 myvg2 -wi-a----- 500.00m                                                    
+[root@localhost ~]# 
+
+[root@localhost ~]# lvchange  -an  /dev/myvg2/mylv3 
+[root@localhost ~]# 
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao---- 700.00m                                                    
+  mylv2 myvg1 -wi-ao---- 500.00m                                                    
+  mylv3 myvg2 -wi------- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# vgchange  -an /dev/myvg2  
+  0 logical volume(s) in volume group "myvg2" now active
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# vgmerge  /dev/myvg1   /dev/myvg2 
+  WARNING: updating old metadata to 17 on /dev/sdb3 for VG myvg1.
+  Volume group "myvg2" successfully merged into "myvg1"
+[root@localhost ~]# 
+[root@localhost ~]# pvs
+  PV         VG    Fmt  Attr PSize    PFree  
+  /dev/sdb1  myvg1 lvm2 a--    <3.00g   1.82g
+  /dev/sdb2  myvg1 lvm2 a--   496.00m 496.00m
+  /dev/sdb3  myvg1 lvm2 a--  1020.00m 520.00m
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# vgs
+  VG    #PV #LV #SN Attr   VSize  VFree 
+  myvg1   3   3   0 wz--n- <4.48g <2.82g
+[root@localhost ~]# 
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao---- 700.00m                                                    
+  mylv2 myvg1 -wi-ao---- 500.00m                                                    
+  mylv3 myvg1 -wi------- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lvchange  -ay  /dev/myvg1/mylv3  
+[root@localhost ~]# 
+[root@localhost ~]# lvs
+  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  mylv1 myvg1 -wi-ao---- 700.00m                                                    
+  mylv2 myvg1 -wi-ao---- 500.00m                                                    
+  mylv3 myvg1 -wi-a----- 500.00m                                                    
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mount /dev/myvg1/mylv3   /lvm-3
+
+
+[root@localhost ~]# blkid 
+/dev/sda2: UUID="76ed71a6-f71c-41cb-ba39-c337010d3c2c" BLOCK_SIZE="512" TYPE="xfs" PARTUUID="ee52214c-02"
+/dev/mapper/myvg1-mylv2: UUID="25251ee2-a9bd-464e-a83a-347df15fce22" BLOCK_SIZE="1024" TYPE="ext4"
+/dev/sdb2: UUID="6xq8wz-EQtB-pbRA-njlu-6C3s-1Kxk-ItUXs6" TYPE="LVM2_member" PARTUUID="7e17fc17-02"
+/dev/sdb3: UUID="r1hvjs-pHoY-rLg3-Gq7O-PTEK-hJ5j-qLckXU" TYPE="LVM2_member" PARTUUID="7e17fc17-03"
+/dev/sdb1: UUID="ivcATX-1aY2-Rc8V-X2j3-1pDG-8ru3-iEoSde" TYPE="LVM2_member" PARTUUID="7e17fc17-01"
+/dev/mapper/myvg1-mylv1: UUID="9981402d-b7fa-48f2-8346-7428a2e07ee8" BLOCK_SIZE="512" TYPE="xfs"
+/dev/sda3: UUID="78a7febc-7880-408e-b626-f8cf611fc583" TYPE="swap" PARTUUID="ee52214c-03"
+/dev/sda1: UUID="42b45bfd-5bd0-4bd1-bd3e-53160fb80261" BLOCK_SIZE="512" TYPE="xfs" PARTUUID="ee52214c-01"
+/dev/mapper/myvg1-mylv3: UUID="354f3677-3509-40a5-8bcb-b1e1b4c4becf" BLOCK_SIZE="512" TYPE="xfs"
+[root@localhost ~]# 
+[root@localhost ~]# cat /etc/fstab 
+
+#
+# /etc/fstab
+# Created by anaconda on Fri Jan 17 04:52:42 2025
+#
+# Accessible filesystems, by reference, are maintained under '/dev/disk/'.
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info.
+#
+# After editing this file, run 'systemctl daemon-reload' to update systemd
+# units generated from this file.
+#
+UUID=76ed71a6-f71c-41cb-ba39-c337010d3c2c /                       xfs     defaults        0 0
+UUID=42b45bfd-5bd0-4bd1-bd3e-53160fb80261 /boot                   xfs     defaults        0 0
+UUID=78a7febc-7880-408e-b626-f8cf611fc583 none                    swap    defaults        0 0
+UUID=1a378c95-f89d-4209-aaf0-1d26bd7f1538	/lvm-1            xfs     defaults	  0 0
+UUID=25251ee2-a9bd-464e-a83a-347df15fce22	/lvm-2            ext4    defaults	  0 0
+UUID=354f3677-3509-40a5-8bcb-b1e1b4c4becf	/lvm-3	     	  xfs     defaults           0 0 
+[root@localhost ~]# 
+
+[root@localhost ~]# systemctl daemon-reload   
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# vgs 
+  VG    #PV #LV #SN Attr   VSize  VFree 
+  myvg1   3   3   0 wz--n- <4.48g <2.82g
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+====================================================================================================
+
+Create NEW LVM as per given requirement  ?
+
+LVM based Installation  ?
+
+LVM Recovery ?
+
+====================================================================================================
+
+Standard + SWAP + LVM ===> MIX 
+
+====================================================================================================
+fdisk OR parted ===> disk  ===> enter  ===> 
+====================================================================================================
+====================================================================================================
+
+
+
+
+

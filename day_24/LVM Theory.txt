@@ -1,0 +1,145 @@
+==============================================================================================
+
+LVM  [ Logical Volume Manager or Management ]
+
+==============================================================================================
+
+Data Store  <===== DISK <== Partition or Volume  
+
+==============================================================================================
+
+Types of partition OR Volume  Creation concept  ?
+
+1- Standard Partition or Volume ==> Fixed Size ==> 
+  We can not Directly Extend or Reduce this Volume Size
+
+2- LVM  ===> We can extend or reduce any space at run time.
+
+
+==============================================================================================
+1- LVM (logical volume manager) is a management technology for storage.
+
+2- LVM technology basically provides the flexible types of
+   storage concept where we can easily extend or reduce any volumes size as per deamand.
+
+3- LVM always use in physical datacenters and in cloud based infra. OR Production Server Env.
+
+4- LVM consist by Physical Volumes and Volume groups  .
+
+5- benefits of using LVM, volumes can be reduced or extended easily. 
+
+6- LVM is very flexible to do this with just one command line.
+
+==============================================================================================
+Disk  => Partition    ==> Label  ==> DOS OR GPT  ===> save  ==> mkfs  ==>  mount  ==>  /etc/fstab  ==> datas store
+Disk  => Partition    ==> Label  ==> DOS OR GPT  ===> save ==> we will not format these partition directly
+==============================================================================================
+First we will create PV and VG then we will create LV
+1- PV create
+2- VG Create
+3- LV Create
+==============================================================================================
+4- Format
+5- mount
+==============================================================================================
+   Creation       information read
+
+1- pvcreate   2- pvdisplay  3- pvs 
+2- vgcreate   2- vgdisplay  3- vgs
+3- lvcreate   2- lvdisplay  3- lvs
+
+4- format   ==> steps will be same
+5- mounting ==> also will be same ==>  /etc/fstab 
+
+==============================================================================================
+lvextend ==> to extend logical volume from Volume group 
+vgextend ==> to extend volume group size using new PV
+==============================================================================================
+What Is The Difference Between LVM And Standard Partition ?
+
+   Partition sizes can be easily changed with LVM compared to standard partition.
+   With LVM, you do not need to unmount a filesystem before resizing,
+   it can be done while online.
+==============================================================================================
+
+Standard Volumes Diagram 
+
+==============================================================================================
+LVM  Diagram
+
+==============================================================================================
+
+
+What is Physical Volume ?
+
+1- physical Volume means a physical partition which comes from the 
+   hard drive with 8e hex code.
+
+2- Atleast one PV is required to create any one volume group.
+
+
+What is Volume group ?
+
+1- Volume groups basically collection of one or more PVs.
+2- One Volume group can be devide into a one or more logical volumes.
+3- Every LVM's Always depend on the Volume groups.
+4- Volume group behave just like as Storage containers.
+
+What is Logical volume  ?
+
+1- LVM basically is a sub part of the Volume group with any defined filesystem Type as per your need.
+2- Every LVM can have any types of Filesystem and mounting point.
+
+============================================================================================== 
+
+1- Pvcreation     ==> pvcreate    pvdisplay   pvs
+2- Vgcreation     ==> vgcreate    vgdisplay   vgs
+3- LV creation    ==> lvcreate    lvdislay    lvs 
+4- format         ==> mkfs.type  
+5- mount          ==> mount   +  /etc/fstab  
+6- testing        ==> data write 
+
+==============================================================================================
+What is Extent or block size or chunk size ?
+1- PE [ physical extent ]
+2- LE [ logical extent  ]
+
+==>> Each physical volume is divided chunks of data, known as physical extents, 
+     these extents have the same size as the logical extents for the volume group.
+
+
+===> logical extent (LE) Each logical volume is split into chunks of data,     
+     known as logical extents.
+
+A- The disk space available for allocation in Volume Group is divided into units of
+   a fixed-size called extents.
+
+B- An extent is the smallest unit of storage that can be allocated. 
+   Within a physical volume, extents are referred to as physical extents.
+
+C- A logical volume is allocated into logical extents of the same size as
+   the physical extents.
+
+BY default 1 PE = 4 MB     [ we change , if we require using  -s option in vgcreate ]
+
+Example:-  1 physical Volume  ==> 500 MB 
+           1 Volume group     ==> 500 MB /  125 PE
+
+             Logical Volume   ==> 100 MB / 25 LE 
+
+Volume Group  ==> 125 PE  - 25 PE  ==>  100 PE / 400MB  Free Space or Free PE
+
+pvdisplay ==> PE
+vgdisplay ==> PE
+
+lvdisplay ==> LE
+
+====== n number of PE ==> volume group  ==> n number PE devides in n number of LEs.
+ 
+=========================================================================
+
+ 
+
+
+
+

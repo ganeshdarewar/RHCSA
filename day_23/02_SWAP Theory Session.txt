@@ -1,0 +1,59 @@
+==================================================================================================
+    SWAP Partition OR SWAP Area OR SWAP SPACE ?
+==================================================================================================
+
+What is SWAP partition in Linux ?
+        OR
+Why we Create SWAP Partition In Linux ?
+
+==================================================================================================
+
+SWAP Creation Choice  ?
+
+1- During the OS installation time as per need
+
+2- After the OS Installation time as per need using command line from any available disk space 
+
+==================================================================================================
+
+Types of Memory Concept  ?
+
+1- Primary Memory OR Physical Memory 
+
+2- Secondary Memory OR additional Memory OR supporting memory OR supplementary Memory
+
+=================================================
+
+Swap space in Linux is used when the amount of physical memory (RAM) is full. If the system needs more memory resources and the RAM is full, inactive pages in memory are moved to the swap space. While swap space can help machines with a small amount of RAM, it should not be considered a replacement for more RAM. Swap space is located on hard drives, which have a slower access time than physical memory
+
+=================================================
+Partition based ===>  /dev/sda   /dev/sdb  ===> using fdisk or parted ===>  cut ==> save ===> #mkswap and swapon   
+File based ===> from any existing  mount point ===>using dd command ===> space  ===> sync  ===> SWAP activate 
+=================================================
+[root@localhost ~]# df -h 
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        1.8G     0  1.8G   0% /dev
+tmpfs           1.9G     0  1.9G   0% /dev/shm
+tmpfs           740M  9.7M  730M   2% /run
+/dev/sda2        15G  3.9G   11G  27% /
+/dev/sda1      1014M  256M  759M  26% /boot
+tmpfs           370M  120K  370M   1% /run/user/0
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# swapon -s  
+Filename				Type		Size		Used		Priority
+/dev/sda3                               partition	2097148		0		-2
+[root@localhost ~]# 
+[root@localhost ~]# free -h
+               total        used        free      shared  buff/cache   available
+Mem:           3.6Gi       1.2Gi       1.7Gi        25Mi       665Mi       2.1Gi
+Swap:          2.0Gi          0B       2.0Gi
+[root@localhost ~]# 
+[root@localhost ~]# free -h -t  
+               total        used        free      shared  buff/cache   available
+Mem:           3.6Gi       1.2Gi       1.7Gi        25Mi       665Mi       2.1Gi
+Swap:          2.0Gi          0B       2.0Gi
+Total:         5.6Gi       1.2Gi       3.7Gi
+[root@localhost ~]# 
+
+==================================================

@@ -1,0 +1,507 @@
+=================================================
+SWAP Creation Notes
+=================================================
+
+Method:-1  Partition based  ===>  /dev/sda   /dev/sdb
+Method:-2  File based SWAP  ===> using dd command  
+
+=================================================
+[root@localhost ~]# free -h 
+               total        used        free      shared  buff/cache   available
+Mem:           7.5Gi       1.1Gi       5.8Gi        26Mi       558Mi       6.1Gi
+Swap:          2.0Gi          0B       2.0Gi
+[root@localhost ~]# 
+[root@localhost ~]# swapon -s 
+Filename				Type		Size		Used		Priority
+/dev/sda3                               partition	2097148		0		-2
+[root@localhost ~]# 
+
+[root@localhost ~]# fdisk -l
+Disk /dev/sda: 30 GiB, 32212254720 bytes, 62914560 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x6763e4d0
+
+Device     Boot    Start      End  Sectors  Size Id Type
+/dev/sda1  *        2048  2099199  2097152    1G 83 Linux
+/dev/sda2        2099200 32819199 30720000 14.6G 83 Linux
+/dev/sda3       32819200 37013503  4194304    2G 82 Linux swap / Solaris
+[root@localhost ~]# 
+
+[root@localhost ~]# fdisk  /dev/sda
+
+Welcome to fdisk (util-linux 2.37.4).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+This disk is currently in use - repartitioning is probably a bad idea.
+It's recommended to umount all file systems, and swapoff all swap
+partitions on this disk.
+
+
+Command (m for help): n
+Partition type
+   p   primary (3 primary, 0 extended, 1 free)
+   e   extended (container for logical partitions)
+Select (default e): e
+
+Selected partition 4
+First sector (37013504-62914559, default 37013504): 
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (37013504-62914559, default 62914559): 
+
+Created a new partition 4 of type 'Extended' and of size 12.4 GiB.
+
+Command (m for help): p
+Disk /dev/sda: 30 GiB, 32212254720 bytes, 62914560 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x6763e4d0
+
+Device     Boot    Start      End  Sectors  Size Id Type
+/dev/sda1  *        2048  2099199  2097152    1G 83 Linux
+/dev/sda2        2099200 32819199 30720000 14.6G 83 Linux
+/dev/sda3       32819200 37013503  4194304    2G 82 Linux swap / Solaris
+/dev/sda4       37013504 62914559 25901056 12.4G  5 Extended
+
+Command (m for help): n
+All primary partitions are in use.
+Adding logical partition 5
+First sector (37015552-62914559, default 37015552): 
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (37015552-62914559, default 62914559): +1G
+
+Created a new partition 5 of type 'Linux' and of size 1 GiB.
+Command (m for help): p
+
+Disk /dev/sda: 30 GiB, 32212254720 bytes, 62914560 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x6763e4d0
+
+Device     Boot    Start      End  Sectors  Size Id Type
+/dev/sda1  *        2048  2099199  2097152    1G 83 Linux
+/dev/sda2        2099200 32819199 30720000 14.6G 83 Linux
+/dev/sda3       32819200 37013503  4194304    2G 82 Linux swap / Solaris
+/dev/sda4       37013504 62914559 25901056 12.4G  5 Extended
+/dev/sda5       37015552 39112703  2097152    1G 83 Linux
+
+Filesystem/RAID signature on partition 5 will be wiped.
+
+Command (m for help): t
+Partition number (1-5, default 5): 5
+Hex code or alias (type L to list all): l
+Hex code or alias (type L to list all): 82
+
+Changed type of partition 'Linux' to 'Linux swap / Solaris'.
+
+Command (m for help): p
+Disk /dev/sda: 30 GiB, 32212254720 bytes, 62914560 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x6763e4d0
+
+Device     Boot    Start      End  Sectors  Size Id Type
+/dev/sda1  *        2048  2099199  2097152    1G 83 Linux
+/dev/sda2        2099200 32819199 30720000 14.6G 83 Linux
+/dev/sda3       32819200 37013503  4194304    2G 82 Linux swap / Solaris
+/dev/sda4       37013504 62914559 25901056 12.4G  5 Extended
+/dev/sda5       37015552 39112703  2097152    1G 82 Linux swap / Solaris
+
+Filesystem/RAID signature on partition 5 will be wiped.
+
+
+Command (m for help): p
+Disk /dev/sda: 30 GiB, 32212254720 bytes, 62914560 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x6763e4d0
+
+Device     Boot    Start      End  Sectors  Size Id Type
+/dev/sda1  *        2048  2099199  2097152    1G 83 Linux
+/dev/sda2        2099200 32819199 30720000 14.6G 83 Linux
+/dev/sda3       32819200 37013503  4194304    2G 82 Linux swap / Solaris
+/dev/sda4       37013504 62914559 25901056 12.4G  5 Extended
+/dev/sda5       37015552 39112703  2097152    1G 82 Linux swap / Solaris
+
+Filesystem/RAID signature on partition 5 will be wiped.
+
+Command (m for help): w
+The partition table has been altered.
+Syncing disks.
+
+[root@localhost ~]# 
+[root@localhost ~]# partprobe  /dev/sda
+[root@localhost ~]# 
+
+[root@localhost ~]# mkswap   /dev/sda5
+Setting up swapspace version 1, size = 1024 MiB (1073737728 bytes)
+no label, UUID=e4c70a86-1596-4dce-8eac-7cff3568e09e
+[root@localhost ~]# 
+[root@localhost ~]# swapon -s  
+Filename				Type		Size		Used		Priority
+/dev/sda3                               partition	2097148		0		-2
+[root@localhost ~]# 
+[root@localhost ~]# swapon     /dev/sda5
+[root@localhost ~]# 
+[root@localhost ~]# swapon -s  
+Filename				Type		Size		Used		Priority
+/dev/sda3                               partition	2097148		0		-2
+/dev/sda5                               partition	1048572		0		-3
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# free -h  
+               total        used        free      shared  buff/cache   available
+Mem:           7.5Gi       1.1Gi       5.9Gi        26Mi       559Mi       6.1Gi
+Swap:          3.0Gi          0B       3.0Gi
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+├─sda3   8:3    0    2G  0 part [SWAP]
+├─sda4   8:4    0    1K  0 part 
+└─sda5   8:5    0    1G  0 part [SWAP]
+sr0     11:0    1  7.9G  0 rom  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# vim /etc/fstab 
+
+/dev/sda5                                 swap                    swap    defaults        0 0
+
+
+:wq!
+
+[root@localhost ~]# systemctl daemon-reload 
+[root@localhost ~]# 
+[root@localhost ~]# free -h  
+               total        used        free      shared  buff/cache   available
+Mem:           7.5Gi       1.1Gi       5.9Gi        26Mi       563Mi       6.1Gi
+Swap:          3.0Gi          0B       3.0Gi
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# free -h  
+               total        used        free      shared  buff/cache   available
+Mem:           7.5Gi       1.1Gi       5.9Gi        26Mi       563Mi       6.1Gi
+Swap:          3.0Gi          0B       3.0Gi
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# swapon -s 
+Filename				Type		Size		Used		Priority
+/dev/sda3                               partition	2097148		0		-2
+/dev/sda5                               partition	1048572		0		-3
+[root@localhost ~]# 
+[root@localhost ~]# cat /proc/swaps 
+Filename				Type		Size		Used		Priority
+/dev/sda3                               partition	2097148		0		-2
+/dev/sda5                               partition	1048572		0		-3
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# cat  /proc/meminfo | grep -i swap 
+SwapCached:            0 kB
+SwapTotal:       3145720 kB
+SwapFree:        3145720 kB
+[root@localhost ~]# 
+[root@localhost ~]# watch -n 3  free -h 
+
+
+Press CTRL + C  to quit  
+
+[root@localhost ~]# top 
+
+Press q to quit  
+
+[root@localhost ~]# top -b -n1 | head  -n 6  
+top - 11:52:14 up  1:02,  1 user,  load average: 0.15, 0.06, 0.01
+Tasks: 275 total,   1 running, 274 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  6.2 us, 12.5 sy,  0.0 ni, 81.2 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   7658.8 total,   5990.7 free,   1104.2 used,    564.0 buff/cache
+MiB Swap:   3072.0 total,   3072.0 free,      0.0 used.   6289.4 avail Mem 
+
+[root@localhost ~]# 
+[root@localhost ~]# top -b -n1 | head  -n 6    | grep -i swap  
+MiB Swap:   3072.0 total,   3072.0 free,      0.0 used.   6289.4 avail Mem 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# top -b -n1 | head  -n 6    | grep -i swap     > /tmp/save  
+[root@localhost ~]# 
+[root@localhost ~]# cat /tmp/save 
+MiB Swap:   3072.0 total,   3072.0 free,      0.0 used.   6289.4 avail Mem 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# top -b -n1 | grep httpd  
+[root@localhost ~]# 
+[root@localhost ~]# top -b -n1 | grep sshd
+    949 root      20   0   16064   9028   7464 S   0.0   0.1   0:00.05 sshd
+[root@localhost ~]# 
+[root@localhost ~]# top -b -n1 | grep crond  
+   1033 root      20   0  223892   3684   2900 S   0.0   0.0   0:00.02 crond
+[root@localhost ~]# 
+[root@localhost ~]# 
+==================================================================================================
+
+Second Method:- using dd command OR File based SWAP 
+[root@localhost ~]# df  -h 
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        3.8G     0  3.8G   0% /dev
+tmpfs           3.8G     0  3.8G   0% /dev/shm
+tmpfs           1.5G  9.7M  1.5G   1% /run
+/dev/sda2        15G  3.9G   11G  27% /
+/dev/sda1      1014M  256M  759M  26% /boot
+tmpfs           766M   92K  766M   1% /run/user/0
+/dev/sr0        8.0G  8.0G     0 100% /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# ls /
+afs  bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# dd  if=/dev/zero  of=/myswapfile  bs=1G   count=1 
+
+
+
+[root@localhost ~]# mkswap -v1   -f  /myswapfile  
+mkswap: /myswapfile: insecure permissions 0644, fix with: chmod 0600 /myswapfile
+Setting up swapspace version 1, size = 1024 MiB (1073737728 bytes)
+no label, UUID=b0b7222d-a257-42e9-97e2-8e97f32e34c3
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# chmod 0600 /myswapfile
+[root@localhost ~]# 
+[root@localhost ~]# ll  /myswapfile 
+-rw-------. 1 root root 1073741824 Apr 20 12:00 /myswapfile
+[root@localhost ~]# 
+[root@localhost ~]# swapon  /myswapfile
+[root@localhost ~]# 
+[root@localhost ~]# swapon -s  
+Filename				Type		Size		Used		Priority
+/dev/sda3                               partition	2097148		0		-2
+/dev/sda5                               partition	1048572		0		-3
+/myswapfile                             file		1048572		0		-4
+[root@localhost ~]# 
+[root@localhost ~]# vim /etc/fstab 
+/myswapfile                               swap                    swap    defaults        0 0
+
+:wq!
+
+[root@localhost ~]# systemctl daemon-reload 
+
+[root@localhost ~]# 
+[root@localhost ~]# free -h  
+               total        used        free      shared  buff/cache   available
+Mem:           7.5Gi       1.1Gi       4.8Gi        26Mi       1.6Gi       6.1Gi
+Swap:          4.0Gi          0B       4.0Gi
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+├─sda3   8:3    0    2G  0 part [SWAP]
+├─sda4   8:4    0    1K  0 part 
+└─sda5   8:5    0    1G  0 part [SWAP]
+sr0     11:0    1  7.9G  0 rom  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# swapon -s 
+Filename				Type		Size		Used		Priority
+/dev/sda3                               partition	2097148		0		-2
+/dev/sda5                               partition	1048572		0		-3
+/myswapfile                             file		1048572		0		-4
+[root@localhost ~]# 
+
+
+============================# reboot======================================================================
+
+
+
+[root@localhost ~]# free  -h 
+               total        used        free      shared  buff/cache   available
+Mem:           7.5Gi       1.1Gi       5.8Gi        25Mi       582Mi       6.1Gi
+Swap:          4.0Gi          0B       4.0Gi
+[root@localhost ~]# 
+[root@localhost ~]# swapon -s  
+Filename				Type		Size		Used	Priority
+/dev/sda3                               partition	2097148		0	-2
+/dev/sda5                               partition	1048572		0	-3
+/myswapfile                             file		1048572		0	-4
+[root@localhost ~]# 
+
+[root@localhost ~]# swapoff  /dev/sda5
+[root@localhost ~]# 
+[root@localhost ~]# swapon -s  
+Filename				Type		Size		Used		Priority
+/dev/sda3                               partition	2097148		0		-2
+/myswapfile                             file		1048572		0		-3
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# swapon  /dev/sda5
+[root@localhost ~]# 
+[root@localhost ~]# swapon -s  
+Filename				Type		Size		Used		Priority
+/dev/sda3                               partition	2097148		0		-2
+/dev/sda5                               partition	1048572		0		-4
+/myswapfile                             file		1048572		0		-3
+[root@localhost ~]# 
+[root@localhost ~]# swapoff -a  
+[root@localhost ~]# 
+[root@localhost ~]# swapon -a  
+[root@localhost ~]# 
+[root@localhost ~]# swapon -s
+Filename				Type		Size		Used		Priority
+/dev/sda3                               partition	2097148		0		-2
+/dev/sda5                               partition	1048572		0		-3
+/myswapfile                             file		1048572		0		-4
+[root@localhost ~]# 
+[root@localhost ~]# swapon -s 
+Filename				Type		Size		Used		Priority
+/dev/sda3                               partition	2097148		0		-2
+/dev/sda5                               partition	1048572		0		-3
+/myswapfile                             file		1048572		0		-4
+[root@localhost ~]# 
+
+[root@localhost ~]# swapoff  /dev/sda5 
+[root@localhost ~]# 
+[root@localhost ~]# swapoff /myswapfile 
+[root@localhost ~]# 
+[root@localhost ~]# swapon -s
+Filename				Type		Size		Used		Priority
+/dev/sda3                               partition	2097148		0		-2
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# vim /etc/fstab 
+
+delete your entry
+
+:wq!
+
+[root@localhost ~]# systemctl daemon-reload 
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+ 	
+
+
+[root@localhost ~]# fdisk /dev/sda
+
+Welcome to fdisk (util-linux 2.37.4).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+This disk is currently in use - repartitioning is probably a bad idea.
+It's recommended to umount all file systems, and swapoff all swap
+partitions on this disk.
+
+
+Command (m for help): d
+Partition number (1-5, default 5): 5
+
+Partition 5 has been deleted.
+
+Command (m for help): d
+Partition number (1-4, default 4): 4
+
+Partition 4 has been deleted.
+
+Command (m for help): w
+The partition table has been altered.
+Syncing disks.
+
+[root@localhost ~]# partprobe  /dev/sda
+[root@localhost ~]# 
+[root@localhost ~]# fdisk -l
+Disk /dev/sda: 30 GiB, 32212254720 bytes, 62914560 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x6763e4d0
+
+Device     Boot    Start      End  Sectors  Size Id Type
+/dev/sda1  *        2048  2099199  2097152    1G 83 Linux
+/dev/sda2        2099200 32819199 30720000 14.6G 83 Linux
+/dev/sda3       32819200 37013503  4194304    2G 82 Linux swap / Solaris
+[root@localhost ~]# 
+
+
+[root@localhost ~]# ls  /
+afs  boot  etc   lib    media  myswapfile  proc  run   srv  tmp  var
+bin  dev   home  lib64  mnt    opt         root  sbin  sys  usr
+
+[root@localhost ~]# touch /abc  
+[root@localhost ~]# 
+[root@localhost ~]# ls  /
+abc  bin   dev  home  lib64  mnt         opt   root  sbin  sys  usr
+afs  boot  etc  lib   media  myswapfile  proc  run   srv   tmp  var
+[root@localhost ~]# 
+[root@localhost ~]# file  /abc 
+/abc: empty
+[root@localhost ~]# file  /etc/passwd
+/etc/passwd: ASCII text
+[root@localhost ~]# 
+[root@localhost ~]# file  /myswapfile
+/myswapfile: Linux swap file, 4k page size, little endian, version 1, size 262143 pages, 0 bad pages, no label, UUID=b0b7222d-a257-42e9-97e2-8e97f32e34c3
+[root@localhost ~]# 
+
+
+[root@localhost ~]# rm -rf /myswapfile 
+[root@localhost ~]# 
+[root@localhost ~]# df  -h  
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        3.8G     0  3.8G   0% /dev
+tmpfs           3.8G     0  3.8G   0% /dev/shm
+tmpfs           1.5G  9.7M  1.5G   1% /run
+/dev/sda2        15G  3.9G   11G  27% /
+/dev/sda1      1014M  256M  759M  26% /boot
+tmpfs           766M   92K  766M   1% /run/user/0
+/dev/sr0        8.0G  8.0G     0 100% /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+
+
+==============================================================================================================
+What is the concept of Swapiness value ?
+
+[root@localhost ~]# cat /proc/sys/vm/swappiness
+60
+[root@localhost ~]# 
+
+==============================================================================================================
+==============================================================================================================
+
+
+
+  259  fallocate -l 2G /swapfile
+  260  ls /
+  261  chmod 600 /swapfile
+  262  mkswap /swapfile
+  263  swapon /swapfile
+  264  free -h
+  265  swapon -s
+
+
+
+
+🔍 What is Swappiness in Linux?
+Swappiness is a kernel parameter that controls how aggressively Linux uses swap space instead of RAM.

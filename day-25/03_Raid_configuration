@@ -1,0 +1,259 @@
+[root@localhost ~]# mdadm -C /dev/md0 -a yes -l 1 -n 2 /dev/sdb1 /dev/sdc1
+mdadm: Note: this array has metadata at the start and
+    may not be suitable as a boot device.  If you plan to
+    store '/boot' on this device please ensure that
+    your boot-loader understands md/v1.x metadata, or use
+    --metadata=0.90
+Continue creating array? yes
+mdadm: Defaulting to version 1.2 metadata
+mdadm: array /dev/md0 started.
+[root@localhost ~]#
+
+
+[root@localhost ~]# fdisk -l /dev/md0
+Disk /dev/md0: 4.99 GiB, 5362417664 bytes, 10473472 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+[root@localhost ~]#
+
+
+
+
+[root@localhost ~]# mkfs.xfs /dev/md0
+meta-data=/dev/md0               isize=512    agcount=4, agsize=327296 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=1, rmapbt=0
+         =                       reflink=1    bigtime=1 inobtcount=1
+data     =                       bsize=4096   blocks=1309184, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+log      =internal log           bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+[root@localhost ~]# mkdir /raid1
+[root@localhost ~]# mount /dev/md0 /raid1
+[root@localhost ~]#
+
+
+
+[root@localhost ~]# lsblk
+NAME          MAJ:MIN RM  SIZE RO TYPE  MOUNTPOINTS
+sda             8:0    0   30G  0 disk
+├─sda1          8:1    0  600M  0 part  /boot/efi
+├─sda2          8:2    0    1G  0 part  /boot
+└─sda3          8:3    0 28.4G  0 part
+  ├─rhel-root 253:0    0 25.4G  0 lvm   /
+  └─rhel-swap 253:1    0    3G  0 lvm   [SWAP]
+sdb             8:16   0    5G  0 disk
+└─sdb1          8:17   0    5G  0 part
+  └─md0         9:0    0    5G  0 raid1 /raid1
+sdc             8:32   0    5G  0 disk
+└─sdc1          8:33   0    5G  0 part
+  └─md0         9:0    0    5G  0 raid1 /raid1
+sr0            11:0    1  7.9G  0 rom
+[root@localhost ~]#
+
+[root@localhost ~]# df -TH
+Filesystem            Type      Size  Used Avail Use% Mounted on
+devtmpfs              devtmpfs  1.4G     0  1.4G   0% /dev
+tmpfs                 tmpfs     1.5G     0  1.5G   0% /dev/shm
+tmpfs                 tmpfs     571M  8.8M  562M   2% /run
+/dev/mapper/rhel-root xfs        28G  4.5G   23G  17% /
+/dev/sda2             xfs       1.1G  266M  798M  25% /boot
+/dev/sda1             vfat      628M  7.4M  621M   2% /boot/efi
+tmpfs                 tmpfs     286M   54k  285M   1% /run/user/42
+tmpfs                 tmpfs     286M   37k  286M   1% /run/user/0
+/dev/md0              xfs       5.4G   72M  5.3G   2% /raid1
+[root@localhost ~]#
+
+
+[root@localhost ~]# vi /etc/fstab
+
+
+/dev/md0                /raid1          xfs             defaults 0 0
+
+[root@localhost ~]# systemctl daemon-reload
+[root@localhost ~]#
+
+[root@localhost ~]# mdadm --detail /dev/md0
+/dev/md0:
+           Version : 1.2
+     Creation Time : Fri Jul 11 13:53:12 2025
+        Raid Level : raid1
+        Array Size : 5236736 (4.99 GiB 5.36 GB)
+     Used Dev Size : 5236736 (4.99 GiB 5.36 GB)
+      Raid Devices : 2
+     Total Devices : 2
+       Persistence : Superblock is persistent
+
+       Update Time : Fri Jul 11 13:59:00 2025
+             State : clean
+    Active Devices : 2
+   Working Devices : 2
+    Failed Devices : 0
+     Spare Devices : 0
+
+Consistency Policy : resync
+
+              Name : localhost.localdomain:0  (local to host localhost.localdomain)
+              UUID : 990f3c79:cce8465d:b15c558d:997468cd
+            Events : 17
+
+    Number   Major   Minor   RaidDevice State
+       0       8       17        0      active sync   /dev/sdb1
+       1       8       33        1      active sync   /dev/sdc1
+[root@localhost ~]#
+
+
+
+[root@localhost ~]# mdadm -D /dev/md0
+/dev/md0:
+           Version : 1.2
+     Creation Time : Fri Jul 11 13:53:12 2025
+        Raid Level : raid1
+        Array Size : 5236736 (4.99 GiB 5.36 GB)
+     Used Dev Size : 5236736 (4.99 GiB 5.36 GB)
+      Raid Devices : 2
+     Total Devices : 2
+       Persistence : Superblock is persistent
+
+       Update Time : Fri Jul 11 13:59:00 2025
+             State : clean
+    Active Devices : 2
+   Working Devices : 2
+    Failed Devices : 0
+     Spare Devices : 0
+
+Consistency Policy : resync
+
+              Name : localhost.localdomain:0  (local to host localhost.localdomain)
+              UUID : 990f3c79:cce8465d:b15c558d:997468cd
+            Events : 17
+
+    Number   Major   Minor   RaidDevice State
+       0       8       17        0      active sync   /dev/sdb1
+       1       8       33        1      active sync   /dev/sdc1
+[root@localhost ~]#
+
+
+[root@localhost ~]# cat /proc/mdstat
+Personalities : [raid1]
+md0 : active raid1 sdc1[1] sdb1[0]
+      5236736 blocks super 1.2 [2/2] [UU]
+
+unused devices: <none>
+[root@localhost ~]#
+
+
+[root@localhost ~]# mdadm --detail --scan
+ARRAY /dev/md0 metadata=1.2 name=localhost.localdomain:0 UUID=990f3c79:cce8465d:b15c558d:997468cd
+[root@localhost ~]#
+
+[root@localhost ~]# mdadm --detail --scan >> /etc/mdadm.conf
+[root@localhost ~]#
+
+
+
+[root@localhost ~]# cat /etc/mdadm.conf
+ARRAY /dev/md0 metadata=1.2 name=localhost.localdomain:0 UUID=990f3c79:cce8465d:b15c558d:997468cd
+[root@localhost ~]#
+
+[root@localhost ~]# cp -rvf /usr/bin /raid1
+
+
+
+[root@localhost ~]# ls /raid1
+bin
+[root@localhost ~]# df -TH
+Filesystem            Type      Size  Used Avail Use% Mounted on
+devtmpfs              devtmpfs  1.4G     0  1.4G   0% /dev
+tmpfs                 tmpfs     1.5G     0  1.5G   0% /dev/shm
+tmpfs                 tmpfs     571M  8.8M  562M   2% /run
+/dev/mapper/rhel-root xfs        28G  4.5G   23G  17% /
+/dev/sda2             xfs       1.1G  266M  798M  25% /boot
+/dev/sda1             vfat      628M  7.4M  621M   2% /boot/efi
+tmpfs                 tmpfs     286M   54k  285M   1% /run/user/42
+tmpfs                 tmpfs     286M   37k  286M   1% /run/user/0
+/dev/md0              xfs       5.4G  298M  5.1G   6% /raid1
+[root@localhost ~]#
+
+[root@localhost ~]# mdadm --examine /dev/sdc1
+/dev/sdc1:
+          Magic : a92b4efc
+        Version : 1.2
+    Feature Map : 0x0
+     Array UUID : 990f3c79:cce8465d:b15c558d:997468cd
+           Name : localhost.localdomain:0  (local to host localhost.localdomain)
+  Creation Time : Fri Jul 11 13:53:12 2025
+     Raid Level : raid1
+   Raid Devices : 2
+
+ Avail Dev Size : 10473472 sectors (4.99 GiB 5.36 GB)
+     Array Size : 5236736 KiB (4.99 GiB 5.36 GB)
+    Data Offset : 10240 sectors
+   Super Offset : 8 sectors
+   Unused Space : before=10160 sectors, after=0 sectors
+          State : clean
+    Device UUID : 5b93d92f:0bf7cbd0:95713e3b:b56bc65b
+
+    Update Time : Fri Jul 11 14:12:35 2025
+  Bad Block Log : 512 entries available at offset 16 sectors
+       Checksum : 567df107 - correct
+         Events : 17
+
+
+   Device Role : Active device 1
+   Array State : AA ('A' == active, '.' == missing, 'R' == replacing)
+[root@localhost ~]#
+
+
+======================================================================================
+
+How we can offline or remove ffrom any drive and add new
+
+[root@localhost ~]# mdadm /dev/md0 -f /dev/sdc1
+mdadm: set /dev/sdc1 faulty in /dev/md0
+[root@localhost ~]# cat /proc/mdstat
+Personalities : [raid1]
+md0 : active raid1 sdc1[1](F) sdb1[0]
+      5236736 blocks super 1.2 [2/1] [U_]
+
+unused devices: <none>
+[root@localhost ~]#
+
+[root@localhost ~]# mdadm -D /dev/md0
+/dev/md0:
+           Version : 1.2
+     Creation Time : Fri Jul 11 13:53:12 2025
+        Raid Level : raid1
+        Array Size : 5236736 (4.99 GiB 5.36 GB)
+     Used Dev Size : 5236736 (4.99 GiB 5.36 GB)
+      Raid Devices : 2
+     Total Devices : 2
+       Persistence : Superblock is persistent
+
+       Update Time : Fri Jul 11 14:14:53 2025
+             State : clean, degraded
+    Active Devices : 1
+   Working Devices : 1
+    Failed Devices : 1
+     Spare Devices : 0
+
+Consistency Policy : resync
+
+              Name : localhost.localdomain:0  (local to host localhost.localdomain)
+              UUID : 990f3c79:cce8465d:b15c558d:997468cd
+            Events : 19
+
+    Number   Major   Minor   RaidDevice State
+       0       8       17        0      active sync   /dev/sdb1
+       -       0        0        1      removed
+
+       1       8       33        -      faulty   /dev/sdc1
+[root@localhost ~]#
+
+[root@localhost ~]# mdadm /dev/md0 -r /dev/sdc1
+mdadm: hot removed /dev/sdc1 from /dev/md0
+[root@localhost ~]#
+

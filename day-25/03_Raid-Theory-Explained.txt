@@ -1,0 +1,129 @@
+==========================================================================
+
+Raid  [ redundant array of inexpensive drives/disks OR independent Disk ] 
+
+==========================================================================
+
+1- Data Redundancy  ==> DONE 
+2- Data Security    ==>  DONE
+3- data Writting speed ==> DONE
+4- Fault Tolerance  ==> DONE
+
+==========================================================================
+
+1- Before RAID      ==> DONE
+2- After RAID       ==> DONE 
+3- RAID Features    ==> Pending
+4- RAID TYPES       ==> Pending
+5- RAID Levels      ==> Pending
+
+==========================================================================
+
+Types of Data ?
+
+1- Normal Data
+2- Critical Data 
+
+==========================================================================
+
+
+In order to further understand RAID levels, we need to learn the three main glossaries of RAID:
+
+=========================================================
+
+Data Striping: 
+
+                It is a technique for writing and reading data sequentially to more than one storage device. 
+                The blocks of data and then written sequentially to all disks simultaneously into areas called stripes.
+
+
+Disk Mirroring: 
+
+                It creates a mirror image of the information of one disk onto another.
+                The data is written to both disks at the same time, if one disk fails then the mirror 
+                disk can be utilized immediately to provide requested data restore the lost data.
+
+Parity Fault Tolerance:
+    
+                It works by performing a logical operation on the data as it stores it and writing the result 
+                of this operation to either a dedicated disk or on the main data disks.
+
+
+
+
+
+=========================================================
+Raid Levels exaplained with advantage and disadvantages
+
+=========================================================
+=========================================================
+
+Raid-0
+
+Advantages:
+
+1- Performance boost for read and write operations
+
+2- Space is not wasted as the entire volume of the individual disks are 
+   used up to store unique data
+
+Disadvantages
+
+There is no redundancy/duplication of data. If one of the disks fails, the entire 
+data is lost.
+
+====================================================
+
+Raid-1 
+
+Advantages
+
+1- Data can be recovered in case of disk failure
+2- Increased performance for read operation
+
+Disadvantages
+
+1- Slow write performance
+2- Space is wasted by duplicating data which increases the cost per unit memory
+
+
+====================================================
+
+RAID 5
+
+
+Advantages
+
+1- It increased write speed and better data redundancy
+
+Disadvantages
+
+1- Can only handle up to a single disk failure
+
+=====================================================
+
+RAID 6
+
+Advantages
+
+Better data redundancy. Can handle upto 2 failed drives
+
+Disadvantages
+
+Large parity overhead
+
+=====================================================
+
+RAID 10 (RAID 1+0)
+
+Advantages
+usage ==> 50%
+
+1- Very fast performance
+2- Redundancy and fault tolerance
+
+Disadvantages
+
+Cost per unit memory is high since data is mirrored
+
+=====================================================

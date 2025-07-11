@@ -1,0 +1,249 @@
+=========================================================
+
+DISK Partition ====> 
+
+1- using fdisk    ===>  partprobe
+
+2- using parted   ===>  udevadm settle
+
+=========================================================
+
+parted  ===> msdos OR gpt    ==> we need to set first the disk label
+
+fdisk   ===> there is no label by default  ===> it will set automatically DOS disk label but we can change this if we want
+
+=========================================================
+
+[root@localhost ~]# lsblk 
+NAME          MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda             8:0    0   30G  0 disk 
+├─sda1          8:1    0    1G  0 part /boot
+├─sda2          8:2    0 20.6G  0 part 
+│ ├─rhel-root 253:0    0   17G  0 lvm  /
+│ ├─rhel-swap 253:1    0    3G  0 lvm  [SWAP]
+│ ├─rhel-home 253:2    0    2G  0 lvm  /home
+│ └─rhel-var  253:3    0    4G  0 lvm  /var
+└─sda3          8:3    0  8.4G  0 part 
+  ├─rhel-root 253:0    0   17G  0 lvm  /
+  ├─rhel-swap 253:1    0    3G  0 lvm  [SWAP]
+  ├─rhel-home 253:2    0    2G  0 lvm  /home
+  └─rhel-var  253:3    0    4G  0 lvm  /var
+sdb             8:16   0    5G  0 disk 
+sr0            11:0    1 1024M  0 rom  
+
+[root@localhost ~]# which parted  
+/usr/sbin/parted
+[root@localhost ~]# which fdisk 
+/usr/sbin/fdisk
+[root@localhost ~]# rpm -qf  /usr/sbin/parted
+parted-3.4-6.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qf  /usr/sbin/fdisk 
+util-linux-2.37.4-3.el9.x86_64
+[root@localhost ~]# 
+
+[root@localhost ~]# parted  /dev/sda  print
+Model: ATA VMware Virtual S (scsi)
+Disk /dev/sda: 32.2GB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags: 
+
+Number  Start   End     Size    Type     File system  Flags
+ 1      1049kB  1075MB  1074MB  primary  xfs          boot
+ 2      1075MB  23.2GB  22.1GB  primary               lvm
+ 3      23.2GB  32.2GB  9033MB  primary               lvm
+
+[root@localhost ~]# 
+
+[root@localhost ~]# parted  /dev/sdb  print
+Error: /dev/sdb: unrecognised disk label
+Model: ATA VMware Virtual S (scsi)                                        
+Disk /dev/sdb: 5369MB
+Sector size (logical/physical): 512B/512B
+Partition Table: unknown
+Disk Flags: 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+[root@localhost ~]# fdisk  /dev/sdb 
+
+Welcome to fdisk (util-linux 2.37.4).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+Device does not contain a recognized partition table.
+Created a new DOS disklabel with disk identifier 0x99a198d6.
+
+Command (m for help): n
+Partition type
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (1-4, default 1): 1
+First sector (2048-10485759, default 2048): 
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-10485759, default 10485759): +1G
+
+Created a new partition 1 of type 'Linux' and of size 1 GiB.
+
+Command (m for help): w
+The partition table has been altered.
+Calling ioctl() to re-read partition table.
+Syncing disks.
+
+[root@localhost ~]# partprobe  /dev/sdb
+[root@localhost ~]# 
+
+
+Suppose if we want to perform these steps  using parted command  
+
+
+[root@localhost ~]# lsblk  |  grep disk 
+sda             8:0    0   30G  0 disk 
+sdb             8:16   0    5G  0 disk 
+sdc             8:32   0    5G  0 disk 
+[root@localhost ~]# 
+[root@localhost ~]# fdisk -l  /dev/sdc
+Disk /dev/sdc: 5 GiB, 5368709120 bytes, 10485760 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+[root@localhost ~]# 
+[root@localhost ~]# parted   /dev/sdc print  
+Error: /dev/sdc: unrecognised disk label
+Model: ATA VMware Virtual S (scsi)                                        
+Disk /dev/sdc: 5369MB
+Sector size (logical/physical): 512B/512B
+Partition Table: unknown
+Disk Flags: 
+[root@localhost ~]# 
+[root@localhost ~]# parted   /dev/sdc mklabel msdos 
+Information: You may need to update /etc/fstab.
+
+[root@localhost ~]#                                                       
+[root@localhost ~]# parted   /dev/sdc print  
+Model: ATA VMware Virtual S (scsi)
+Disk /dev/sdc: 5369MB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags: 
+
+Number  Start  End  Size  Type  File system  Flags
+
+[root@localhost ~]# 
+[root@localhost ~]# fdisk -l    /dev/sdc 
+Disk /dev/sdc: 5 GiB, 5368709120 bytes, 10485760 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x59055bc9
+[root@localhost ~]# 
+
+
+[root@localhost ~]# parted  /dev/sdc 
+GNU Parted 3.4
+Using /dev/sdc
+Welcome to GNU Parted! Type 'help' to view a list of commands.
+(parted) help
+(parted) print 
+Model: ATA VMware Virtual S (scsi)
+Disk /dev/sdc: 5369MB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags: 
+
+Number  Start  End  Size  Type  File system  Flags
+
+(parted)            
+(parted) 
+(parted) mkpart                                                           
+Partition type?  primary/extended? primary                               
+File system type?  [ext2]? xfs
+Start? 2048s                                                              
+End? 1GB
+(parted)                                                                  
+(parted) print                                                            
+Model: ATA VMware Virtual S (scsi)
+Disk /dev/sdc: 5369MB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags: 
+
+Number  Start   End     Size   Type     File system  Flags
+ 1      1049kB  1000MB  999MB  primary  xfs          lba
+
+(parted)  
+
+(parted) quit                                                             
+Information: You may need to update /etc/fstab.
+
+[root@localhost ~]#                                                       
+[root@localhost ~]# 
+[root@localhost ~]# udevadm settle  
+[root@localhost ~]# 
+        [root@localhost ~]# mkdir  /data  
+[root@localhost ~]# 
+[root@localhost ~]# mount /dev/sdc1  /data
+[root@localhost ~]# 
+            
+=========================================================================
+
+create one more partition using parted command  
+
+=========================================================================
+[root@localhost ~]# parted   /dev/sdc
+GNU Parted 3.4
+Using /dev/sdc
+Welcome to GNU Parted! Type 'help' to view a list of commands.
+(parted) print                                                            
+Model: ATA VMware Virtual S (scsi)
+Disk /dev/sdc: 5369MB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags: 
+
+Number  Start   End     Size   Type     File system  Flags
+ 1      1049kB  1000MB  999MB  primary  xfs
+
+(parted)                                                                  
+(parted) 
+(parted) mkpart                                                           
+Partition type?  primary/extended? primary                                
+File system type?  [ext2]? linux-swap
+Start? 1000MB                                                             
+End? 2048MB                                                               
+(parted)                                                                  
+(parted) print                                                            
+Model: ATA VMware Virtual S (scsi)
+Disk /dev/sdc: 5369MB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags: 
+
+Number  Start   End     Size    Type     File system     Flags
+ 1      1049kB  1000MB  999MB   primary  xfs
+ 2      1000MB  2048MB  1048MB  primary  linux-swap(v1)  lba
+  
+
+(parted) mkpart                                                           
+Partition type?  primary/extended? primary                                
+File system type?  [ext2]? xfs                                            
+Start? 2048MB                                                             
+End? 2500MB                                                               
+(parted)                                                                  
+(parted) print    
+
+
+[root@localhost ~]# fdisk -l  /dev/sdd                      
+Disk /dev/sdd: 5 GiB, 5368709120 bytes, 10485760 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0xddf40b0d
+          

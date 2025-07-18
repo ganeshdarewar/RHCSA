@@ -1,0 +1,643 @@
+======================================================================================
+
+ Networking Concept Theory Session 
+
+======================================================================================
+
+Before Network Configuration Between two or more machines ?
+
+
+We need to Understand About Network devices and IP Address Concept ?
+
+======================================================================================
+
+machine [H/W] set of devices  <=== Operating system <== Applications
+
+Machine-1  <== OS  <== Application 
+
+
+Machine-2  <== OS  <== Application 
+
+======================================================================================
+
+
+
+
+
+1- Machine ==> desktop/laptop/Rack mounted server/Tower Machine/Virtual Machine/Cloud based machine    
+2- motherboard
+3- NIC/Virtual NIC	
+4- RJ45 Connector
+5- Ethernet Cable ==>  we can connect max only two computer 
+6- Hub/Switch 
+
+======================================================================================
+
+machine  <=== OS   <== Application    <=== machine-1  machine-2 machine-3  ==> communication
+
+we need networking between these machine 
+
+======================================================================================
+======================================================================================
+
+
+
+
+7- How these machine can communicate with each other ?
+
+8- MAC address 
+
+9- IP ADDRESS  ==> IP-V4 and IP-V6
+
+10- classes
+
+11- private ip and public ip
+
+12- subnet mask
+
+13- router/gateway/DNS/DHCP concept
+
+14- How we can test network between two or more machine.
+
+======================================================================================
+
+15- Network  configuration between two or more machines ?
+
+======================================================================================
+======================================================================================
+
+Machine to machine ==> communication ==> without networking it's not possible
+
+======================================================================================
+
+
+
+Machine-1  <===  RHEL-8 OS   <=== n number of services or application or tools
+
+Machine-2  <===  RHEL-8 OS
+
+Machine-3  <===  CENTOS 8 OS
+
+Machine-4  <===  Ubuntu Linux
+
+Machine-5  <===  Windows
+
+======================================================================================
+
+
+Gaurav   ==> samsung  mobile  <=== inbuilt  Android    + SIM [ number ]
+
+Rohit    ==> VIVO  mobile     <=== ibnuilt  Android    + SIM [ number ]
+
+
+user1   =====> call ==> connect  ==> user2
+
+user2   =====> call ==> connect  ==> user1
+
+
+====================================================================================== eth0   eth1 
+
+Types of Machine ?
+
+1- physical machine
+2- Virtual machine
+3- Cloud based machine  ==> AWS Azure Google Cloud other vendors
+
+======================================================================================
+# ifconfig OR # ip address   ==> Port  ===>  interface name  ==> MAC address + IP address
+                                           
+# ipconfig
+
+
+Machine-1               Machine-2
+
+OS                        OS
+
+
+wants to communicate ===> IP  Address 
+
+======================================================================================
+Ethernet Card
+NIC card        <=== personal   <== MAC address     <=== Address [ IP address  ]
+LAN Card
+======================================================================================
+
+Address  ===>
+
+1- Physical address  ==> MAC  address 
+
+
+2- Logical Address   ==> IP-V4  and  IP-V6
+
+======================================================================================
+
+# ifconfig     OR  # ip  address  OR  # ip  a  OR  # ip addr show    ==> for linux   
+# ipconfig  ==> in windows
+
+ 
+==> LAN Card or NIC Card OR Ethernet card  Name
+
+==> IP 	
+
+==> Physical address   ==> MAC address 
+
+======================================================================================
+NIC
+Ethernet Cable
+RJ45 Connector
+Cross Cable  ==> two computers
+HUB      ==> in current markets it's not a recommened device
+SWITCH   ==> highly recommended device in production setup
+
+======================================================================================
+RHEL-9   ==> MAC address  <=== IP-V4  OR  IP-V6
+======================================================================================
+
+IP Address   OR Internet Protocol address 
+
+======================================================================================
+
+Internet  ==> Bombay
+
+Home machine  ==> internet ==>
+
+Internet     <====> Internet
+
+======================================================================================
+
+IP Address
+
+Two types of IP Address
+
+
+1- Private IP address Range   ===> LAN   ==> Free IP Range
+
+2- Public IP address Range    ===> WAN   ==> PAID IP
+
+
+====================================================================================== IP addrsss -===> valid range 
+IANA  ===> IP address  ==> Rules 
+======================================================================================
+ # ifconfig 
+
+MAC address {Media Access Control}  
+
+===>   6 Block 
+===>   each block is seperated by  :   symbol 
+===>   8 bit  ==> per block 
+===>   8 * 6  ==> 48 Bit address
+===>   Addressing  ==> Hexa decimal   ==>  ( A-F, 0-9)16
+
+======================================================================================
+
+binary
+
+0  ==> off bit
+1  ==> on  bit
+
+======================================================================================
+
+IP address   ==> IP-V4
+
+===>   4 Block 
+===>   each block is seperated by  .   symbol 
+===>   8 bit  ==> per block 
+===>   8 * 4  ==> 32 Bit address
+===>   Addressing  ==> decimal   ==>  ( 0-9 )10
+
+======================================================================================
+
+block1.block2.block3.block4
+
+8000.9000.6000.20000  ==> IP wrong 
+
+
+8     8    8    8
+
+======================================================================================
+
+00000000   ==>  0
+
+11111111   ==> 255
+
+
+
+1  1  1   1   1   1  1    1   ==> 11111111
+1  2  4   8  16  32  64  128  ==> 255 
+
+======================================================================================
+0   to  255  ==> always called valid IP
+
+192.168.1.1  ==> Valid IP
+
+192.168.1.5000  ==> not a valid IP
+700.800.900.600 ==> not a valid IP
+
+======================================================================================
+
+IP address    ==> IP-V6
+
+===>   8 Block 
+===>   each block is seperated by  :   symbol 
+===>   16 bit  ==> per block 
+===>   8 * 16  ==> 128 Bit address
+===>   Addressing  ==> Hexadecimal   ==>  ( 0-9, A-F )16
+
+
+
+======================================================================================
+IANA  ===> IP address  ==> Rules
+======================================================================================
+Bit  ==> 0   ==>  off bit
+     ==> 1   ==>   on bit
+
+8.8.8.8     ==> 32 Bit 
+
+
+00000000   ==>      0
+11111111   ==>    255
+
+
+======================================================================================
+======================================================================================
+Classes 
+
+A     ==>  0 -  126
+
+B     ==>  128 - 191
+
+C     ==>  192 - 223
+
+D     ==>  224 - 239
+
+E     ==>  240 - 255
+
+======================================================================================
+Computer  ==> NIC  ==> default IP ==> loop Back address or local ip  ==> 127.0.0.1
+======================================================================================
+one to one    ==> A B C
+one to many   ==> D
+many to many  ==> E
+======================================================================================
+A - C  Class
+======================================================================================
+
+Types of IP
+
+1- Free IP range  OR private IP or internal network 
+2- Paid IP Range  OR public IP
+
+
+
+======================================================================================
+Private IP Address Range
+
+A    ==>  10.0.0.0    to  10.255.255.255
+
+B    ==>  172.16.0.0  to  172.31.255.255
+
+C    ==>  192.168.0.0  to  192.168.255.255  
+
+
+======================================================================================
+
+11.1.1.2      ==> Class A  ==> public IP
+10.0.0.1      ==> Class A  ==> private IP
+10.56.70.300  ==> Class A  ==> not a valid ip
+         
+======================================================================================
+
+172.10.0.1   ==> Class B  ==> public IP
+172.16.0.1   ==> CLass B  ==> private IP
+172.32.10.1  ==> Class B  ==> public IP
+172.25.250.11  ==> Class B  ==> Private IP
+171.25.250.1   ==> Class B  ==> public IP
+======================================================================================
+
+192.168.0.1   ==> Class C   ==>  Private IP
+
+192.170.10.11  ==> CLass C  ==> Public Range
+
+192.168.1.1    ==> Class C  ==> private Range
+
+191.168.1.1    ==> Class B  ==> public 
+
+======================================================================================
+
+Subnet Mask  ===>   N  ==> Network ID     H ==> Host ID
+
+A    ==> N.H.H.H
+
+B    ==> N.N.H.H
+
+C    ==> N.N.N.H
+
+======================================================================================
+
+default subnet mask
+
+A ==>  255.0.0.0
+
+B ==>  255.255.0.0
+
+C ==>  255.255.255.0
+
+======================================================================================
+
+10.0.0.1      OR   10.0.0.1/8
+255.0.0.0
+
+8.8.8.8
+255.0.0.0
+8   0 0 0   ==>   32 - 24  ==> 8 OR 255.0.0.0
+
+======================================================================================
+
+172.25.0.11  OR  172.25.0.11/16  
+255.255.0.0
+
+192.168.0.10  OR   192.168.0.10/24
+255.255.255.0
+
+====================================================================================== 
+/8    <==> 255.0.0.0
+/16   <==> 255.255.0.0
+/24   <==> 255.255.255.0
+
+
+======================================================================================
+what is the us of ping command ===> used to check connectivity between two or more machine
+======================================================================================
+ping OR communicate
+======================================================================================
+1- Class should be same
+2- network ID block numbers also should be same
+======================================================================================
+3- Router  ==> use to communication between two or more different network and classes
+======================================================================================
+Machine-1          Machine-2
+
+192.168.0.10      192.168.0.20     ===>    YES
+
+192.168.1.10      192.168.1.20     ===>    YES
+
+192.168.1.20      192.168.2.20     ===>    NO
+
+10.0.0.1          10.11.12.13      ===>    YES
+
+172.25.10.11      172.24.10.12     ===>    NO
+
+10.0.0.1          192.168.0.11     ===>    NO    ==> we need to configure router with routing 
+
+10.0.0.1          11.12.12.14      ===>    NO
+
+192.168.10.11     192.168.11.12    ===>    NO
+
+
+======================================================================================
+
+
+Personal Practise ==> Same Class  +  same network ID
+
+======================================================================================
+Machine-1      192.168.0.10/24    ==> node-1    Server
+
+                                         YES
+
+machine-2      192.168.0.20/24    ==> node-2    Client
+
+
+Node1   ===> Node2  ===> PING  ===> YES
+Node2   ===> Node1  ===> PING  ===> YES
+======================================================================================
+
+
+
+
+
+192.168.0.0    ==> network address
+
+192.168.0.1
+192.168.0.2
+192.168.0.3   ==> Valid IP or HOST ID
+
+...........
+
+192.168.0.254
+
+192.168.0.255  ===> Broadcast address
+
+======================================================================================
+
+192.168.1.0    ==> network address
+
+192.168.1.1
+192.168.1.2
+...........
+192.168.1.254
+192.168.1.255
+
+======================================================================================
+192.168.2.0    
+192.168.2.1
+192.168.2.2
+192.168.2.254
+192.168.2.255
+======================================================================================
+192.168.0.0
+   TO
+192.168.255.255
+
+192.168.0.0  to 192.168.255.255
+
+10.0.0.0
+10.0.0.1
+10.0.0.2
+........
+10.0.0.254
+10.0.0.255
+======================================================================================
+10.0.1.0
+10.0.1.1
+10.0.1.2
+........
+........
+10.255.255.255
+
+
+10.0.0.0  to 10.255.255.255
+
+======================================================================================
+======================================================================================
+
+without changing the network ID block
+
+
+A ==> number of host  ==> 2 power offbit - 2  ==>     1,67,77,214
+
+B ==> number of host  ==>        65,534
+
+C ==> number of host  ==>           254
+
+======================================================================================
+
+What is the Use of Router ? ==>
+
+What is the use of Firewall ? 
+
+ 1- H/W based Firewall   2- Software Firewalls OR OS based Firewalls OR host based Firewalls
+
+Use to manage the incoming and outgoing traffic
+
+
+
+
+
+======================================================================================
+1- Switch
+2- Router
+3- Firewalls
+======================================================================================
+======================================================================================
+Theory Completed
+======================================================================================
+
+machine-1    ==> ip + subnet    ==> same class + same network
+          
+
+machine-2    ==> ip  + subnet   ==> same class + same network  
+
+
+
+ping  ==> YES
+
+======================================================================================
+
+
+
+
+
+
+Why we are not using gateway ip in this case ?
+
+
+======================================================================================
+
+Types Class  ==> Choice ==> A  B  C
+
+======================================================================================
+
+Types of IP assigning method on any computer ?
+
+1- manual configuration  ==> always assign by any system admin/desktop admin
+
+2- automatic IP configuration using DHCP server/protocol  ==> IP RANGE
+
+Dynamic Host configuration Protocol
+
+Interface card  ==> ip get or ip assign ==> two  ==> 1- manual  2- automatic ==> IP
+
+DHCP 
+
+1- Device
+2- OS
+
+
+DHCP always works on DORA process.
+
+======================================================================================
+======================================================================================
+
+
+
+
+IP Address ==> DHCP
+
+1- ip address
+2- subnet mask
+3- gateway 
+
+======================================================================================
+
+Lease time or interval time ===> DHCP reservation OR MAC binding or MAC reservation ==> to provide fixed IP on any ethernet 
+                                 after expire interval time
+======================================================================================
+
+DHCP ? Dynamic Host Configuration protocol
+
+
+DNS ?  Domain name System
+
+
+machine-1   ==> Hostname   [Optional]
+            ==> IP address [mandatory]
+
+IP to IP  ==> YES      ==> there is no need to configure DNS
+
+name  to Name ==> NO
+
+
+Name to IP  and IP to Name   ==> reach    ==> using DNS Concept  
+
+==> DNS  is an optional service
+
+NAME to IP and IP to name  ==> mapping OR communication  ==> you need DNS server
+
+
+1- /etc/hosts        ===> without dns examples
+2- /etc/resolv.conf  ===> with DNS examples  ===> 1- Primary DNS   2- Secondary DNS
+====================================================================================== 
+Basic TERMS
+======================================================================================
+======================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

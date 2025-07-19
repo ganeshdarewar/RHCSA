@@ -1,0 +1,26 @@
+========================================================================================
+
+
+How we can get IP from Available DHCP server ?  OR how we can connect this machine with Internet ?
+
+
+[root@node10 ~]# nmcli connection add con-name ens160  ifname ens160 type ethernet autoconnect yes 
+
+[root@node10 ~]# ip r
+default via 192.168.211.2 dev ens160 proto dhcp metric 100
+192.168.211.0/24 dev ens160 proto kernel scope link src 192.168.211.131 metric 100
+[root@node10 ~]#
+
+========================================================================================
+
+How we can set these all things manually using command line OR how we can connect this machine without DHCP Settings (Here you have to perform above task first find out which range your DHCP is configured  )
+
+IP Address  ===> 192.168.211.131
+NETMASK     ===> 255.255.255.0  OR  /24
+GATEWAY     ===> 192.168.211.2
+DNS1        ===> 192.168.211.2
+DNS2        ===> 8.8.8.8
+
+hostname ===> node10.example.com 
+
+===================================================================================

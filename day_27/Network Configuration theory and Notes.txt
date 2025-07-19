@@ -1,0 +1,1393 @@
+==================================================================================
+
+Objective:-1  Before network Configuration ==> Theory Concept
+
+Objective:-2  How we can configure network between two or more machines ?
+
+================================================================================== 
+
+Machine-1     192.168.0.10/24  
+
+
+Machine-2     192.168.0.20/24
+
+
+By default Rule 
+
+
+IP to IP  ==> ping  ==> YES
+
+1- manually as per need choice we can define OR set the system IP
+2- we can get OR take IP from any running OR available DHCP server
+
+==================================================================================
+
+[root @ localhost ~ ] #
+
+
+Computer name or machine name OR hostname
+
+==================================================================================
+
+
+# ssh root@192.168.0.10
+
+[ root @ nokia-uk-server ~ ] #
+
+==================================================================================
+Machine ==> IP Configuration
+        ==> Hostname configuration  ==> Optional but it is recommended practise   ==> default hostname  ==> localhost.localdomain
+
+1- hostname  and  /etc/sysconfig/network    ==> Till rhel-6
+
+2- hostnamectl  [by rhel-7-8-9]   OR   /etc/hostname  
+
+
+
+hostname ==> Rules  ==>   FQ.DN (Fully Qualified Domain Name)
+
+node1.nokia.com
+node2.nokia.com
+
+pc1.hcl.com
+pc2.hcl.com
+
+max-hostpital-pc1.max.com
+max-hostpital-pc2.max.com
+
+Machine-1   ====>    station10.example.com     192.168.0.10/24
+machine-2   ====>    station20.example.com     192.168.0.20/24
+
+
+
+==================================================================================
+Rule:-1   IP to IP     ===> PING  ===> YES    
+
+Rule-2    NAME to NAME ===> PING  ===> NO
+
+
+Choice-1 without DNS server how we can machine with hostname to hostname ===>  /etc/hosts 
+
+Choice-2 with DNS Server Concept                                         ===>  /etc/resolv.conf   
+
+==================================================================================
+==================================================================================
+
+
+1- During the OS installation time   ==> YES
+
+2- After the OS installation ==> yes we can configure  1-  using command line 2- using direct file method  3- GUI based 
+
+
+
+interface ===> Choice-1  always try to get IP using any available DHCP server in our network.
+               Choice-2  administrator again can change the IP as per need   ==> 1- using DHCP [automatic from any given range in DHCP]
+                                                                                 2- manual configuration [static]
+
+==================================================================================
+
+==================================================================================
+# ping     IP-V4
+# ping6    IP-V6
+
+
+A ping (Packet Internet or Inter-Network Groper) is a basic Internet program that allows a user to test and verify if a particular destination IP address exists and can accept requests in computer network administration.
+
+==================================================================================
+# ping 192.168.0.20    ==> YES
+# ping station20.example.com  ==> default ans is NO ==>
+
+How we can communicate machines with hostname ?
+
+1- Without DNS concept  ===>  /etc/hosts   ==> local to local  ==> name to IP and IP to name communication
+
+2- With DNS Concept     ===>  /etc/resolv.conf ==> 1- Primary OR master  DNS server   2- Secondary OR Slave DNS server 
+
+================================================================================== 
+
+In home setup  ==> using  /etc/hosts file
+
+==================================================================================
+
+
+
+Network Configuration ?
+
+
+VM-1    192.168.0.10/24       node10.example.com
+
+VM-2    192.168.0.20/24       node20.example.com
+
+
+
+
+==================================================================================
+ON VM-1
+
+[root@localhost ~]# hostname
+localhost.localdomain
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# hostnamectl 
+   Static hostname: n/a                                     
+Transient hostname: localhost
+         Icon name: computer-vm
+           Chassis: vm 🖴
+        Machine ID: 5997fb93d3b14920bf29f2b718104fcf
+           Boot ID: 733c119e38e64f64a5f7402395bc1571
+    Virtualization: vmware
+  Operating System: Red Hat Enterprise Linux 9.0 (Plow)     
+       CPE OS Name: cpe:/o:redhat:enterprise_linux:9::baseos
+            Kernel: Linux 5.14.0-70.13.1.el9_0.x86_64
+      Architecture: x86-64
+   Hardware Vendor: VMware, Inc.
+    Hardware Model: VMware Virtual Platform
+[root@localhost ~]# 
+[root@localhost ~]# hostnamectl set-hostname  node10.example.com 
+[root@localhost ~]# 
+[root@localhost ~]# cat  /etc/hostname 
+node10.example.com
+[root@localhost ~]# 
+
+[root@node10 ~]# hostname
+node10.example.com
+[root@node10 ~]# 
+[root@node10 ~]# 
+
+Howw we can configure system IP
+
+[root@node10 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.104  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::20c:29ff:fe64:e1ad  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:64:e1:ad  txqueuelen 1000  (Ethernet)
+        RX packets 7537  bytes 3486498 (3.3 MiB)
+        RX errors 0  dropped 1292  overruns 0  frame 0
+        TX packets 3169  bytes 367571 (358.9 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 18  bytes 2112 (2.0 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 18  bytes 2112 (2.0 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@node10 ~]# 
+
+[root@node10 ~]# nmcli connection show 
+NAME    UUID                                  TYPE      DEVICE 
+ens160  475dd1fc-48c0-3187-83a1-8d644d015184  ethernet  ens160 
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection delete ens160
+Connection 'ens160' (475dd1fc-48c0-3187-83a1-8d644d015184) successfully deleted.
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection show 
+
+[root@node10 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        ether 00:0c:29:64:e1:ad  txqueuelen 1000  (Ethernet)
+        RX packets 7978  bytes 3550687 (3.3 MiB)
+        RX errors 0  dropped 1377  overruns 0  frame 0
+        TX packets 3385  bytes 395361 (386.0 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 34  bytes 3648 (3.5 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 34  bytes 3648 (3.5 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@node10 ~]# 
+[root@node10 ~]# cat /etc/redhat-release 
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@node10 ~]# 
+[root@node10 ~]# ls /etc/NetworkManager/system-connections
+ens160.nmconnection
+
+
+[root@node10 ~]# nmcli connection add con-name ens160 ifname ens160 type ethernet autoconnect yes ip4 192.168.0.10/24
+Connection 'ens160' (7a1253d2-8072-433e-8faa-3306fc4cf171) successfully added.
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection show 
+NAME    UUID                                  TYPE      DEVICE 
+ens160  7a1253d2-8072-433e-8faa-3306fc4cf171  ethernet  ens160 
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.10  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::b6bd:e5f4:7f08:5d0e  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:64:e1:ad  txqueuelen 1000  (Ethernet)
+        RX packets 8171  bytes 3566404 (3.4 MiB)
+        RX errors 0  dropped 1452  overruns 0  frame 0
+        TX packets 3410  bytes 398408 (389.0 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+[root@node10 ~]# cat  /etc/NetworkManager/system-connections/ens160.nmconnection 
+
+
+[root@node10 ~]# hostname
+node10.example.com
+[root@node10 ~]# 
+[root@node10 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.10  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::b6bd:e5f4:7f08:5d0e  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:64:e1:ad  txqueuelen 1000  (Ethernet)
+        RX packets 8236  bytes 3572199 (3.4 MiB)
+        RX errors 0  dropped 1474  overruns 0  frame 0
+        TX packets 3412  bytes 398532 (389.1 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 50  bytes 5184 (5.0 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 50  bytes 5184 (5.0 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@node10 ~]# 
+
+=============================================================================
+
+VM-2
+
+
+[root@localhost ~]# hostname
+localhost.localdomain
+[root@localhost ~]# 
+[root@localhost ~]# hostnamectl set-hostname node20.example.com
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# cat /etc/hostname 
+node20.example.com
+[root@localhost ~]# 
+
+[root@localhost ~]# bash     [ to refresh my login env settings without logout from the terminal]
+[root@node20 ~]# 
+[root@node20 ~]# 
+
+
+[root@node20 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.106  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::20c:29ff:fe4c:bd0d  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:4c:bd:0d  txqueuelen 1000  (Ethernet)
+        RX packets 3681  bytes 3549675 (3.3 MiB)
+        RX errors 0  dropped 373  overruns 0  frame 0
+        TX packets 2637  bytes 168037 (164.0 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 20  bytes 2222 (2.1 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 20  bytes 2222 (2.1 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@node20 ~]# nmcli connection show 
+NAME    UUID                                  TYPE      DEVICE 
+ens160  bdbe4d6a-1811-3adc-9447-a444133d40de  ethernet  ens160 
+[root@node20 ~]# 
+[root@node20 ~]# nmcli c  s  
+NAME    UUID                                  TYPE      DEVICE 
+ens160  bdbe4d6a-1811-3adc-9447-a444133d40de  ethernet  ens160 
+[root@node20 ~]# 
+[root@node20 ~]# nmcli connection delete ens160 
+Connection 'ens160' (bdbe4d6a-1811-3adc-9447-a444133d40de) successfully deleted.
+[root@node20 ~]# 
+[root@node20 ~]# 
+[root@node20 ~]# nmcli connection show 
+
+[root@node20 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        ether 00:0c:29:4c:bd:0d  txqueuelen 1000  (Ethernet)
+        RX packets 3717  bytes 3552662 (3.3 MiB)
+        RX errors 0  dropped 388  overruns 0  frame 0
+        TX packets 2653  bytes 169406 (165.4 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 20  bytes 2222 (2.1 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 20  bytes 2222 (2.1 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@node20 ~]# nmcli connection add con-name ens160 ifname ens160 type ethernet autoconnect yes ip4 192.168.0.20/24
+Connection 'ens160' (c9abae65-9c23-49e2-b447-9f69e08b8181) successfully added.
+[root@node20 ~]# 
+[root@node20 ~]# nmcli connection show 
+NAME    UUID                                  TYPE      DEVICE 
+ens160  c9abae65-9c23-49e2-b447-9f69e08b8181  ethernet  ens160 
+[root@node20 ~]# 
+[root@node20 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.20  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::c89c:3eb1:cbb6:a2f9  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:4c:bd:0d  txqueuelen 1000  (Ethernet)
+        RX packets 3755  bytes 3555969 (3.3 MiB)
+        RX errors 0  dropped 413  overruns 0  frame 0
+        TX packets 2678  bytes 172453 (168.4 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 20  bytes 2222 (2.1 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 20  bytes 2222 (2.1 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@node20 ~]# hostname
+node20.example.com
+[root@node20 ~]# 
+[root@node20 ~]# ifconfig ens160 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.20  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::c89c:3eb1:cbb6:a2f9  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:4c:bd:0d  txqueuelen 1000  (Ethernet)
+        RX packets 3761  bytes 3556528 (3.3 MiB)
+        RX errors 0  dropped 418  overruns 0  frame 0
+        TX packets 2679  bytes 172515 (168.4 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@node20 ~]# 
+[root@node20 ~]# ifconfig lo
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 20  bytes 2222 (2.1 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 20  bytes 2222 (2.1 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+================================================================
+
+VM-1   hostname and IP is ready
+
+VM-2   hostname and IP is ready
+
+================================================================
+
+How we can test these machine using ping command is it we are in network or not  ?
+
+
+
+[root@node20 ~]# which ping 
+/usr/bin/ping
+[root@node20 ~]# 
+[root@node20 ~]# 
+
+method:-1  IP to IP Testing  
+
+[root@node20 ~]# ping 192.168.0.10
+
+[root@node20 ~]# ping 192.168.0.10
+PING 192.168.0.10 (192.168.0.10) 56(84) bytes of data.
+64 bytes from 192.168.0.10: icmp_seq=1 ttl=64 time=0.797 ms
+64 bytes from 192.168.0.10: icmp_seq=2 ttl=64 time=0.399 ms
+64 bytes from 192.168.0.10: icmp_seq=3 ttl=64 time=0.530 ms
+
+
+Press CTRL + C 
+
+[root@node20 ~]# ping -c  5   192.168.0.10
+PING 192.168.0.10 (192.168.0.10) 56(84) bytes of data.
+64 bytes from 192.168.0.10: icmp_seq=1 ttl=64 time=0.438 ms
+64 bytes from 192.168.0.10: icmp_seq=2 ttl=64 time=0.335 ms
+64 bytes from 192.168.0.10: icmp_seq=3 ttl=64 time=0.554 ms
+64 bytes from 192.168.0.10: icmp_seq=4 ttl=64 time=0.392 ms
+64 bytes from 192.168.0.10: icmp_seq=5 ttl=64 time=0.331 ms
+
+--- 192.168.0.10 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4105ms
+rtt min/avg/max/mdev = 0.331/0.410/0.554/0.082 ms
+[root@node20 ~]# 
+[root@node20 ~]# ping -c  1   192.168.0.10
+PING 192.168.0.10 (192.168.0.10) 56(84) bytes of data.
+64 bytes from 192.168.0.10: icmp_seq=1 ttl=64 time=0.381 ms
+
+--- 192.168.0.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.381/0.381/0.381/0.000 ms
+[root@node20 ~]# 
+
+[root@node10 ~]# ping 192.168.0.20
+PING 192.168.0.20 (192.168.0.20) 56(84) bytes of data.
+64 bytes from 192.168.0.20: icmp_seq=1 ttl=64 time=0.377 ms
+64 bytes from 192.168.0.20: icmp_seq=2 ttl=64 time=0.325 ms
+64 bytes from 192.168.0.20: icmp_seq=3 ttl=64 time=0.360 ms
+^C
+--- 192.168.0.20 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2039ms
+rtt min/avg/max/mdev = 0.325/0.354/0.377/0.021 ms
+[root@node10 ~]# 
+
+================================================================
+Optional  ?
+
+method:-2  hostname to hostname testing  
+
+
+[root@node10 ~]# ping node20.example.com 
+ping: node20.example.com: Name or service not known
+[root@node10 ~]# 
+[root@node10 ~]# ping 127.0.0.1
+PING 127.0.0.1 (127.0.0.1) 56(84) bytes of data.
+64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.089 ms
+64 bytes from 127.0.0.1: icmp_seq=2 ttl=64 time=0.038 ms
+^C
+--- 127.0.0.1 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1053ms
+rtt min/avg/max/mdev = 0.038/0.063/0.089/0.025 ms
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# ping localhost
+PING localhost(localhost (::1)) 56 data bytes
+64 bytes from localhost (::1): icmp_seq=1 ttl=64 time=0.060 ms
+64 bytes from localhost (::1): icmp_seq=2 ttl=64 time=0.094 ms
+^C
+--- localhost ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1060ms
+rtt min/avg/max/mdev = 0.060/0.077/0.094/0.017 ms
+
+[root@node10 ~]# 
+[root@node10 ~]# vim /etc/hosts  
+
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+
+
+192.168.0.10    node10.example.com  node10  machine10
+192.168.0.20    node20.example.com  node20  machine20
+
+
+:wq!
+[root@node10 ~]# ping node10.example.com
+PING node10.example.com (192.168.0.10) 56(84) bytes of data.
+64 bytes from node10.example.com (192.168.0.10): icmp_seq=1 ttl=64 time=0.043 ms
+64 bytes from node10.example.com (192.168.0.10): icmp_seq=2 ttl=64 time=0.043 ms
+64 bytes from node10.example.com (192.168.0.10): icmp_seq=3 ttl=64 time=0.044 ms
+64 bytes from node10.example.com (192.168.0.10): icmp_seq=4 ttl=64 time=0.035 ms
+64 bytes from node10.example.com (192.168.0.10): icmp_seq=5 ttl=64 time=0.113 ms
+64 bytes from node10.example.com (192.168.0.10): icmp_seq=6 ttl=64 time=0.044 ms
+^C
+--- node10.example.com ping statistics ---
+6 packets transmitted, 6 received, 0% packet loss, time 5138ms
+rtt min/avg/max/mdev = 0.035/0.053/0.113/0.026 ms
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# ping node20.example.com
+PING node20.example.com (192.168.0.20) 56(84) bytes of data.
+64 bytes from node20.example.com (192.168.0.20): icmp_seq=1 ttl=64 time=0.408 ms
+64 bytes from node20.example.com (192.168.0.20): icmp_seq=2 ttl=64 time=0.367 ms
+^C
+--- node20.example.com ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1027ms
+rtt min/avg/max/mdev = 0.367/0.387/0.408/0.020 ms
+[root@node10 ~]# 
+[root@node10 ~]# ping node20
+PING node20.example.com (192.168.0.20) 56(84) bytes of data.
+64 bytes from node20.example.com (192.168.0.20): icmp_seq=1 ttl=64 time=0.801 ms
+64 bytes from node20.example.com (192.168.0.20): icmp_seq=2 ttl=64 time=0.375 ms
+^C
+--- node20.example.com ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1032ms
+rtt min/avg/max/mdev = 0.375/0.588/0.801/0.213 ms
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# ping machine20
+PING node20.example.com (192.168.0.20) 56(84) bytes of data.
+64 bytes from node20.example.com (192.168.0.20): icmp_seq=1 ttl=64 time=0.380 ms
+64 bytes from node20.example.com (192.168.0.20): icmp_seq=2 ttl=64 time=0.640 ms
+^C
+--- node20.example.com ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1011ms
+rtt min/avg/max/mdev = 0.380/0.510/0.640/0.130 ms
+[root@node10 ~]# 
+
+[root@node10 ~]# hostname
+node10.example.com
+[root@node10 ~]# 
+[root@node10 ~]# hostname  -i 
+192.168.0.10
+[root@node10 ~]# hostname  -a
+node10 machine10
+[root@node10 ~]# 
+[root@node10 ~]# hostname  -d
+example.com
+[root@node10 ~]# hostname  -s
+node10
+[root@node10 ~]# hostname  -f
+node10.example.com
+[root@node10 ~]# 
+[root@node10 ~]# 
+
+
+Now go on VM-2 and repeat the same steps  
+
+[root@node20 ~]# ping -c  1  node10.example.com
+ping: node10.example.com: Name or service not known
+[root@node20 ~]# 
+
+[root@node20 ~]# vim /etc/hosts 
+
+192.168.0.10    node10.example.com  node10  machine10
+192.168.0.20    node20.example.com  node20  machine20
+
+
+:wq!
+
+
+[root@node20 ~]# 
+[root@node20 ~]# 
+[root@node20 ~]# ping -c  4  node10.example.com
+PING node10.example.com (192.168.0.10) 56(84) bytes of data.
+64 bytes from node10.example.com (192.168.0.10): icmp_seq=1 ttl=64 time=0.244 ms
+64 bytes from node10.example.com (192.168.0.10): icmp_seq=2 ttl=64 time=0.350 ms
+64 bytes from node10.example.com (192.168.0.10): icmp_seq=3 ttl=64 time=0.325 ms
+64 bytes from node10.example.com (192.168.0.10): icmp_seq=4 ttl=64 time=0.437 ms
+
+--- node10.example.com ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3067ms
+rtt min/avg/max/mdev = 0.244/0.339/0.437/0.068 ms
+[root@node20 ~]# 
+[root@node20 ~]# 
+[root@node20 ~]# ping -c  4  node10 
+PING node10.example.com (192.168.0.10) 56(84) bytes of data.
+64 bytes from node10.example.com (192.168.0.10): icmp_seq=1 ttl=64 time=0.719 ms
+64 bytes from node10.example.com (192.168.0.10): icmp_seq=2 ttl=64 time=0.368 ms
+64 bytes from node10.example.com (192.168.0.10): icmp_seq=3 ttl=64 time=0.455 ms
+64 bytes from node10.example.com (192.168.0.10): icmp_seq=4 ttl=64 time=0.422 ms
+
+--- node10.example.com ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3080ms
+rtt min/avg/max/mdev = 0.368/0.491/0.719/0.135 ms
+[root@node20 ~]# 
+
+================================================================
+
+using SSH command how we can test remote login if we are in network ?
+
+
+[root@node20 ~]# ssh   root@192.168.0.10
+The authenticity of host '192.168.0.10 (192.168.0.10)' can't be established.
+ED25519 key fingerprint is SHA256:BHJ3CI0SSA2VjR9uTTv1B/EgvZMUKtUGX5YYaqgZmvw.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '192.168.0.10' (ED25519) to the list of known hosts.
+root@192.168.0.10's password: 
+Activate the web console with: systemctl enable --now cockpit.socket
+
+Register this system with Red Hat Insights: insights-client --register
+Create an account or view all your systems at https://red.ht/insights-dashboard
+Last login: Fri Jan 17 10:34:49 2025
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# mkdir /data
+[root@node10 ~]# systemctl restart crond
+[root@node10 ~]# 
+[root@node10 ~]# exit
+logout
+Connection to 192.168.0.10 closed.
+[root@node20 ~]# 
+
+
+
+[root@node20 ~]# 
+[root@node20 ~]# ssh   root@node10.example.com
+The authenticity of host 'node10.example.com (192.168.0.10)' can't be established.
+ED25519 key fingerprint is SHA256:BHJ3CI0SSA2VjR9uTTv1B/EgvZMUKtUGX5YYaqgZmvw.
+This host key is known by the following other names/addresses:
+    ~/.ssh/known_hosts:1: 192.168.0.10
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'node10.example.com' (ED25519) to the list of known hosts.
+root@node10.example.com's password: 
+Activate the web console with: systemctl enable --now cockpit.socket
+
+Register this system with Red Hat Insights: insights-client --register
+Create an account or view all your systems at https://red.ht/insights-dashboard
+Last login: Sun May  4 10:27:29 2025 from 192.168.0.20
+[root@node10 ~]# 
+[root@node10 ~]# exit
+logout
+Connection to node10.example.com closed.
+[root@node20 ~]# 
+[root@node20 ~]# ssh   root@node10 
+The authenticity of host 'node10 (192.168.0.10)' can't be established.
+ED25519 key fingerprint is SHA256:BHJ3CI0SSA2VjR9uTTv1B/EgvZMUKtUGX5YYaqgZmvw.
+This host key is known by the following other names/addresses:
+    ~/.ssh/known_hosts:1: 192.168.0.10
+    ~/.ssh/known_hosts:4: node10.example.com
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'node10' (ED25519) to the list of known hosts.
+root@node10's password: 
+Activate the web console with: systemctl enable --now cockpit.socket
+
+Register this system with Red Hat Insights: insights-client --register
+Create an account or view all your systems at https://red.ht/insights-dashboard
+Last login: Sun May  4 10:29:24 2025 from 192.168.0.20
+[root@node10 ~]# 
+[root@node10 ~]# exit
+logout
+Connection to node10 closed.
+[root@node20 ~]# 
+
+========================================================================================
+ON VM-1
+
+
+[root@node10 ~]# which sshd
+/usr/sbin/sshd
+[root@node10 ~]# systemctl is-active sshd  
+active
+[root@node10 ~]# netstat -tunlp  |  grep sshd
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1057/sshd: /usr/sbi 
+tcp6       0      0 :::22                   :::*                    LISTEN      1057/sshd: /usr/sbi 
+[root@node10 ~]# 
+[root@node10 ~]# 
+
+[root@node10 ~]# systemctl stop sshd
+[root@node10 ~]# systemctl disable  sshd
+Removed /etc/systemd/system/multi-user.target.wants/sshd.service.
+[root@node10 ~]# 
+[root@node10 ~]# netstat -tunlp  |  grep sshd
+[root@node10 ~]# 
+
+ON VM-2
+
+[root@node20 ~]# ping 192.168.0.10
+PING 192.168.0.10 (192.168.0.10) 56(84) bytes of data.
+64 bytes from 192.168.0.10: icmp_seq=1 ttl=64 time=1.97 ms
+64 bytes from 192.168.0.10: icmp_seq=2 ttl=64 time=0.448 ms
+^C
+--- 192.168.0.10 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 0.448/1.208/1.969/0.760 ms
+[root@node20 ~]# 
+[root@node20 ~]# 
+[root@node20 ~]# ssh root@192.168.0.10
+ssh: connect to host 192.168.0.10 port 22: Connection refused
+[root@node20 ~]# 
+[root@node20 ~]# 
+
+
+ON VM-1
+
+[root@node10 ~]# systemctl start sshd
+[root@node10 ~]# systemctl enable  sshd
+Created symlink /etc/systemd/system/multi-user.target.wants/sshd.service → /usr/lib/systemd/system/sshd.service.
+[root@node10 ~]# 
+[root@node10 ~]# pidof sshd
+7372
+[root@node10 ~]# 
+[root@node10 ~]# netstat -tunlp  |  grep sshd
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      7372/sshd: /usr/sbi 
+tcp6       0      0 :::22                   :::*                    LISTEN      7372/sshd: /usr/sbi 
+[root@node10 ~]# 
+
+
+
+ON VM-2
+
+
+
+
+[root@node20 ~]# ssh root@192.168.0.10
+root@192.168.0.10's password: 
+Activate the web console with: systemctl enable --now cockpit.socket
+
+Register this system with Red Hat Insights: insights-client --register
+Create an account or view all your systems at https://red.ht/insights-dashboard
+Last login: Sun May  4 10:29:36 2025 from 192.168.0.20
+[root@node10 ~]# 
+[root@node10 ~]# exit
+logout
+Connection to 192.168.0.10 closed.
+[root@node20 ~]# 
+[root@node20 ~]# 
+======================================================================================== 
+NetworkManagement + Firewall Management
+========================================================================================
+
+BASIC Network configuration + Network Testing  ===>  between two machine ===> YES
+
+========================================================================================
+
+Advance Networking ?
+
+VM-1 
+
+
+How we can change system IP without deleting the current profile OR current connection ?
+
+
+using commnd line ?
+
+[root@node10 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.10  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::b6bd:e5f4:7f08:5d0e  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:64:e1:ad  txqueuelen 1000  (Ethernet)
+        RX packets 10587  bytes 3770464 (3.5 MiB)
+        RX errors 0  dropped 2008  overruns 0  frame 0
+        TX packets 3681  bytes 434466 (424.2 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 86  bytes 8288 (8.0 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 86  bytes 8288 (8.0 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@node10 ~]# nmcli connection show 
+NAME    UUID                                  TYPE      DEVICE 
+ens160  7a1253d2-8072-433e-8faa-3306fc4cf171  ethernet  ens160 
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection modify ens160 ipv4.addresses 192.168.0.100/24
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.10  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::b6bd:e5f4:7f08:5d0e  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:64:e1:ad  txqueuelen 1000  (Ethernet)
+        RX packets 10624  bytes 3773287 (3.5 MiB)
+        RX errors 0  dropped 2040  overruns 0  frame 0
+        TX packets 3681  bytes 434466 (424.2 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@node10 ~]# nmcli connection down ens160 
+Connection 'ens160' successfully deactivated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/2)
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection up  ens160 
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/3)
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.100  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::b6bd:e5f4:7f08:5d0e  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:64:e1:ad  txqueuelen 1000  (Ethernet)
+        RX packets 10642  bytes 3774754 (3.5 MiB)
+        RX errors 0  dropped 2054  overruns 0  frame 0
+        TX packets 3704  bytes 437210 (426.9 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+
+VM-2
+
+
+How we can change system IP without deleting the current profile OR current connection ?
+
+
+using direct network configuration file method ?
+
+[root@node20 ~]# vim /etc/NetworkManager/system-connections/ens160.nmconnection 
+[ipv4]
+address1=192.168.0.200/24
+method=manual
+
+:wq!
+
+[root@node20 ~]# nmcli connection load  /etc/NetworkManager/system-connections/ens160.nmconnection 
+[root@node20 ~]# 
+[root@node20 ~]# nmcli connection up  ens160 
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/4)
+[root@node20 ~]# 
+[root@node20 ~]# 
+[root@node20 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.200  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::c89c:3eb1:cbb6:a2f9  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:4c:bd:0d  txqueuelen 1000  (Ethernet)
+        RX packets 6000  bytes 3750512 (3.5 MiB)
+        RX errors 0  dropped 969  overruns 0  frame 0
+        TX packets 3074  bytes 215079 (210.0 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 52  bytes 4910 (4.7 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 52  bytes 4910 (4.7 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+========================================================================================
+
+
+How we can get IP from Available DHCP server ?  OR how we can connect this machine with Internet ?
+
+VM-1
+
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection show 
+NAME    UUID                                  TYPE      DEVICE 
+ens160  7a1253d2-8072-433e-8faa-3306fc4cf171  ethernet  ens160 
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection delete ens160 
+Connection 'ens160' (7a1253d2-8072-433e-8faa-3306fc4cf171) successfully deleted.
+[root@node10 ~]# 
+[root@node10 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        ether 00:0c:29:64:e1:ad  txqueuelen 1000  (Ethernet)
+        RX packets 10881  bytes 3797607 (3.6 MiB)
+        RX errors 0  dropped 2201  overruns 0  frame 0
+        TX packets 3723  bytes 438910 (428.6 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 134  bytes 12896 (12.5 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 134  bytes 12896 (12.5 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+[root@node10 ~]# nmcli connection add con-name ens160  ifname ens160 type ethernet autoconnect yes 
+
+Connection 'ens160' (ef7c2b84-88c3-44e7-9c19-5301870c4baa) successfully added.
+
+[root@node10 ~]# 
+[root@node10 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.110  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::42e1:2954:ef33:d218  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:64:e1:ad  txqueuelen 1000  (Ethernet)
+        RX packets 10934  bytes 3804330 (3.6 MiB)
+        RX errors 0  dropped 2224  overruns 0  frame 0
+        TX packets 3767  bytes 445275 (434.8 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+[root@node10 ~]# cat /etc/NetworkManager/system-connections/ens160.nmconnection 
+[connection]
+id=ens160
+uuid=ef7c2b84-88c3-44e7-9c19-5301870c4baa
+type=ethernet
+interface-name=ens160
+
+[ethernet]
+
+[ipv4]
+method=auto
+
+[ipv6]
+addr-gen-mode=stable-privacy
+method=auto
+
+[proxy]
+[root@node10 ~]# 
+
+[root@node10 ~]# ip route
+default via 192.168.1.1 dev ens160 proto dhcp metric 100 
+192.168.1.0/24 dev ens160 proto kernel scope link src 192.168.1.110 metric 100 
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# ping 192.168.1.1
+PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.
+64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=0.799 ms
+64 bytes from 192.168.1.1: icmp_seq=2 ttl=64 time=0.912 ms
+^C
+--- 192.168.1.1 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1035ms
+rtt min/avg/max/mdev = 0.799/0.855/0.912/0.056 ms
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# cat /etc/resolv.conf 
+# Generated by NetworkManager
+search example.com
+nameserver 192.168.1.1
+[root@node10 ~]# 
+[root@node10 ~]# 
+
+How we can set these all things manually using command line OR how we can connect this machine without DHCP Settings
+
+IP Address  ===> 192.168.1.110
+NETMASK     ===> 255.255.255.0  OR  /24
+GATEWAY     ===> 192.168.1.1
+DNS1        ===> 192.168.1.1
+DNS2        ===> 8.8.8.8
+
+hostname ===> node10.example.com 
+
+===================================================================================
+[root@node10 ~]# nmcli connection show 
+NAME    UUID                                  TYPE      DEVICE 
+ens160  ef7c2b84-88c3-44e7-9c19-5301870c4baa  ethernet  ens160 
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection delete ens160 
+Connection 'ens160' (ef7c2b84-88c3-44e7-9c19-5301870c4baa) successfully deleted.
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection show 
+
+[root@node10 ~]# 
+[root@node10 ~]# 
+
+
+
+[root@node10 ~]# nmcli connection add con-name ens160 ifname ens160 type ethernet autoconnect yes  ip4 192.168.1.110/24 gw4 192.168.1.1
+Connection 'ens160' (f3d6c966-2c28-40a2-9cb3-65a195c403a0) successfully added.
+[root@node10 ~]# 
+[root@node10 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.110  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::f5da:8c19:f22b:6809  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:64:e1:ad  txqueuelen 1000  (Ethernet)
+        RX packets 24937  bytes 20414581 (19.4 MiB)
+        RX errors 0  dropped 2453  overruns 0  frame 0
+        TX packets 13989  bytes 2035134 (1.9 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 134  bytes 12896 (12.5 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 134  bytes 12896 (12.5 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@node10 ~]# 
+[root@node10 ~]# ip route 
+default via 192.168.1.1 dev ens160 proto static metric 100 
+192.168.1.0/24 dev ens160 proto kernel scope link src 192.168.1.110 metric 100 
+[root@node10 ~]# 
+
+
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection modify ens160 ipv4.dns  192.168.1.1   
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection modify ens160 +ipv4.dns  8.8.8.8
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection down ens160 
+Connection 'ens160' successfully deactivated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/5)
+[root@node10 ~]# nmcli connection up   ens160 
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/6)
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# ifconfig ens160 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.110  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::f5da:8c19:f22b:6809  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:64:e1:ad  txqueuelen 1000  (Ethernet)
+        RX packets 24995  bytes 20419342 (19.4 MiB)
+        RX errors 0  dropped 2484  overruns 0  frame 0
+        TX packets 14035  bytes 2039723 (1.9 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@node10 ~]# 
+[root@node10 ~]# ip route 
+default via 192.168.1.1 dev ens160 proto static metric 100 
+192.168.1.0/24 dev ens160 proto kernel scope link src 192.168.1.110 metric 100 
+[root@node10 ~]# 
+[root@node10 ~]# cat  /etc/resolv.conf 
+# Generated by NetworkManager
+search example.com
+nameserver 192.168.1.1
+nameserver 8.8.8.8
+[root@node10 ~]# cat  /etc/NetworkManager/system-connections/ens160.nmconnection 
+[connection]
+id=ens160
+uuid=f3d6c966-2c28-40a2-9cb3-65a195c403a0
+type=ethernet
+interface-name=ens160
+timestamp=1746336933
+
+[ethernet]
+
+[ipv4]
+address1=192.168.1.110/24,192.168.1.1
+dns=192.168.1.1;8.8.8.8;
+method=manual
+
+[ipv6]
+addr-gen-mode=stable-privacy
+method=auto
+
+[proxy]
+[root@node10 ~]# 
+
+
+[root@node10 ~]# ping 192.168.1.1
+PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.
+64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=0.718 ms
+64 bytes from 192.168.1.1: icmp_seq=2 ttl=64 time=0.868 ms
+^C
+--- 192.168.1.1 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1029ms
+rtt min/avg/max/mdev = 0.718/0.793/0.868/0.075 ms
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# ping google.com
+PING google.com (142.250.194.238) 56(84) bytes of data.
+64 bytes from del12s08-in-f14.1e100.net (142.250.194.238): icmp_seq=1 ttl=119 time=2.62 ms
+^C
+--- google.com ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 2.618/2.618/2.618/0.000 ms
+[root@node10 ~]# 
+
+
+===================================================================================
+
+ON VM-2
+
+do the same things using direct file method  ?
+
+
+[root@node20 ~]# vim  /etc/NetworkManager/system-connections/ens160.nmconnection 
+
+[ipv4]
+address1=192.168.1.111/24,192.168.1.1
+dns=192.168.1.1;8.8.8.8;
+method=manual
+
+
+:wq!
+
+[root@node20 ~]# nmcli connection  load    /etc/NetworkManager/system-connections/ens160.nmconnection 
+[root@node20 ~]# 
+[root@node20 ~]# nmcli connection up ens160 
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/5)
+[root@node20 ~]# 
+[root@node20 ~]# nmcli connection show  
+NAME    UUID                                  TYPE      DEVICE 
+ens160  c9abae65-9c23-49e2-b447-9f69e08b8181  ethernet  ens160 
+[root@node20 ~]# 
+
+
+[root@node20 ~]# cat /etc/resolv.conf 
+# Generated by NetworkManager
+search example.com
+nameserver 192.168.1.1
+nameserver 8.8.8.8
+[root@node20 ~]# 
+[root@node20 ~]# 
+
+[root@node20 ~]# ip route 
+default via 192.168.1.1 dev ens160 proto static metric 100 
+192.168.1.0/24 dev ens160 proto kernel scope link src 192.168.1.111 metric 100 
+[root@node20 ~]# 
+[root@node20 ~]# 
+[root@node20 ~]# ifconfig ens160  
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.111  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::c89c:3eb1:cbb6:a2f9  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:4c:bd:0d  txqueuelen 1000  (Ethernet)
+        RX packets 6964  bytes 3836017 (3.6 MiB)
+        RX errors 0  dropped 1540  overruns 0  frame 0
+        TX packets 3138  bytes 221478 (216.2 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@node20 ~]# 
+
+
+[root@node20 ~]# ping 192.168.1.1
+PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.
+64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=0.865 ms
+64 bytes from 192.168.1.1: icmp_seq=2 ttl=64 time=0.979 ms
+^C
+--- 192.168.1.1 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1042ms
+rtt min/avg/max/mdev = 0.865/0.922/0.979/0.057 ms
+[root@node20 ~]# 
+[root@node20 ~]# 
+[root@node20 ~]# ping google.com
+PING google.com (142.250.194.238) 56(84) bytes of data.
+64 bytes from del12s08-in-f14.1e100.net (142.250.194.238): icmp_seq=1 ttl=119 time=1.72 ms
+^C
+--- google.com ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 1.716/1.716/1.716/0.000 ms
+[root@node20 ~]# 
+
+
+===================================================================================
+
+[root@node10 ~]# which ifconfig 
+/usr/sbin/ifconfig
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# which ip  
+/usr/sbin/ip
+[root@node10 ~]# 
+
+
+[root@node10 ~]# which ifconfig 
+/usr/sbin/ifconfig
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# which ip  
+/usr/sbin/ip
+[root@node10 ~]# rpm -qf  /usr/sbin/ifconfig
+net-tools-2.0-0.62.20160912git.el9.x86_64
+[root@node10 ~]# 
+[root@node10 ~]# rpm -qf  /usr/sbin/ip
+iproute-5.15.0-2.2.el9_0.x86_64
+[root@node10 ~]# 
+[root@node10 ~]# ip address 
+
+
+[root@node10 ~]# 
+[root@node10 ~]# ip a  
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: ens160: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 00:0c:29:64:e1:ad brd ff:ff:ff:ff:ff:ff
+    altname enp3s0
+    inet 192.168.1.110/24 brd 192.168.1.255 scope global noprefixroute ens160
+       valid_lft forever preferred_lft forever
+    inet6 fe80::f5da:8c19:f22b:6809/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+[root@node10 ~]# 
+[root@node10 ~]# ip addr show  
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: ens160: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 00:0c:29:64:e1:ad brd ff:ff:ff:ff:ff:ff
+    altname enp3s0
+    inet 192.168.1.110/24 brd 192.168.1.255 scope global noprefixroute ens160
+       valid_lft forever preferred_lft forever
+    inet6 fe80::f5da:8c19:f22b:6809/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+[root@node10 ~]# 
+
+====================================================================================
+
+
+[root@node10 ~]# nmcli connection show 
+NAME    UUID                                  TYPE      DEVICE 
+ens160  f3d6c966-2c28-40a2-9cb3-65a195c403a0  ethernet  ens160 
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection delete ens160 
+Connection 'ens160' (f3d6c966-2c28-40a2-9cb3-65a195c403a0) successfully deleted.
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection show 
+
+[root@node10 ~]# nmcli connection add con-name ens160 ifname ens160 type ethernet autoconnect yes ip4 192.168.1.110/24 gw4 192.168.1.1 ipv4.dns 192.168.1.1 +ipv4.dns 8.8.8.8
+Connection 'ens160' (a539ad0d-ef7f-4324-af25-9580b02dcff6) successfully added.
+[root@node10 ~]# 
+[root@node10 ~]# 
+
+[root@node10 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.110  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::4431:5692:c05b:c857  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:64:e1:ad  txqueuelen 1000  (Ethernet)
+        RX packets 25836  bytes 20491028 (19.5 MiB)
+        RX errors 0  dropped 2884  overruns 0  frame 0
+        TX packets 14268  bytes 2058990 (1.9 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 134  bytes 12896 (12.5 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 134  bytes 12896 (12.5 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@node10 ~]# 
+[root@node10 ~]# ip route 
+default via 192.168.1.1 dev ens160 proto static metric 100 
+192.168.1.0/24 dev ens160 proto kernel scope link src 192.168.1.110 metric 100 
+[root@node10 ~]# 
+[root@node10 ~]# cat /etc/resolv.conf 
+# Generated by NetworkManager
+search example.com
+nameserver 192.168.1.1
+nameserver 8.8.8.8
+[root@node10 ~]# 
+[root@node10 ~]# ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: ens160: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 00:0c:29:64:e1:ad brd ff:ff:ff:ff:ff:ff
+    altname enp3s0
+    inet 192.168.1.110/24 brd 192.168.1.255 scope global noprefixroute ens160
+       valid_lft forever preferred_lft forever
+    inet6 fe80::4431:5692:c05b:c857/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+[root@node10 ~]# 
+
+[root@node10 ~]# nmcli connection delete ens160 
+Connection 'ens160' (a539ad0d-ef7f-4324-af25-9580b02dcff6) successfully deleted.
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection add con-name "Wired connection 1"  ifname ens160 type ethernet autoconnect yes  
+Connection 'Wired connection 1' (c901abaa-aec1-4a42-9698-7d775ea34f98) successfully added.
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection show 
+NAME                UUID                                  TYPE      DEVICE 
+Wired connection 1  c901abaa-aec1-4a42-9698-7d775ea34f98  ethernet  ens160 
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection delete "Wired connection 1"
+Connection 'Wired connection 1' (c901abaa-aec1-4a42-9698-7d775ea34f98) successfully deleted.
+[root@node10 ~]# 
+[root@node10 ~]# nmcli connection show 
+
+====================================================================================
+
+
+How we can activate/deactivate particular interface after any changes  ?
+
+
+Method:-1   
+
+[root@node20 ~]# systemctl restart NetworkManager 
+[root@node20 ~]# 
+[root@node20 ~]# 
+
+
+Method:-2 
+
+[root@node20 ~]# nmcli connection show 
+NAME    UUID                                  TYPE      DEVICE 
+ens160  c9abae65-9c23-49e2-b447-9f69e08b8181  ethernet  ens160 
+[root@node20 ~]# 
+[root@node20 ~]# nmcli connection down ens160 
+Connection 'ens160' successfully deactivated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/1)
+[root@node20 ~]# 
+[root@node20 ~]# nmcli connection up ens160 
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/2)
+[root@node20 ~]# 
+[root@node20 ~]# 
+
+
+Method-3
+
+[root@node20 ~]# cat /etc/NetworkManager/system-connections/ens160.nmconnection 
+[root@node20 ~]# nmcli  connection load   /etc/NetworkManager/system-connections/ens160.nmconnection 
+[root@node20 ~]# 
+[root@node20 ~]# nmcli connection up ens160 
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/3)
+[root@node20 ~]# 
+[root@node20 ~]# 
+
+
+Method-4
+
+[root@node20 ~]# nmcli device status 
+DEVICE  TYPE      STATE      CONNECTION 
+ens160  ethernet  connected  ens160     
+lo      loopback  unmanaged  --         
+[root@node20 ~]# 
+[root@node20 ~]# nmcli d   s 
+DEVICE  TYPE      STATE      CONNECTION 
+ens160  ethernet  connected  ens160     
+lo      loopback  unmanaged  --         
+[root@node20 ~]# 
+[root@node20 ~]# 
+[root@node20 ~]# nmcli device disconnect ens160 
+Device 'ens160' successfully disconnected.
+[root@node20 ~]# 
+[root@node20 ~]# nmcli device connect ens160 
+Device 'ens160' successfully activated with 'c9abae65-9c23-49e2-b447-9f69e08b8181'.
+[root@node20 ~]# 
+[root@node20 ~]# nmcli d   s 
+DEVICE  TYPE      STATE      CONNECTION 
+ens160  ethernet  connected  ens160     
+lo      loopback  unmanaged  --         
+[root@node20 ~]# 
+
+
+====================================================================================
+
+Method-5
+
+OLD version  
+
+
+[root@node20 ~]# ifdown ens160  
+bash: ifdown: command not found...
+[root@node20 ~]# 
+[root@node20 ~]# ifup  ens160  
+bash: ifup: command not found...
+[root@node20 ~]# 
+[root@node20 ~]# 
+
+
+
+====================================================================================
+
+add one more interface ?
+
+[root@node10 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.110  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::145b:a25c:a637:7f28  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:64:e1:ad  txqueuelen 1000  (Ethernet)
+        RX packets 26906  bytes 20595442 (19.6 MiB)
+        RX errors 0  dropped 3082  overruns 0  frame 0
+        TX packets 14455  bytes 2078349 (1.9 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+ens192: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        ether 00:0c:29:64:e1:b7  txqueuelen 1000  (Ethernet)
+        RX packets 15  bytes 1309 (1.2 KiB)
+        RX errors 0  dropped 5  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 134  bytes 12896 (12.5 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 134  bytes 12896 (12.5 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@node10 ~]# 
+
+
+
+

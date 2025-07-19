@@ -1,0 +1,192 @@
+# SSH Configuration — Detailed Explanation & Notes
+
+---
+
+## 1. **SSH Overview**
+
+- **SSH (Secure Shell)** is a protocol for secure remote login and command execution between computers.
+- Commonly used for Linux-to-Linux and Linux-to-Windows (with tools like PuTTY, MobaXterm) connections.
+- SSH encrypts all traffic, including passwords, commands, and files.
+
+---
+
+## 2. **Lab Setup & Network Preparation**
+
+- **Server Node:** VM-1 (RHEL 9), e.g., `node10.example.com`, IP: `192.168.1.107`
+- **Client Node:** VM-2 (RHEL 9), e.g., `node20.example.com`, IP: `192.168.1.108`
+- **Windows Client:** VM-3 (uses PuTTY/MobaXterm for SSH)
+- Ensure both server and client are on the same subnet and can ping each other.
+
+---
+
+## 3. **SSH Package Installation & Service Management**
+
+- **Server:** Needs `openssh-server` and `openssh-clients` installed.
+- **Client:** Needs `openssh-clients`.
+- Check installation:
+  ```bash
+  rpm -qa openssh*
+  ```
+- Start and enable SSH service:
+  ```bash
+  systemctl start sshd
+  systemctl enable sshd
+  ```
+- Verify SSH is running and listening on port 22:
+  ```bash
+  systemctl is-active sshd
+  systemctl is-enabled sshd
+  netstat -tunlp | grep sshd
+  ss -tunlp | grep sshd
+  ```
+
+---
+
+## 4. **User Management**
+
+- Add users for SSH login:
+  ```bash
+  useradd <username>
+  passwd <username>
+  ```
+- Example users: `kapil`, `soniya`
+
+---
+
+## 5. **Basic SSH Usage**
+
+- Connect from client to server:
+  ```bash
+  ssh root@192.168.1.107
+  ssh kapil@192.168.1.107
+  ```
+- First connection asks to verify the host key (security feature).
+- Enter password for authentication.
+
+---
+
+## 6. **Remote Command Execution**
+
+- Run commands directly over SSH:
+  ```bash
+  ssh root@192.168.1.107 free -h
+  ssh root@192.168.1.107 df -h
+  ssh root@192.168.1.107 'date ; cal'
+  ```
+- Useful for quick checks without full login.
+
+---
+
+## 7. **Monitor Remote Logins on Server**
+
+- See who is logged in:
+  ```bash
+  who
+  w
+  pinky
+  who -u
+  tail -f /var/log/secure
+  ```
+- Can kill remote sessions using `kill <PID>`.
+
+---
+
+## 8. **Windows SSH Clients**
+
+- Use **PuTTY** or **MobaXterm** for SSH access from Windows.
+- Enter server IP, username, and password in the client application.
+
+---
+
+## 9. **SSH Access Control**
+
+### **Root Login Control**
+- By default, root login may be allowed. For security, you can disable it:
+  - Edit `/etc/ssh/sshd_config.d/01-permitrootlogin.conf`:
+    ```
+    PermitRootLogin no
+    ```
+  - Restart SSH:
+    ```bash
+    systemctl restart sshd
+    ```
+- To re-enable root login, set `PermitRootLogin yes` and restart SSH.
+
+### **Allow/Deny Specific Users**
+- In `/etc/ssh/sshd_config`:
+  ```
+  AllowUsers amit sumit deepak
+  DenyUsers kapil sumit raj alok
+  ```
+- Only users in `AllowUsers` can log in; users in `DenyUsers` are blocked.
+
+---
+
+## 10. **SSH Key-Based Authentication (Passwordless Login)**
+
+### **Steps:**
+
+#### **On Client (VM-2):**
+1. **Generate SSH Key Pair:**
+   ```bash
+   ssh-keygen
+   ```
+   - Press Enter for all prompts to accept defaults.
+   - Creates `id_rsa` (private key) and `id_rsa.pub` (public key) in `/root/.ssh`.
+
+2. **Copy Public Key to Server:**
+   ```bash
+   ssh-copy-id -i /root/.ssh/id_rsa.pub root@192.168.1.107
+   ```
+   - This appends the public key to `/root/.ssh/authorized_keys` on the server.
+
+3. **Test Passwordless Login:**
+   ```bash
+   ssh root@192.168.1.107
+   ```
+   - Should log in without password prompt.
+
+#### **On Server (VM-1):**
+- Public key is stored in `/root/.ssh/authorized_keys`.
+
+---
+
+## 11. **SCP (Secure Copy Protocol)**
+
+- Copy files/directories between machines securely:
+  ```bash
+  scp -r root@192.168.1.107:/home /tmp
+  ```
+- `-r` for recursive copy (directories).
+
+---
+
+## 12. **SSH Known Hosts**
+
+- `.ssh/known_hosts` stores fingerprints of previously connected servers.
+- If server key changes, SSH warns about possible security risks (man-in-the-middle attack).
+- Remove old key entries if needed to resolve warnings.
+
+---
+
+## 13. **Firewall Considerations**
+
+- SSH access can be restricted by firewall rules (topic mentioned, not detailed in file).
+- Ensure port 22 is open for SSH connections.
+
+---
+
+## 14. **Summary of SSH Workflow**
+
+1. **Configure network and hostname on both server and client.**
+2. **Install and start SSH services.**
+3. **Create users and set passwords.**
+4. **Test SSH connectivity with password.**
+5. **Set up key-based authentication for passwordless login.**
+6. **Control access using configuration files.**
+7. **Use SCP for secure file transfers.**
+8. **Monitor and manage remote sessions.**
+
+---
+
+**End of Detailed SSH Configuration Notes**

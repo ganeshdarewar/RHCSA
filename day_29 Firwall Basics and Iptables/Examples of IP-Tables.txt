@@ -1,0 +1,1089 @@
+=======================================================================
+
+Examples of IP-Tables
+
+=======================================================================
+
+VM-1  RHEL-9   Server Node  
+
+VM-2  RHEL-9   Client Node  
+
+1- configure network between these two machine   ===> choice-1 using DHCP   Choice-2  manual ip configurarion   PING ===>PING  
+
+2- configure YUM repo file to install the packages for iptables
+
+=======================================================================
+
+VM-1 configure Network and YUM repo file 
+
+   4  hostnamectl set-hostname node10.example.com  
+    5  cat  /etc/hostname 
+    6  ifconfig 
+    7  nmcli connection down ens160 
+    8  nmcli connection up  ens160 
+    9  ifconfig 
+
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sr0     11:0    1    8G  0 rom  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mount /dev/sr0  /mnt 
+mount: /mnt: WARNING: source write-protected, mounted read-only.
+[root@localhost ~]# 
+[root@localhost ~]# ls /mnt 
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost ~]# 
+
+[root@localhost ~]# vim /etc/yum.repos.d/abc.repo 
+
+[path-1]
+name=abc
+baseurl=file:///mnt/BaseOS
+enabled=1
+gpgcheck=0
+[path-2]
+name=xyz
+baseurl=file:///mnt/AppStream
+enabled=1
+gpgcheck=0
+
+
+:wq!
+
+
+[root@localhost ~]# yum clean all 
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+0 files removed
+[root@localhost ~]# yum repolist all 
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+repo id                                                     repo name                                               status
+path-1                                                      abc                                                     enabled
+path-2                                                      xyz                                                     enabled
+[root@localhost ~]# 
+
+[root@localhost ~]# cat /etc/redhat-release 
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa iptables
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa firewalld
+firewalld-1.0.0-4.el9.noarch
+[root@localhost ~]# 
+[root@localhost ~]# which firewall-cmd 
+/usr/bin/firewall-cmd
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# systemctl is-active firewalld
+active
+[root@localhost ~]# systemctl is-enabled firewalld
+enabled
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# systemctl stop firewalld 
+[root@localhost ~]# systemctl disable  firewalld 
+Removed /etc/systemd/system/multi-user.target.wants/firewalld.service.
+Removed /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service.
+[root@localhost ~]# 
+[root@localhost ~]# systemctl mask  firewalld 
+Created symlink /etc/systemd/system/firewalld.service → /dev/null.
+[root@localhost ~]# 
+[root@localhost ~]#yuminstall iptables*  -y  
+
+
+[root@localhost ~]# systemctl  start  iptables  
+[root@localhost ~]# systemctl  enable    iptables  
+Created symlink /etc/systemd/system/multi-user.target.wants/iptables.service → /usr/lib/systemd/system/iptables.service.
+[root@localhost ~]# 
+[root@localhost ~]# which iptables
+/usr/sbin/iptables
+[root@localhost ~]# 
+[root@localhost ~]# cat /etc/sysconfig/iptables 
+[root@localhost ~]# netstat -tunlp 
+[root@localhost ~]# netstat -tunlp  | grep sshd
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      914/sshd: /usr/sbin 
+tcp6       0      0 :::22                   :::*                    LISTEN      914/sshd: /usr/sbin 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ifconfig  ens160  
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.108  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::20c:29ff:fe86:140a  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:86:14:0a  txqueuelen 1000  (Ethernet)
+        RX packets 7038  bytes 2185944 (2.0 MiB)
+        RX errors 0  dropped 1771  overruns 0  frame 0
+        TX packets 2264  bytes 167605 (163.6 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@localhost ~]# 
+
+   33  netstat -tunlp  | grep sshd
+   34  ifconfig  ens160  
+   35  iptables -L  
+   36  iptables -L  INPUT
+   37  iptables -L  OUTPUT 
+   38  iptables -L  FORWARD 
+   39  iptables -L 
+   40  iptables -F INPUT 
+   41  iptables -L  
+   42  iptables -F 
+   43  iptables  -L 
+[root@localhost ~]# service iptables save
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# cat  /etc/sysconfig/iptables
+# Generated by iptables-save v1.8.7 on Sun May 11 10:37:10 2025
+*filter
+:INPUT ACCEPT [12:1375]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [27:2646]
+COMMIT
+# Completed on Sun May 11 10:37:10 2025
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+======================================================================================
+Now this machine is ready to go with IP-Tables
+
+======================================================================================
+
+VM-2   Configure Hostname and ipaddress  
+
+[root@node20 ~]# history 
+    1  hostnamectl set-hostname node20.example.com
+    2  ifconfig 
+    3  nmcli connection down ens160 
+    4  nmcli connection up   ens160 
+    5  ifconfig 
+    6  ping 192.168.1.108
+
+
+[root@node20 ~]# hostname
+node20.example.com
+[root@node20 ~]# ifconfig ens160 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.105  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::20c:29ff:fe3c:ad74  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:3c:ad:74  txqueuelen 1000  (Ethernet)
+        RX packets 7443  bytes 2224652 (2.1 MiB)
+        RX errors 0  dropped 1940  overruns 0  frame 0
+        TX packets 2018  bytes 150954 (147.4 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@node20 ~]# 
+
+======================================================================================
+
+VM-1   node10.example.com  and 192.168.1.108
+VM-2   node20.example.com  and 192.168.1.105
+
+======================================================================================
+
+Examples:-1  How we can block particular IP address to access the SSH service in my machine using IP-Tables ?
+
+ON VM-1
+
+[root@localhost ~]# iptables  -I INPUT -p tcp  --dport 22  -s 192.168.1.105 -j REJECT 
+[root@localhost ~]# 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+
+ON VM-2
+
+[root@node20 ~]# ssh  root@192.168.1.108
+ssh: connect to host 192.168.1.108 port 22: Connection refused
+[root@node20 ~]# 
+[root@node20 ~]# 
+
+
+ON VM-1 
+
+[root@localhost ~]# iptables  -L INPUT  
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+REJECT     tcp  --  192.168.1.105        anywhere             tcp dpt:ssh reject-with icmp-port-unreachable
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# iptables  -L INPUT  -v 
+Chain INPUT (policy ACCEPT 162 packets, 17916 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    1    60 REJECT     tcp  --  any    any     192.168.1.105        anywhere             tcp dpt:ssh reject-with icmp-port-unreachable
+[root@localhost ~]# 
+[root@localhost ~]# iptables  -L INPUT  -v -n  
+Chain INPUT (policy ACCEPT 170 packets, 19072 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    1    60 REJECT     tcp  --  *      *       192.168.1.105        0.0.0.0/0            tcp dpt:22 reject-with icmp-port-unreachable
+[root@localhost ~]# 
+
+[root@localhost ~]# iptables  -L INPUT  -v -n   --line-number 
+Chain INPUT (policy ACCEPT 175 packets, 19418 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        1    60 REJECT     tcp  --  *      *       192.168.1.105        0.0.0.0/0            tcp dpt:22 reject-with icmp-port-unreachable
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# iptables  -D INPUT   1  
+[root@localhost ~]# 
+[root@localhost ~]# iptables  -L INPUT  -v -n   --line-number 
+Chain INPUT (policy ACCEPT 177 packets, 19574 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# iptables  -F   INPUT
+[root@localhost ~]# 
+[root@localhost ~]# service iptables save 
+
+
+
+
+======================================================================================
+
+Examples:-2
+
+[root@localhost ~]# iptables  -I INPUT -p tcp  --dport 22  -s 192.168.1.105 -j REJECT 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+
+
+======================================================================================
+
+
+Example:-3 
+
+
+[root@localhost ~]# iptables  -I INPUT -p tcp  --dport 22  -s 192.168.1.0/24 -j REJECT 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+
+======================================================================================
+Example:-4
+
+[root@localhost ~]# iptables  -I INPUT -p tcp  --dport 22  -j REJECT 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+======================================================================================
+
+Example:-5
+
+
+[root@localhost ~]# iptables  -I INPUT -p tcp  -s 192.168.1.105  -j REJECT 
+[root@localhost ~]# 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+======================================================================================
+Example:-6
+
+[root@localhost ~]# iptables  -I INPUT -p tcp  -j REJECT 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+======================================================================================
+
+Example:-7
+
+[root@localhost ~]# iptables -F 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+
+
+======================================================================================
+Example:8
+
+[root@localhost ~]# iptables  -I INPUT -p tcp  --dport 22  ! -s 192.168.1.0/24 -j REJECT 
+[root@localhost ~]# 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# iptables -F  
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# iptables  -I INPUT -p tcp  --dport 22  ! -s 192.168.1.105 -j REJECT 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+======================================================================================
+
+[root@localhost ~]# iptables  -I INPUT -p tcp  --dport 22  -j REJECT 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# iptables  -I INPUT -p tcp  -j REJECT 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+
+======================================================================================
+
+[root@localhost ~]# iptables -F  
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# iptables  -I INPUT -p tcp --dport 22 -s 192.168.0.0/24  -j ACCEPT  
+[root@localhost ~]# iptables  -I INPUT -p tcp --dport 22 -s 192.168.1.0/24  -j REJECT  
+[root@localhost ~]# 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# iptables  -F 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# iptables -L 
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+[root@localhost ~]# 
+
+========================================================================================
+
+
+How we can block ping request from any particular IP  ?
+
+ON VM-1
+
+
+[root@localhost ~]# iptables  -I INPUT  -p icmp -s  192.168.1.105  -j REJECT 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# iptables -F
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# iptables  -I INPUT  -p icmp -s  192.168.1.105  -j DROP 
+[root@localhost ~]# 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+
+
+
+
+ON VM-2
+
+[root@node20 ~]# ping 192.168.1.108
+PING 192.168.1.108 (192.168.1.108) 56(84) bytes of data.
+64 bytes from 192.168.1.108: icmp_seq=1 ttl=64 time=0.439 ms
+64 bytes from 192.168.1.108: icmp_seq=2 ttl=64 time=0.342 ms
+^C
+--- 192.168.1.108 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1032ms
+rtt min/avg/max/mdev = 0.342/0.390/0.439/0.048 ms
+[root@node20 ~]# 
+[root@node20 ~]# 
+[root@node20 ~]# ping 192.168.1.108
+PING 192.168.1.108 (192.168.1.108) 56(84) bytes of data.
+From 192.168.1.108 icmp_seq=1 Destination Port Unreachable
+From 192.168.1.108 icmp_seq=2 Destination Port Unreachable
+From 192.168.1.108 icmp_seq=3 Destination Port Unreachable
+From 192.168.1.108 icmp_seq=4 Destination Port Unreachable
+From 192.168.1.108 icmp_seq=5 Destination Port Unreachable
+^C
+--- 192.168.1.108 ping statistics ---
+5 packets transmitted, 0 received, +5 errors, 100% packet loss, time 4129ms
+
+[root@node20 ~]# ping 192.168.1.108
+PING 192.168.1.108 (192.168.1.108) 56(84) bytes of data.
+
+
+
+ON VM-1
+[root@localhost ~]# iptables -F
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# iptables  -I INPUT  -p icmp  ! -s  192.168.1.105  -j DROP 
+[root@localhost ~]# 
+
+========================================================================================
+ON VM-1  Hoe we can clock ssh request using client MAC address  ?  on VM-2  00:0c:29:3c:ad:74
+
+[root@localhost ~]# iptables -F
+[root@localhost ~]# 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# iptables -I INPUT -m  mac  --mac-source  00:0c:29:3c:ad:74  -p tcp  --dport 22  -j REJECT 
+[root@localhost ~]# 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+
+
+ON VM-2
+[root@node20 ~]# ssh 192.168.1.108
+ssh: connect to host 192.168.1.108 port 22: Connection refused
+[root@node20 ~]# 
+
+
+
+========================================================================================
+
+block all the available services in my machine from this MAC address  
+
+[root@localhost ~]# iptables -I INPUT -m  mac  --mac-source  00:0c:29:3c:ad:74   -j REJECT 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+
+========================================================================================
+
+[root@localhost ~]# iptables -I INPUT -m  multiport  -p tcp --dport 22,21,80,443  -s 192.168.1.105   -j REJECT 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+
+
+[root@localhost ~]# iptables -L 
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+REJECT     tcp  --  192.168.1.105        anywhere             multiport dports ssh,ftp,http,https reject-with icmp-port-unreachable
+REJECT     all  --  anywhere             anywhere             MAC00:0c:29:3c:ad:74 reject-with icmp-port-unreachable
+REJECT     tcp  --  anywhere             anywhere             MAC00:0c:29:3c:ad:74 tcp dpt:ssh reject-with icmp-port-unreachable
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# iptables -L  INPUT -v  -n 
+Chain INPUT (policy ACCEPT 421 packets, 46383 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 REJECT     tcp  --  *      *       192.168.1.105        0.0.0.0/0            multiport dports 22,21,80,443 reject-with icmp-port-unreachable
+    1    60 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            MAC00:0c:29:3c:ad:74 reject-with icmp-port-unreachable
+    0     0 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            MAC00:0c:29:3c:ad:74 tcp dpt:22 reject-with icmp-port-unreachable
+[root@localhost ~]# 
+
+========================================================================================
+
+[root@localhost ~]# iptables  -F INPUT
+[root@localhost ~]# 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# iptables -L 
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+========================================================================================
+How we can configure firewall rules using IPtables for HTTP service  ?
+========================================================================================
+[root@localhost ~]# yum install  httpd*  -y 
+[root@localhost ~]# systemctl start httpd  
+[root@localhost ~]# systemctl enable  httpd  
+Created symlink /etc/systemd/system/multi-user.target.wants/httpd.service → /usr/lib/systemd/system/httpd.service.
+[root@localhost ~]# 
+
+
+
+[root@localhost ~]# cd  /var/www/html
+[root@localhost html]# 
+[root@localhost html]# echo  "Hello testing apache webserver"   >  index.html 
+[root@localhost html]# 
+[root@localhost html]# cat  index.html 
+Hello testing apache webserver
+[root@localhost html]# 
+[root@localhost html]# cd
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+choice-1   using curl command          curl   http://192.168.1.108
+
+choice-2   using firefox  browser      http://192.168.1.108
+
+[root@localhost ~]# which curl 
+/usr/bin/curl
+[root@localhost ~]# 
+[root@localhost ~]# curl  http://192.168.1.108
+Hello testing apache webserver
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# firefox    ===> http://192.168.1.108
+
+ON VM-2
+
+[root@node20 ~]# ping  192.168.1.108
+PING 192.168.1.108 (192.168.1.108) 56(84) bytes of data.
+64 bytes from 192.168.1.108: icmp_seq=1 ttl=64 time=0.385 ms
+^C
+--- 192.168.1.108 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.385/0.385/0.385/0.000 ms
+[root@node20 ~]# 
+[root@node20 ~]# 
+[root@node20 ~]# curl  http://192.168.1.108
+Hello testing apache webserver
+[root@node20 ~]# 
+[root@node20 ~]# 
+[root@node20 ~]# 
+
+========================================================================================
+ON VM-1
+[root@localhost ~]# iptables -L 
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+[root@localhost ~]# 
+
+[root@localhost ~]# netstat -tunlp  | grep httpd  
+tcp6       0      0 :::80                   :::*                    LISTEN      35871/httpd         
+[root@localhost ~]# 
+[root@localhost ~]# netstat -tunlp  | grep sshd
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      914/sshd: /usr/sbin 
+tcp6       0      0 :::22                   :::*                    LISTEN      914/sshd: /usr/sbin 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# netstat -tunlp  | grep httpd  
+tcp6       0      0 :::80                   :::*                    LISTEN      35871/httpd         
+[root@localhost ~]# 
+[root@localhost ~]# netstat -tunlp  | grep sshd
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      914/sshd: /usr/sbin 
+tcp6       0      0 :::22                   :::*                    LISTEN      914/sshd: /usr/sbin 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# iptables  -I INPUT -p  tcp  --dport 80  -s  192.168.1.105 -j REJECT 
+[root@localhost ~]# 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# curl  http://192.168.1.108
+Hello testing apache webserver
+[root@localhost ~]# 
+
+
+on VM-2
+
+
+[root@node20 ~]# ping  192.168.1.108
+PING 192.168.1.108 (192.168.1.108) 56(84) bytes of data.
+64 bytes from 192.168.1.108: icmp_seq=1 ttl=64 time=0.407 ms
+^C
+--- 192.168.1.108 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.407/0.407/0.407/0.000 ms
+[root@node20 ~]# 
+[root@node20 ~]# 
+[root@node20 ~]# curl  http://192.168.1.108
+curl: (7) Failed to connect to 192.168.1.108 port 80: Connection refused
+[root@node20 ~]# 
+[root@node20 ~]# 
+
+
+ON VM-1
+
+[root@localhost ~]# grep 22 /etc/ssh/sshd_config
+#Port 22
+[root@localhost ~]# 
+[root@localhost ~]# grep 80  /etc/httpd/conf/httpd.conf 
+#Listen 12.34.56.78:80
+Listen 80
+#ServerName www.example.com:80
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+========================================================================================
+[root@localhost ~]# iptables  -F
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# iptables -L 
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+[root@localhost ~]# 
+
+
+========================================================================================
+
+How we can block out outgoing for any particular service 
+
+ON VM-1
+
+[root@localhost ~]# ping 192.168.1.105
+PING 192.168.1.105 (192.168.1.105) 56(84) bytes of data.
+64 bytes from 192.168.1.105: icmp_seq=1 ttl=64 time=0.391 ms
+^C
+--- 192.168.1.105 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.391/0.391/0.391/0.000 ms
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ssh  192.168.1.105
+The authenticity of host '192.168.1.105 (192.168.1.105)' can't be established.
+ED25519 key fingerprint is SHA256:WMXyFfvDQGqkZh7nTf62fVGdU/H8t0YVi4mdiketpbI.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? no
+Host key verification failed.
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# iptables  -I OUTPUT  -p tcp --dport 22  -d  192.168.1.105  -j DROP  
+[root@localhost ~]# 
+[root@localhost ~]# service iptables save 
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# ssh  192.168.1.105
+
+Will block our outgoing 
+
+[root@localhost ~]# iptables  -F  
+[root@localhost ~]# 
+[root@localhost ~]# ssh  192.168.1.105
+The authenticity of host '192.168.1.105 (192.168.1.105)' can't be established.
+ED25519 key fingerprint is SHA256:WMXyFfvDQGqkZh7nTf62fVGdU/H8t0YVi4mdiketpbI.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? ^C
+[root@localhost ~]# 
+
+
+
+========================================================================================
+
+How we can run any service on any custom port number if it is required due to security reasons ?
+
+EXAMPLE:    ssh  ===> default port number ===> 22  ===> 1122 
+            http ===> default port number ===> 80  ===> 85 
+
+is it possble ?  YES
+
+========================================================================================
+
+ON VM-1
+
+
+Step-1 change the port number in respective service configuration file  
+
+[root@localhost ~]# vim /etc/ssh/sshd_config 
+
+Port 1122
+
+:wq!
+
+[root@localhost ~]# systemctl restart sshd 
+Job for sshd.service failed because the control process exited with error code.
+See "systemctl status sshd.service" and "journalctl -xeu sshd.service" for details.
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# netstat -tunlp  | grep sshd 
+[root@localhost ~]# 
+[root@localhost ~]# pidof sshd 
+[root@localhost ~]# 
+[root@localhost ~]# systemctl status sshd.service -l  
+● sshd.service - OpenSSH server daemon
+     Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled; vendor preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Sun 2025-05-11 11:53:48 IST; 3s ago
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+    Process: 37111 ExecStart=/usr/sbin/sshd -D $OPTIONS (code=exited, status=255/EXCEPTION)
+   Main PID: 37111 (code=exited, status=255/EXCEPTION)
+        CPU: 12ms
+
+May 11 11:53:48 node10.example.com sshd[37111]: fatal: Cannot bind any address.
+May 11 11:53:48 node10.example.com systemd[1]: sshd.service: Failed with result 'exit-code'.
+May 11 11:53:48 node10.example.com systemd[1]: Failed to start OpenSSH server daemon.
+[root@localhost ~]# 
+[root@localhost ~]# getenforce 
+Enforcing
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# getenforce 
+Enforcing
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# tail -f  /var/log/messages 
+
+
+[root@localhost ~]# semanage port -l |  grep ssh  
+ssh_port_t                     tcp      22
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# semanage port -a  -t   ssh_port_t   -p tcp  1122 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# semanage port -l |  grep ssh  
+ssh_port_t                     tcp      1122, 22
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# systemctl restart sshd  
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# systemctl status sshd.service -l  
+● sshd.service - OpenSSH server daemon
+     Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sun 2025-05-11 11:58:58 IST; 9s ago
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+   Main PID: 37377 (sshd)
+      Tasks: 1 (limit: 23290)
+     Memory: 1.7M
+        CPU: 8ms
+     CGroup: /system.slice/sshd.service
+             └─37377 "sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups"
+
+May 11 11:58:58 node10.example.com systemd[1]: Starting OpenSSH server daemon...
+May 11 11:58:58 node10.example.com sshd[37377]: Server listening on 0.0.0.0 port 1122.
+May 11 11:58:58 node10.example.com sshd[37377]: Server listening on :: port 1122.
+May 11 11:58:58 node10.example.com systemd[1]: Started OpenSSH server daemon.
+[root@localhost ~]# 
+[root@localhost ~]# netstat -tunlp  |  grep sshd  
+tcp        0      0 0.0.0.0:1122            0.0.0.0:*               LISTEN      37377/sshd: /usr/sb 
+tcp6       0      0 :::1122                 :::*                    LISTEN      37377/sshd: /usr/sb 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+[root@localhost ~]# systemctl is-active  iptables
+active
+[root@localhost ~]# 
+[root@localhost ~]# systemctl is-active  firewalld  
+inactive
+[root@localhost ~]# 
+
+
+
+Client Node:-2  
+
+[root@node20 ~]# ssh  192.168.1.108
+ssh: connect to host 192.168.1.108 port 22: Connection refused
+[root@node20 ~]# 
+[root@node20 ~]# ssh  192.168.1.108 -p  1122
+The authenticity of host '[192.168.1.108]:1122 ([192.168.1.108]:1122)' can't be established.
+ED25519 key fingerprint is SHA256:+E2B6rdf/0JlrrVqLHwyb5XvG4wimnTCJWHkayeCK5A.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '[192.168.1.108]:1122' (ED25519) to the list of known hosts.
+root@192.168.1.108's password: 
+Activate the web console with: systemctl enable --now cockpit.socket
+
+Register this system with Red Hat Insights: insights-client --register
+Create an account or view all your systems at https://red.ht/insights-dashboard
+Last login: Sun May 11 09:33:11 2025
+[root@node10 ~]# 
+[root@node10 ~]# exit
+logout
+Connection to 192.168.1.108 closed.
+[root@node20 ~]# 
+
+========================================================================================
+
+How we can configure PORT forwarding if it is required ?
+
+
+[root@localhost ~]# iptables -t nat -A PREROUTING -p tcp  --dport 22  -j REDIRECT --to-port 1122  
+[root@localhost ~]# 
+[root@localhost ~]# service iptables save
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+========================================================================================
+
+ON VM-2
+[root@node20 ~]# ssh  192.168.1.108 
+The authenticity of host '192.168.1.108 (192.168.1.108)' can't be established.
+ED25519 key fingerprint is SHA256:+E2B6rdf/0JlrrVqLHwyb5XvG4wimnTCJWHkayeCK5A.
+This host key is known by the following other names/addresses:
+    ~/.ssh/known_hosts:1: [192.168.1.108]:1122
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '192.168.1.108' (ED25519) to the list of known hosts.
+root@192.168.1.108's password: 
+Activate the web console with: systemctl enable --now cockpit.socket
+
+Register this system with Red Hat Insights: insights-client --register
+Create an account or view all your systems at https://red.ht/insights-dashboard
+Last login: Sun May 11 12:02:15 2025 from 192.168.1.105
+[root@node10 ~]# exit
+logout
+Connection to 192.168.1.108 closed.
+[root@node20 ~]# 
+
+========================================================================================
+
+
+
+How we can replace iptables again with firewalld  
+
+[root@localhost ~]# iptables -F  
+[root@localhost ~]# service iptables save
+iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
+[root@localhost ~]# 
+[root@localhost ~]# systemctl stop iptables  
+[root@localhost ~]# systemctl disable  iptables  
+Removed /etc/systemd/system/multi-user.target.wants/iptables.service.
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# getenforce 
+Enforcing
+[root@localhost ~]# 
+[root@localhost ~]# systemctl unmask firewalld 
+Removed /etc/systemd/system/firewalld.service.
+[root@localhost ~]# 
+[root@localhost ~]# systemctl start  firewalld 
+[root@localhost ~]# systemctl enable   firewalld 
+Created symlink /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service → /usr/lib/systemd/system/firewalld.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/firewalld.service → /usr/lib/systemd/system/firewalld.service.
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# firewall-cmd  --list-services 
+cockpit dhcpv6-client ssh
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd  --list-ports 
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd  --permanent  --add-port=1122/tcp 
+success
+[root@localhost ~]# firewall-cmd --reload  
+success
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+[root@localhost ~]# curl http://192.168.1.108
+Hello testing apache webserver
+[root@localhost ~]# 
+
+
+
+
+ON VM-2
+
+[root@node20 ~]# curl http://192.168.1.108
+curl: (7) Failed to connect to 192.168.1.108 port 80: No route to host
+[root@node20 ~]# 
+[root@node20 ~]# 
+
+We need to define this service in firewall rules
+
+[root@localhost ~]# firewall-cmd  --permanent  --add-service=http
+success
+[root@localhost ~]# firewall-cmd  --reload  
+success
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@node20 ~]# curl http://192.168.1.108
+Hello testing apache webserver
+[root@node20 ~]# 
+
+====================================================================
+
+1- Configuration file ===> changes 
+2- Selinux ===> port  ===> add
+3- Firewalld ===> port  ==> add
+
+====================================================================
+
+[root@localhost ~]# vim /etc/httpd/conf/httpd.conf 
+
+Listen 85
+
+
+:wq!
+
+[root@localhost ~]# systemctl restart httpd 
+Job for httpd.service failed because the control process exited with error code.
+See "systemctl status httpd.service" and "journalctl -xeu httpd.service" for details.
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# systemctl status httpd.service -l 
+× httpd.service - The Apache HTTP Server
+     Loaded: loaded (/usr/lib/systemd/system/httpd.service; enabled; vendor preset: disabled)
+     Active: failed (Result: exit-code) since Sun 2025-05-11 12:13:48 IST; 14s ago
+       Docs: man:httpd.service(8)
+    Process: 38073 ExecStart=/usr/sbin/httpd $OPTIONS -DFOREGROUND (code=exited, status=1/FAILURE)
+   Main PID: 38073 (code=exited, status=1/FAILURE)
+     Status: "Reading configuration..."
+        CPU: 42ms
+
+May 11 12:13:48 node10.example.com systemd[1]: Starting The Apache HTTP Server...
+May 11 12:13:48 node10.example.com httpd[38073]: (13)Permission denied: AH00072: make_sock: could not bind to address [::]:85
+May 11 12:13:48 node10.example.com httpd[38073]: (13)Permission denied: AH00072: make_sock: could not bind to address 0.0.0.0:85
+May 11 12:13:48 node10.example.com httpd[38073]: no listening sockets available, shutting down
+May 11 12:13:48 node10.example.com httpd[38073]: AH00015: Unable to open logs
+May 11 12:13:48 node10.example.com systemd[1]: httpd.service: Main process exited, code=exited, status=1/FAILURE
+May 11 12:13:48 node10.example.com systemd[1]: httpd.service: Failed with result 'exit-code'.
+May 11 12:13:48 node10.example.com systemd[1]: Failed to start The Apache HTTP Server.
+[root@localhost ~]# 
+
+[root@localhost ~]# tail -f  /var/log/messages
+
+
+
+[root@localhost ~]# getenforce 
+Enforcing
+[root@localhost ~]# semanage  port  -l  |  grep http 
+http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
+http_cache_port_t              udp      3130
+http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, 9000
+pegasus_http_port_t            tcp      5988
+pegasus_https_port_t           tcp      5989
+[root@localhost ~]# 
+[root@localhost ~]# semanage  port  -a  -t  http_port_t  -p  tcp  85  
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# semanage  port  -l  |  grep http 
+http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
+http_cache_port_t              udp      3130
+http_port_t                    tcp      85, 80, 81, 443, 488, 8008, 8009, 8443, 9000
+pegasus_http_port_t            tcp      5988
+pegasus_https_port_t           tcp      5989
+[root@localhost ~]# 
+
+[root@localhost ~]# systemctl restart httpd 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# netstat -tunlp  |  grep httpd
+tcp6       0      0 :::85                   :::*                    LISTEN      38218/httpd         
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+
+
+ON VM-2  
+
+[root@node20 ~]# curl http://192.168.1.108:85
+curl: (7) Failed to connect to 192.168.1.108 port 85: No route to host
+[root@node20 ~]# 
+[root@node20 ~]# curl http://192.168.1.108
+curl: (7) Failed to connect to 192.168.1.108 port 80: Connection refused
+[root@node20 ~]# 
+
+
+ON VM-1
+
+[root@localhost ~]# systemctl restart httpd 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# netstat -tunlp  |  grep httpd
+tcp6       0      0 :::85                   :::*                    LISTEN      38218/httpd         
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd  --list-services 
+cockpit dhcpv6-client http ssh
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd  --list-ports 
+1122/tcp
+[root@localhost ~]# firewall-cmd  --permanent  --add-port=85/tcp
+success
+[root@localhost ~]# firewall-cmd  --reload  
+success
+[root@localhost ~]# systemctl restart httpd 
+[root@localhost ~]# 
+
+ON VM-2
+
+[root@node20 ~]# curl http://192.168.1.108:85
+Hello testing apache webserver
+[root@node20 ~]# 
+[root@node20 ~]# 
+[root@node20 ~]# 
+
+=================================================================================
+
+How we can configure PORT forwarding ?
+
+
+[root@localhost ~]# firewall-cmd --permanent  --add-forward-port=port=80:proto=tcp:toport=85
+success
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd  --reload  
+success
+[root@localhost ~]# 
+[root@localhost ~]# systemctl  restart  httpd  
+[root@localhost ~]# 
+
+
+
+=================================================================================
+ON VM-2
+[root@node20 ~]# curl http://192.168.1.108:85
+Hello testing apache webserver
+[root@node20 ~]# 
+[root@node20 ~]# curl http://192.168.1.108
+Hello testing apache webserver
+[root@node20 ~]# 
+
+
+=================================================================================
+
+
+
+
+

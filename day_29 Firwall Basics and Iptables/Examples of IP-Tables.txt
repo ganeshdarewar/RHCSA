@@ -203,6 +203,18 @@ iptables: Saving firewall rules to /etc/sysconfig/iptables: [  OK  ]
 [root@localhost ~]# 
 [root@localhost ~]# 
 
+🔍 What this command does:
+iptables: The command-line utility to configure Linux kernel firewall rules.
+
+-I INPUT: Insert the rule at the top of the INPUT chain.
+
+-p tcp: Match only TCP protocol traffic.
+
+--dport 22: Match packets destined for port 22 (used by SSH).
+
+-s 192.168.1.105: Match traffic coming from IP 192.168.1.105.
+
+-j REJECT: The action is to reject the packet and send an error response.
 
 
 ON VM-2

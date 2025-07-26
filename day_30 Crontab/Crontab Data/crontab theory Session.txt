@@ -180,6 +180,23 @@ press CTRL+D   save and quit
 =======================================================================================
 
 
+=================================================
+
+
+at command example
+
+=================================================
+=================================================
+
+at : execute commands at specified time.
+atq OR at -l : lists the pending jobs of users.
+atrm : delete jobs by their job number.
+at -c jobnumber  : check the content of job 
+
+=================================================
+=================================================
+
+
 
 
 

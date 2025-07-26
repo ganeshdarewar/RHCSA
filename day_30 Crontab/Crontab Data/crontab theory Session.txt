@@ -1,0 +1,227 @@
+================  Crontab OR Job Scheduling  =========================
+======================================================================
+Types of command execution method  ?
+
+1- manual work ==> With the help of Linux admins
+
+2- Automated   ==> using at and crontab utility
+
+======================================================================
+
+Difference between at and crontab ?
+
+AT ==> at command is a command-line utility that is used to schedule a command to be executed at a particular time 
+       in the future. Jobs created with at command are executed only once but not repeated.
+
+CRONTAB  ==> It is also use to schedule any task but it will continue the the task on defined time table.
+         ==> It is used in repeated concept not at a  time execution.
+
+
+
+============================ First we are going to cover Crontab ==========================================
+
+1- Crontab is use to schedule any task as per required time to perform any task automatically.
+
+2- with the help of crontab we can run any command
+   OR any scripts on any time as per demand.
+
+3- By default crontab service is allowed for super
+   user and normal user  both.
+
+
+Super user can set allow and deny rules for any normal users
+   using   /etc/cron.deny and  /etc/cron.allow files.
+
+
+Allow or deny File   ==> by default both files are blank that means all are allowed
+
+
+
+/etc/cron.allow    ==> these user's can set only crontab service, remaining users
+                       will automatically count in block mode.
+     OR
+
+/etc/cron.deny     ==> to block any  users to access the crontab service 
+                       But remaining will be allowed.
+=======================================================================
+Use of crontab for any Linux admin ?
+
+Daily backups
+Daily server health check based script
+Monitoring  
+Smart work
+
+======================================================================= 
+=======================================================================
+=======================================================================
+Package:   crontabs and cronie 
+Daemon name or  service name:   crond 
+File:    /etc/crontab  
+Log:   /var/log/cron 
+======================================================================
+======================================================================  
+
+# crontab    -l    { list ==> to check all crontab details in my account }
+
+# crontab    -e    { edit ==> to apply crontab }
+
+# crontab    -r    { Remove ==> to remove all cron jobs from my account }
+ 
+======================================================================
+
+
+# crontab  -e   -u     username 
+
+# crontab  -l   -u     username 
+
+# crontab  -r   -u     username  
+
+
+======================================================================
+
+# crontab  -e  
+
+Here it will open  a File . This file always devide  into two parts
+
+
+First Field  ==>   Time Table   ==> break in five fields
+Second Field ==>   Command to be executed
+
+=====================================================================
+
+# crontab -e  
+
+*	     *	        *	    *	      *	             rsync  -av  /sqldata   /backup 
+
+
+First      second      Third     Fourth    Fifth 
+
+Minutes    Hours    Day-of-Month   Month    days-of-week
+
+(0 - 59)   (0-23)     (1-31)      (1-12)    (0 - 6 OR 1 - 7 ) [Where 0 and 7 => sunday] [1 to 6 Monday to sat ]
+
+
+
+====================================================================================
+                       Possible Examples OR Crontab Time Table Syntax
+====================================================================================
+*	*	*	*	*             [ command - name or script - path ] 
+30	09	*	*	*	      [ command - name or script - path ]
+30	21	*	*	*	      [ command - name or script - path ]
+30	09	*	*	1             [ command - name or script - path ]
+30	09	*	*	1,3,5	      [ command - name or script - path ]
+30	09	*	*	0,6	      [ command - name or script - path ]
+30	09	*	*	1-5	      [ command - name or script - path ]
+30	09	1,11,21	 *	*	      [ command - name or script - path ]
+30	09	1       1,3,5	*	      [ command - name or script - path ]
+30	09   1,3,5,11-15,21   * 	*     [ command - name or script - path ]
+*/5	*	*	*	*	      [ command - name or script - path ]
+*	*/2	*	*	*	      [ command - name or script - path ]
+
+=====================================================================================
+
+Value    ==> particular value
+*        ==> all or every
+
+=====================================================================================
+,        ==> AND
+-        ==> Range
+/        ==> repeat
+
+=====================================================================================
+First method:-  we can define a particular value as per demand
+Second method:-  *  or all or every 
+Third Method:-   we can use the  / symbol to repeat any task ex:-  */2
+Fourth Method:- we can define the range with help -  symbol.    11-15,  6-7
+Fifth Method:-  we can use , symbol for AND operator.    6,7
+====================================================================================== /  ==> after every OR repeat 
+============================ Crontab Theory Finish ===================================
+
+what is the use of at command ?
+
+at a time execution 
+
+======================================================================================
+# at  <options>  time
+
+# at  10:05 AM
+> command
+ctrol + D   ==> save and quit
+
+======================================================================================
+
+Example of crontab  ?
+
+
+# crontab  -e  
+
+05   10 	*	*	*     rsync -av  /sqldata    /backup OR any xyz command or any xyz script 
+
+:wq
+
+
+Example of at command  ?
+
+
+# at 10:05 AM
+
+rsync -av  /sqldata    /backup
+
+press CTRL+D   save and quit
+======================================================================================
+
+
+# crontab  -l  
+
+
+# atq
+
+=======================================================================================
+=======================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  

@@ -176,6 +176,8 @@ These files always must be working and functioning properly to boot up the machi
 
 
 
+How to reinstall GRUB and GRUB2 on UEFI-based machines?
 
+https://access.redhat.com/solutions/3486741s
 
 

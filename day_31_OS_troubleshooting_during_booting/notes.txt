@@ -1,0 +1,181 @@
+==================================================================
+
+What is Operating system ?
+
+An operating system (OS) is the core software that manages a computer's hardware and software resources, allowing users to interact with the computer and run applications
+==================================================================
+
+What is Application ?
+
+Essentially, an application is a software program that helps users accomplish a particular goal
+
+==================================================================
+
+What is Computer ?
+A computer system is a combination of hardware and software working together to perform specific tasks. It includes the physical components like the CPU, memory, and storage, along with the software that provides instructions and controls the system. 
+
+==================================================================
+
+  
+
+What is Shell?
+A shell is a special user program that provides an interface for the user to use operating system services. Shell accepts human-readable commands from users and converts them into something which the kernel can understand. It is a command language interpreter that executes commands read from input devices such as keyboards or from files. The shell gets started when the user logs in or starts the terminal.
+
+What is kernel ?
+
+In the context of Linux, the kernel is the core of the operating system, acting as the interface between hardware and software. It manages system resources like memory, processes, and device drivers, enabling applications to interact with the hardware
+
+
+Complete Linux system = Kernel + GNU system utilities and libraries + other management scripts + installation scripts.
+
+What are the task of kernel  ?
+
+
+The kernel is a computer program that is the core of a computer’s operating system, with complete control over everything in the system. It manages the following resources of the Linux system –
+
+File management
+Process management
+I/O management
+Memory management
+Device management etc.
+
+
+Name of shell in Linux ?
+
+Name of the kernel in Linux  ?
+
+==================================================================
+
+
+
+[root@localhost ~]# cat  /etc/redhat-release 
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# cat /etc/system-release
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# echo $SHELL 
+/bin/bash
+[root@localhost ~]# rpm -qa  bash
+bash-5.1.8-4.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# echo $BASH_VERSION
+5.1.8(1)-release
+[root@localhost ~]# 
+
+[root@localhost ~]# rpm -qa | wc -l  
+1170
+[root@localhost ~]# 
+
+
+===========================================================
+   10  cat  /etc/redhat-release 
+   11  cat /etc/system-release
+   12  echo $SHELL 
+   13  rpm -qa  bash
+   14  echo $BASH_VERSION
+   15  rpm -qa
+   16  rpm -qa | wc -l  
+   17  rpm -qa | bash 
+   18  rpm -qa | grep bash  
+   19  rpm -qa | grep kernel
+   20  rpm -qa gedit 
+   21  rpm -qa | grep -E  -v  'bash|kernel'  | wc -l  
+   22  rpm -qa |  wc -l  
+   23  ls /usr/bin | wc -l  
+   24  ls /usr/sbin | wc -l  
+   25  clears
+   26  which clear 
+   27  which date 
+   28  which useradd 
+   29  history 
+[root@localhost ~]# 
+[root@localhost ~]# grep root  /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+[root@localhost ~]# 
+[root@localhost ~]# echo $SHELL 
+/bin/bash
+[root@localhost ~]# echo $BASH_VERSION
+5.1.8(1)-release
+[root@localhost ~]# 
+[root@localhost ~]# uname 
+Linux
+[root@localhost ~]# cat  /etc/redhat-release 
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa bash
+bash-5.1.8-4.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# uname -r 
+5.14.0-70.13.1.el9_0.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# uname -m 
+x86_64
+[root@localhost ~]# uname -a
+Linux localhost.localdomain 5.14.0-70.13.1.el9_0.x86_64 #1 SMP PREEMPT Thu Apr 14 12:42:38 EDT 2022 x86_64 x86_64 x86_64 GNU/Linux
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# hostname
+localhost.localdomain
+[root@localhost ~]# hostname  a
+[root@localhost ~]# hostname
+a
+[root@localhost ~]# cat /etc/redhat-release 
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+
+[root@localhost ~]# 
+[root@localhost ~]# which bash
+/usr/bin/bash
+[root@localhost ~]# 
+[root@localhost ~]# ls /boot 
+config-5.14.0-70.13.1.el9_0.x86_64                       loader
+efi                                                      symvers-5.14.0-70.13.1.el9_0.x86_64.gz
+grub2                                                    System.map-5.14.0-70.13.1.el9_0.x86_64
+initramfs-0-rescue-905aaaf959ef4314b218e75751e62f63.img  vmlinuz-0-rescue-905aaaf959ef4314b218e75751e62f63
+initramfs-5.14.0-70.13.1.el9_0.x86_64.img                vmlinuz-5.14.0-70.13.1.el9_0.x86_64
+initramfs-5.14.0-70.13.1.el9_0.x86_64kdump.img
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# uname -r  
+5.14.0-70.13.1.el9_0.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa kernel
+kernel-5.14.0-70.13.1.el9_0.x86_64
+[root@localhost ~]# 
+
+==============================================================
+Non Visible stage
+Visible stage
+
+GRUB2 ===> load  ===> 1- kernel
+                      2- initramfs   ====> now kernel will boot up the OS required services stepo by step 
+                                                                  OR
+                                           kernel will take he handover the machine
+
+
+[root@localhost ~]# lsinitrd  /boot/initramfs-5.14.0-70.13.1.el9_0.x86_64.img  | wc -l 
+
+==============================================================
+Kernel Panic Error 
+============================================================== Power on ===> first visible screen ==> Stage-1
+1- Bootloader  ===> /boot/grub2/grub.cfg ===> if you are working with BIOS firmware
+2- kernel
+3- initramfs
+==============================================================
+1- Bootloader  ===> /boot/efi/EFI/redhat/grub.cfg ===> if you are working with UEFI firmware
+2- kernel
+3- initramfs
+
+These files always must be working and functioning properly to boot up the machine
+
+==============================================================
+
+
+
+
+
+

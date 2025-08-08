@@ -1,0 +1,142 @@
+[root@localhost ~]# history 
+    1  hostnamectl set-hostname node10.example.com
+    2  ifconfig 
+    3  nmcli connection show
+    4  nmcli connection down ens160 
+    5  nmcli connection up  ens160 
+    6  ifconfig 
+[root@node10 ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sr0     11:0    1    8G  0 rom  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# mount  /dev/sr0  /mnt  
+mount: /mnt: WARNING: source write-protected, mounted read-only.
+[root@node10 ~]# 
+[root@node10 ~]# ls /mnt  
+AppStream  EULA              images      RPM-GPG-KEY-redhat-beta
+BaseOS     extra_files.json  isolinux    RPM-GPG-KEY-redhat-release
+EFI        GPL               media.repo
+[root@node10 ~]# 
+[root@node10 ~]# cd /etc/yum.repos.d
+[root@node10 yum.repos.d]# ls
+redhat.repo
+[root@node10 yum.repos.d]# 
+[root@node10 yum.repos.d]# 
+[root@node10 yum.repos.d]# 
+[root@node10 yum.repos.d]# vim xyz.repo
+
+[path-1]
+name=abc
+baseurl=file:///mnt/BaseOS
+enabled=1
+gpgcheck=0
+[path-2]
+name=xyz
+baseurl=file:///mnt/AppStream
+enabled=1
+gpgcheck=0
+
+:wq!
+   15  cd
+   16  yum clean all 
+   17  yum repolist all 
+   18  cat /etc/sysctl.conf # for older version 
+   19  yum install tuned  -y 
+   20  systemctl start  tuned.service 
+   21  systemctl enable   tuned.service 
+   22  which tuned-adm 
+
+=======================================================================
+Manual Tunning Configuration OR static Tunning  
+
+
+[root@node10 ~]# tuned-adm  list
+Available profiles:
+- accelerator-performance     - Throughput performance based tuning with disabled higher latency STOP states
+- balanced                    - General non-specialized tuned profile
+- desktop                     - Optimize for the desktop use-case
+- hpc-compute                 - Optimize for HPC compute workloads
+- intel-sst                   - Configure for Intel Speed Select Base Frequency
+- latency-performance         - Optimize for deterministic performance at the cost of increased power consumption
+- network-latency             - Optimize for deterministic performance at the cost of increased power consumption, focused on low latency network performance
+- network-throughput          - Optimize for streaming network throughput, generally only necessary on older CPUs or 40G+ networks
+- optimize-serial-console     - Optimize for serial console use.
+- powersave                   - Optimize for low power consumption
+- throughput-performance      - Broadly applicable tuning that provides excellent performance across a variety of common server workloads
+- virtual-guest               - Optimize for running inside a virtual guest
+- virtual-host                - Optimize for running KVM guests
+Current active profile: virtual-guest
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# ls /etc/tuned
+active_profile  bootcmdline  post_loaded_profile  profile_mode  recommend.d  tuned-main.conf
+[root@node10 ~]# 
+[root@node10 ~]# tuned-adm active 
+[root@node10 ~]# tuned-adm  recommend 
+virtual-guest
+[root@node10 ~]# 
+[root@node10 ~]# tuned-adm  recommend 
+virtual-guest
+[root@node10 ~]# tuned-adm  profile  virtual-guest
+[root@node10 ~]# 
+[root@node10 ~]# tuned-adm active 
+Current active profile: virtual-guest
+[root@node10 ~]# 
+
+=======================================================================
+
+Dynamic Tunning Enable 
+
+[root@node10 ~]# vim /etc/tuned/tuned-main.conf 
+
+dynamic_tuning = 1
+
+update_interval = 15
+
+:wq!
+
+[root@node10 ~]# systemctl restart tuned.service 
+[root@node10 ~]# 
+[root@node10 ~]# 
+
+[root@node10 ~]# tuned-adm active 
+Current active profile: virtual-guest
+[root@node10 ~]# 
+[root@node10 ~]# 
+
+=======================================================================
+
+[root@node10 ~]# ls /usr/lib/tuned
+accelerator-performance  functions    latency-performance  optimize-serial-console  throughput-performance
+balanced                 hpc-compute  network-latency      powersave                virtual-guest
+desktop                  intel-sst    network-throughput   recommend.d              virtual-host
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# tuned-adm list 
+Available profiles:
+- accelerator-performance     - Throughput performance based tuning with disabled higher latency STOP states
+- balanced                    - General non-specialized tuned profile
+- desktop                     - Optimize for the desktop use-case
+- hpc-compute                 - Optimize for HPC compute workloads
+- intel-sst                   - Configure for Intel Speed Select Base Frequency
+- latency-performance         - Optimize for deterministic performance at the cost of increased power consumption
+- network-latency             - Optimize for deterministic performance at the cost of increased power consumption, focused on low latency network performance
+- network-throughput          - Optimize for streaming network throughput, generally only necessary on older CPUs or 40G+ networks
+- optimize-serial-console     - Optimize for serial console use.
+- powersave                   - Optimize for low power consumption
+- throughput-performance      - Broadly applicable tuning that provides excellent performance across a variety of common server workloads
+- virtual-guest               - Optimize for running inside a virtual guest
+- virtual-host                - Optimize for running KVM guests
+Current active profile: virtual-guest
+[root@node10 ~]# 
+
+
+
+
+

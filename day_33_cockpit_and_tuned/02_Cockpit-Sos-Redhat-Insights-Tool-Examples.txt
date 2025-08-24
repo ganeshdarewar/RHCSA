@@ -1,0 +1,259 @@
+========================================================
+
+
+
+
+
+
+Objective:-1  What is the use of redhat login ID and How we can sync our machine with online free repository to install any packages ?
+
+Objective:-2  What is the use OF COCKPIT web console monitoring and configuration Tools in redhat linux ?
+
+Objective:-3  How we can create Support case with Redhat to get any types of Techinal Support by Redhat Technical team members ?
+
+Objective:-4  How we can create SOS report using GUI Mode [COCKPIT] and using CLI mode ?
+
+Objective:-5  What is the use of Redhat Insight Tool OR Redhat Insight Web Access in Redhat Linux ?
+
+
+========================================================
+========================================================
+
+Step-1 First configure hostname and IP 
+
+   50  hostname
+   51  hostnamectl set-hostname node10.example.com
+   52  hostname
+   53  ifconfig 
+   54  nmcli connection show
+   55  nmcli connection down ens160 
+   56  nmcli connection  up   ens160 
+   57  ifconfig 
+   58  ping google.com
+
+step-2  What is the use of redhat login ID and How we can sync our machine with online free repository ?
+
+[root@node10 ~]# ls /etc/yum.repos.d
+redhat.repo
+[root@node10 ~]# 
+[root@node10 ~]# cat  /etc/yum.repos.d/redhat.repo 
+#
+# Certificate-Based Repositories
+# Managed by (rhsm) subscription-manager
+#
+# *** This file is auto-generated.  Changes made here will be over-written. ***
+# *** Use "subscription-manager repo-override --help" if you wish to make changes. ***
+#
+# If this file is empty and this system is subscribed consider
+# a "yum repolist" to refresh available repos
+#
+[root@node10 ~]# 
+[root@node10 ~]# yum repolist all 
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+No repositories available
+[root@node10 ~]# subscription-manager register 
+Registering to: subscription.rhsm.redhat.com:443/subscription
+Username: 
+Password: 
+The system has been registered with ID: 1009ad07-86fb-401f-96d1-267add9401d1
+The registered system name is: node10.example.com
+
+
+
+   66  yum clean all 
+   67  yum repolist all 
+
+
+
+=====================================================================================
+Task-2- Why we use Cockpit tool in Linux ?
+========================================================
+
+Cockpit is a server administration tool sponsored by Red Hat, 
+focused on providing a modern-looking and user-friendly interface to manage and administer servers.
+
+By using it, you can perform system administration tasks, such as inspecting and controlling systemd services, 
+managing storage, configuring networks, analyzing network issues, and inspecting logs.
+
+Packagename:cockpit
+Daemon: cockpit
+Port number: 9090
+
+make sure we have defined this service in firewalld if it is running
+
+=====================================================================================
+
+   68  yum install cockpit  
+   69  yum install cockpit*  
+   70  systemctl restart cockpit.socket 
+   71  systemctl enable  cockpit.socket 
+   72  netstat -tunlp  | grep  9090
+[root@node10 ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.38  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::20c:29ff:fe23:d0eb  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:23:d0:eb  txqueuelen 1000  (Ethernet)
+        RX packets 217744  bytes 322464586 (307.5 MiB)
+        RX errors 0  dropped 3346  overruns 0  frame 0
+        TX packets 36707  bytes 2898675 (2.7 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+
+open firefox in your linux machine  
+
+
+https://serverIP:9090
+
+username:root
+password:
+
+
+add host  ==> using remote machine IP address 
+
+
+======================================================================
+
+
+
+What is SOS report  ?
+
+
+What is a SOS report command in Red Hat Enterprise Linux?
+
+The sos report command is a tool that collects configuration details, 
+system information and diagnostic information from a Red Hat Enterprise Linux system.
+
+The output of sos report is the common starting point for Red Hat support engineers when performing an initial analysis 
+of a service request for a Red Hat Enterprise Linux system.
+
+
+
+1- GUI mode       ===> using cockpit tool if we have access on it.
+
+2- CLI mode      ===> OR else we can create this direct using CLI method
+
+
+  447  yum install sos  -y  
+  448  rpm -qa sos
+  449  which sos
+   76  cat /etc/redhat-release 
+   77  sos report
+   78  ls  /var/tmp
+   79  sos clean  /var/tmp/sosreport-node10-2025-01-15-iosvway.tar.xz
+   80  ls  /var/tmp
+
+=======================================================
+
+[root@node10 ~]# cd /etc/yum.repos.d
+[root@node10 yum.repos.d]# 
+[root@node10 yum.repos.d]# ls
+abc.repo  redhat.repo
+[root@node10 yum.repos.d]# 
+[root@node10 yum.repos.d]# rm -rf abc.repo 
+[root@node10 yum.repos.d]# cd
+[root@node10 ~]# 
+[root@node10 ~]# 
+
+
+How we can sync this machine with www.redhat.com to install online packages
+
+
+[root@node10 ~]# ping  google.com
+PING google.com (142.250.192.238) 56(84) bytes of data.
+64 bytes from del11s13-in-f14.1e100.net (142.250.192.238): icmp_seq=1 ttl=128 time=9.46 ms
+^C
+--- google.com ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 9.459/9.459/9.459/0.000 ms
+[root@node10 ~]# 
+
+[root@node10 ~]# subscription-manager  register
+Registering to: subscription.rhsm.redhat.com:443/subscription
+Username: 
+Password: 
+The system has been registered with ID: 94db2c45-f624-41c4-b7dc-d30f75cd8129
+The registered system name is: node10.example.com
+
+
+
+
+
+[root@node10 ~]# cat /etc/yum.repos.d/redhat.repo 
+
+
+
+[root@node10 ~]# yum clean all 
+Updating Subscription Management repositories.
+
+29 files removed
+[root@node10 ~]# 
+[root@node10 ~]# yum repolist all  | grep enabled
+
+[root@node10 ~]# yum list 
+
+[root@node10 ~]# yum check-update
+
+
+
+
+What is Redhat Insight Tool ?
+
+
+[root@node10 ~]# yum install insights-client
+
+[root@node10 ~]# insights-client  --register
+
+===============================================================================
+
+Red Hat® Insights continuously analyzes platforms and applications to predict risk,
+recommend actions, and track costs so enterprises can better manage hybrid cloud environments.
+
+
+
+Red Hat® Insights is a Software-as-a-Service offering that gives users visibility into their operating environments,
+helping to identify and address operational and vulnerability risks before an issue results in downtime.
+To provide this service, small pieces of system metadata are sent to the Red Hat Insights service 
+for processing and analysis, during which time measures are taken to help reduce risk. 
+
+
+===============================================================================
+
+
+
+https://www.thegeekdiary.com/how-to-configure-kdump-for-centos-rhel-9/
+
+
+=============================================================================== 9.0 to 9.6
+
+   66  yum  update -y 
+   67  reboot 
+
+   34  yum check-update | grep podman
+   35  rpm -qa podman 
+   36  yum check-update | grep podman
+   37  yum update podman  -y 
+   38  rpm -qa podman  
+[root@node10 ~]# cat /etc/redhat-release 
+Red Hat Enterprise Linux release 9.6 (Plow)
+[root@node10 ~]# 
+[root@node10 ~]# 
+===============================================================================
+Home work ?
+
+===============================================================================
+
+RHEL-8 to RHEL-9 update   ===> ISO download 8.6  to 9.0  
+ 
+https://www.tecmint.com/upgrade-rhel-8-to-rhel-9/
+
+https://www.thegeekdiary.com/how-to-configure-kdump-for-centos-rhel-9/
+
+===============================================================================
+===============================================================================
+===============================================================================
+

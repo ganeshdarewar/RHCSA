@@ -1,0 +1,101 @@
+=================================================================================
+
+Debug HTTP webserver in your Linux machine due to firewalld and Se-Linux policy
+
+=================================================================================
+
+   78  yum install  httpd -y 
+   79  systemctl start httpd
+   80  systemctl enable  httpd
+   81  netstat -tunlp  | grep httpd 
+   82  cd  /var/www/html
+   83  ls
+   84  echo  "hello testing web page"   > index.html 
+   85  cat index.html 
+   86  cd
+   87  systemctl is-active firewalld 
+   88  firewall-cmd   --list-service  
+   89  firewall-cmd   --permanent  --add-service=http 
+   90  firewall-cmd --reload  
+   91  firewall-cmd   --list-service  
+[root@node10 ~]# netstat -tunlp  | grep httpd
+tcp6       0      0 :::80                   :::*                    LISTEN      7729/httpd          
+[root@node10 ~]# 
+[root@node10 ~]# curl  http://192.168.1.110
+hello testing web page
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]#
+[root@node10 ~]# vim /etc/httpd/conf/httpd.conf 
+ Listen 85
+
+:wq!
+
+=================================================================================
+
+[root@node10 ~]# systemctl restart  httpd  
+
+Job for httpd.service failed because the control process exited with error code.
+See "systemctl status httpd.service" and "journalctl -xeu httpd.service" for details.
+[root@node10 ~]# 
+[root@node10 ~]# 
+
+
+[root@node10 ~]# systemctl status httpd.service
+[root@node10 ~]# tail -f  /var/log/messages 
+[root@node10 ~]# getenforce 
+Enforcing
+[root@node10 ~]# 
+[root@node10 ~]# semanage port -l  | grep http
+http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
+http_cache_port_t              udp      3130
+http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, 9000
+pegasus_http_port_t            tcp      5988
+pegasus_https_port_t           tcp      5989
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# semanage port -a -t http_port_t -p tcp 85
+[root@node10 ~]# semanage port -l  | grep http
+http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
+http_cache_port_t              udp      3130
+http_port_t                    tcp      85, 80, 81, 443, 488, 8008, 8009, 8443, 9000
+pegasus_http_port_t            tcp      5988
+pegasus_https_port_t           tcp      5989
+[root@node10 ~]# 
+
+[root@node10 ~]# systemctl restart  httpd  
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# netstat -tunlp  | grep httpd
+tcp6       0      0 :::85                   :::*                    LISTEN      8325/httpd          
+[root@node10 ~]# 
+
+[root@node10 ~]# firewall-cmd  --list-services 
+cockpit dhcpv6-client http ssh
+[root@node10 ~]# 
+[root@node10 ~]# firewall-cmd  --permanent --add-port=85/tcp 
+success
+[root@node10 ~]# 
+[root@node10 ~]# firewall-cmd  --reload  
+success
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# systemctl restart  httpd  
+[root@node10 ~]# netstat -tunlp  | grep httpd
+tcp6       0      0 :::85                   :::*                    LISTEN      8573/httpd          
+[root@node10 ~]# 
+[root@node10 ~]# curl  http://192.168.1.110:85 
+hello testing web page
+[root@node10 ~]# 
+[root@node10 ~]# 
+[root@node10 ~]# 
+
+
+Client Side:
+
+[root@localhost ~]# curl  http://192.168.1.110:85
+hello testing web page
+[root@localhost ~]# 
+[root@localhost ~]# 
+=================================================================================
+=================================================================================

@@ -1,0 +1,742 @@
+=====================================================================
+    Examples of SE-Linux
+=====================================================================
+  
+How we can change SE-Linux Mode ?
+
+
+
+[root@localhost ~]# rpm -qa selinux*
+selinux-policy-34.1.29-1.el9_0.noarch
+selinux-policy-targeted-34.1.29-1.el9_0.noarch
+[root@localhost ~]# 
+[root@localhost ~]# getenforce 
+Enforcing
+[root@localhost ~]# grep  '^SELINUX'  /etc/sysconfig/selinux 
+SELINUX=enforcing
+SELINUXTYPE=targeted
+[root@localhost ~]# 
+[root@localhost ~]# grep  '^SELINUX'  /etc/selinux/config 
+SELINUX=enforcing
+SELINUXTYPE=targeted
+[root@localhost ~]# 
+[root@localhost ~]# getenforce 
+Enforcing
+[root@localhost ~]# 
+[root@localhost ~]# sestatus 
+SELinux status:                 enabled
+SELinuxfs mount:                /sys/fs/selinux
+SELinux root directory:         /etc/selinux
+Loaded policy name:             targeted
+Current mode:                   enforcing
+Mode from config file:          enforcing
+Policy MLS status:              enabled
+Policy deny_unknown status:     allowed
+Memory protection checking:     actual (secure)
+Max kernel policy version:      33
+[root@localhost ~]# 
+
+[root@localhost ~]# setenforce 0
+[root@localhost ~]# 
+[root@localhost ~]# getenforce 
+Permissive
+[root@localhost ~]# 
+[root@localhost ~]# sestatus 
+SELinux status:                 enabled
+SELinuxfs mount:                /sys/fs/selinux
+SELinux root directory:         /etc/selinux
+Loaded policy name:             targeted
+Current mode:                   permissive
+Mode from config file:          enforcing
+Policy MLS status:              enabled
+Policy deny_unknown status:     allowed
+Memory protection checking:     actual (secure)
+Max kernel policy version:      33
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# setenforce 1  
+[root@localhost ~]# 
+[root@localhost ~]# getenforce 
+Enforcing
+[root@localhost ~]# 
+[root@localhost ~]# systemctl stop firewalld  
+[root@localhost ~]# systemctl disable firewalld  
+Removed /etc/systemd/system/multi-user.target.wants/firewalld.service.
+Removed /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service.
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# vim /etc/selinux/config 
+SELINUX=disabled
+
+:wq!
+
+[root@localhost ~]# getenforce 
+Enforcing
+[root@localhost ~]# 
+
+======================================================================
+======================================================================
+[root@localhost ~]# reboot 
+======================================================================
+[root@localhost ~]# getenforce 
+Disabled
+[root@localhost ~]# sestatus 
+SELinux status:                 disabled
+[root@localhost ~]# 
+======================================================================
+[root@localhost ~]# systemctl start firewalld 
+[root@localhost ~]# systemctl enable firewalld 
+Created symlink /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service → /usr/lib/systemd/system/firewalld.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/firewalld.service → /usr/lib/systemd/system/firewalld.service.
+[root@localhost ~]# 
+[root@localhost ~]# setenforce 1 
+setenforce: SELinux is disabled
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# vim /etc/selinux/config 
+
+SELINUX=enforcing
+
+:wq!
+
+[root@localhost ~]# getenforce 
+Disabled
+[root@localhost ~]# reboot
+
+[root@localhost ~]# getenforce 
+Enforcing
+[root@localhost ~]# 
+[root@localhost ~]# sestatus 
+SELinux status:                 enabled
+SELinuxfs mount:                /sys/fs/selinux
+SELinux root directory:         /etc/selinux
+Loaded policy name:             targeted
+Current mode:                   enforcing
+Mode from config file:          enforcing
+Policy MLS status:              enabled
+Policy deny_unknown status:     allowed
+Memory protection checking:     actual (secure)
+Max kernel policy version:      33
+[root@localhost ~]# 
+[root@localhost ~]# systemctl is-active firewalld.service 
+active
+[root@localhost ~]# 
+
+======================================================================
+Lab-0 How we can set SE-Linux Mode as per need ?
+Lab-1 what is the role of SE-Linux context type ?
+Lab-2 what is the role of port relabel in SE-linux Policy ?
+Lab-3 what is the use booleans in SE-Linux Policy ?
+Lab-4 How we can read the log files to troubleshoot the selinux policy related issues ?
+======================================================================
+
+[root@localhost ~]# cd /etc/selinux/targeted/contexts/files
+[root@localhost files]# ls
+file_contexts      file_contexts.homedirs      file_contexts.local  file_contexts.subs_dist
+file_contexts.bin  file_contexts.homedirs.bin  file_contexts.subs   media
+[root@localhost files]# 
+[root@localhost files]# 
+[root@localhost files]# cat file_contexts 
+[root@localhost files]# cd
+[root@localhost ~]# 
+
+
+======================================================================
+
+[root@localhost ~]# touch abc  
+[root@localhost ~]# 
+[root@localhost ~]# ls -l abc
+-rw-r--r--. 1 root root 0 Jun  1 09:30 abc
+[root@localhost ~]# 
+[root@localhost ~]# ls -lZ  abc
+-rw-r--r--. 1 root root unconfined_u:object_r:admin_home_t:s0 0 Jun  1 09:30 abc
+[root@localhost ~]# 
+[root@localhost ~]# touch  /abc
+[root@localhost ~]# 
+[root@localhost ~]# ls -lZ /abc
+-rw-r--r--. 1 root root unconfined_u:object_r:etc_runtime_t:s0 0 Jun  1 09:30 /abc
+[root@localhost ~]# 
+[root@localhost ~]# ls -ldZ /tmp
+drwxrwxrwt. 20 root root system_u:object_r:tmp_t:s0 4096 Jun  1 09:29 /tmp
+[root@localhost ~]# 
+[root@localhost ~]# ls -ldZ /var/tmp
+drwxrwxrwt. 13 root root system_u:object_r:tmp_t:s0 4096 Jun  1 09:29 /var/tmp
+[root@localhost ~]# ls -ldZ /var
+drwxr-xr-x. 20 root root system_u:object_r:var_t:s0 4096 May  6 10:41 /var
+[root@localhost ~]# ls -ldZ /etc
+drwxr-xr-x. 132 root root system_u:object_r:etc_t:s0 8192 Jun  1 09:26 /etc
+[root@localhost ~]# 
+[root@localhost ~]# ls -ldZ /bin
+lrwxrwxrwx. 1 root root system_u:object_r:bin_t:s0 7 Aug 10  2021 /bin -> usr/bin
+[root@localhost ~]# ls -ldZ /sbin
+lrwxrwxrwx. 1 root root system_u:object_r:bin_t:s0 8 Aug 10  2021 /sbin -> usr/sbin
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ldZ /var/log
+drwxr-xr-x. 14 root root system_u:object_r:var_log_t:s0 4096 Jun  1 09:02 /var/log
+
+
+[root@localhost ~]# which sshd 
+/usr/sbin/sshd
+[root@localhost ~]# pidof sshd
+914
+[root@localhost ~]# 
+[root@localhost ~]# netstat -tunlp  | grep sshd
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      914/sshd: /usr/sbin 
+tcp6       0      0 :::22                   :::*                    LISTEN      914/sshd: /usr/sbin 
+[root@localhost ~]# 
+[root@localhost ~]# ps -ZC sshd
+LABEL                               PID TTY          TIME CMD
+system_u:system_r:sshd_t:s0-s0:c0.c1023 914 ?    00:00:00 sshd
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ldZ /etc/ssh/sshd_config
+-rw-------. 1 root root system_u:object_r:etc_t:s0 3669 Feb 22  2022 /etc/ssh/sshd_config
+[root@localhost ~]# 
+
+   43  ifconfig 
+   44  nmcli connection up ens160 
+   45  ifconfig 
+   46  history 
+
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sr0     11:0    1    8G  0 rom  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mount /dev/sr0 /mnt
+mount: /mnt: WARNING: source write-protected, mounted read-only.
+[root@localhost ~]# 
+[root@localhost ~]# ls /mnt 
+AppStream  EFI   extra_files.json  images    media.repo               RPM-GPG-KEY-redhat-release
+BaseOS     EULA  GPL               isolinux  RPM-GPG-KEY-redhat-beta
+[root@localhost ~]# 
+[root@localhost ~]# vim /etc/yum.repos.d/abc.repo
+
+[path-1]
+name=abc
+baseurl=file:///mnt/BaseOS
+enabled=1
+gpgcheck=0
+[path-2]
+name=xyz
+baseurl=file:///mnt/AppStream
+enabled=1
+gpgcheck=0
+
+
+:wq!
+
+[root@localhost ~]# yum install httpd -y
+[root@localhost ~]# systemctl restart httpd
+[root@localhost ~]# systemctl enable  httpd 
+
+
+
+[root@localhost ~]# pstree  | grep httpd
+        |-httpd-+-httpd
+        |       |-httpd---80*[{httpd}]
+        |       `-2*[httpd---64*[{httpd}]]
+[root@localhost ~]# 
+[root@localhost ~]# ps -ZC  httpd 
+LABEL                               PID TTY          TIME CMD
+system_u:system_r:httpd_t:s0      19170 ?        00:00:00 httpd
+system_u:system_r:httpd_t:s0      19233 ?        00:00:00 httpd
+system_u:system_r:httpd_t:s0      19234 ?        00:00:00 httpd
+system_u:system_r:httpd_t:s0      19269 ?        00:00:00 httpd
+system_u:system_r:httpd_t:s0      19278 ?        00:00:00 httpd
+[root@localhost ~]# 
+[root@localhost ~]# ls -ldZ /var/www/html
+drwxr-xr-x. 2 root root system_u:object_r:httpd_sys_content_t:s0 6 Mar 21  2022 /var/www/html
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# echo hello testing webpage  >  /var/www/html/index.html 
+[root@localhost ~]# 
+[root@localhost ~]# ls -ldZ /var/www/html/index.html 
+-rw-r--r--. 1 root root unconfined_u:object_r:httpd_sys_content_t:s0 22 Jun  1 09:42 /var/www/html/index.html
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /var/www/html/index.html 
+-rw-r--r--. 1 root root 22 Jun  1 09:42 /var/www/html/index.html
+[root@localhost ~]# 
+[root@localhost ~]# curl http://localhost
+hello testing webpage
+[root@localhost ~]# 
+[root@localhost ~]# 
+======================================================================
+ON VM-2
+[root@localhost ~]# ping 192.168.1.110
+PING 192.168.1.110 (192.168.1.110) 56(84) bytes of data.
+64 bytes from 192.168.1.110: icmp_seq=1 ttl=64 time=0.833 ms
+^C
+--- 192.168.1.110 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.833/0.833/0.833/0.000 ms
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# curl  http://192.168.1.110
+curl: (7) Failed to connect to 192.168.1.110 port 80: No route to host
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+======================================================================
+ON VM-1
+[root@localhost ~]# systemctl is-active firewalld
+active
+[root@localhost ~]# 
+
+
+[root@localhost ~]# firewall-cmd  --permanent --add-service=http
+success
+[root@localhost ~]# firewall-cmd  --reload  
+success
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd  --permanent --list-services 
+cockpit dhcpv6-client http ssh
+[root@localhost ~]# 
+
+
+ON VM-2
+
+[root@localhost ~]# curl  http://192.168.1.110
+hello testing webpage
+[root@localhost ~]# 
+
+======================================================================
+ON VM -1
+
+difference CP and MV command with respective of SE_linux 
+
+[root@localhost ~]# rm -rf /var/www/html/index.html 
+[root@localhost ~]# 
+[root@localhost ~]# echo hell webpage  > index.html 
+[root@localhost ~]# 
+[root@localhost ~]# cat index.html 
+hell webpage
+[root@localhost ~]# 
+[root@localhost ~]# ls -lZ index.html 
+-rw-r--r--. 1 root root unconfined_u:object_r:admin_home_t:s0 13 Jun  1 09:49 index.html
+[root@localhost ~]# 
+[root@localhost ~]# mv index.html   /var/www/html/
+[root@localhost ~]# 
+[root@localhost ~]# ls /var/www/html
+index.html
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls -lZ   /var/www/html/index.html 
+-rw-r--r--. 1 root root unconfined_u:object_r:admin_home_t:s0 13 Jun  1 09:49 /var/www/html/index.html
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# systemctl restart httpd
+[root@localhost ~]# ps -ZC httpd 
+LABEL                               PID TTY          TIME CMD
+system_u:system_r:httpd_t:s0      33331 ?        00:00:00 httpd
+system_u:system_r:httpd_t:s0      33332 ?        00:00:00 httpd
+system_u:system_r:httpd_t:s0      33333 ?        00:00:00 httpd
+system_u:system_r:httpd_t:s0      33335 ?        00:00:00 httpd
+system_u:system_r:httpd_t:s0      33338 ?        00:00:00 httpd
+[root@localhost ~]# 
+[root@localhost ~]# ls -lZ  /var/www/html/index.html 
+-rw-r--r--. 1 root root unconfined_u:object_r:admin_home_t:s0 13 Jun  1 09:49 /var/www/html/index.html
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# curl http://localhost
+[root@localhost ~]# getenforce 
+Enforcing
+[root@localhost ~]# 
+[root@localhost ~]# setenforce 0  
+[root@localhost ~]# getenforce 
+Permissive
+[root@localhost ~]# curl http://localhost
+hell webpage
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# tail -f /var/log/messages
+
+[root@localhost ~]# chcon -t  httpd_sys_content_t  /var/www/html/index.html 
+[root@localhost ~]# 
+[root@localhost ~]# curl http://localhost
+hell webpage
+[root@localhost ~]# 
+[root@localhost ~]# getenforce 
+Permissive
+[root@localhost ~]# setenforce 1 
+[root@localhost ~]# getenforce 
+Enforcing
+[root@localhost ~]# 
+[root@localhost ~]# curl http://localhost
+hell webpage
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# rm -rf /var/www/html/index.html 
+[root@localhost ~]# 
+[root@localhost ~]# echo hello webpage >  index.html  
+[root@localhost ~]# 
+[root@localhost ~]# ls -lZ  index.html 
+-rw-r--r--. 1 root root unconfined_u:object_r:admin_home_t:s0 14 Jun  1 09:54 index.html
+[root@localhost ~]# 
+[root@localhost ~]# cp index.html  /var/www/html
+[root@localhost ~]# 
+[root@localhost ~]# ls -lZ /var/www/html/index.html 
+-rw-r--r--. 1 root root unconfined_u:object_r:httpd_sys_content_t:s0 14 Jun  1 09:55 /var/www/html/index.html
+[root@localhost ~]# 
+[root@localhost ~]# curl http://localhost
+hello webpage
+[root@localhost ~]# 
+
+======================================================================
+Difference between chcon and restorecon  command  
+
+[root@localhost ~]# ls -lZ /var/www/html/index.html 
+-rw-r--r--. 1 root root unconfined_u:object_r:httpd_sys_content_t:s0 14 Jun  1 09:55 /var/www/html/index.html
+[root@localhost ~]# 
+[root@localhost ~]# chcon -R  -t samba_share_t  /var/www/html/index.html
+[root@localhost ~]# 
+[root@localhost ~]# ls -lZ /var/www/html/index.html 
+-rw-r--r--. 1 root root unconfined_u:object_r:samba_share_t:s0 14 Jun  1 09:55 /var/www/html/index.html
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# curl http://localhost
+
+[root@localhost ~]# ls -lZ /var/www/html/index.html 
+-rw-r--r--. 1 root root unconfined_u:object_r:samba_share_t:s0 14 Jun  1 09:55 /var/www/html/index.html
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# restorecon -R  -v    /var/www/html/index.html 
+Relabeled /var/www/html/index.html from unconfined_u:object_r:samba_share_t:s0 to unconfined_u:object_r:httpd_sys_content_t:s0
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls -lZ /var/www/html/index.html 
+-rw-r--r--. 1 root root unconfined_u:object_r:httpd_sys_content_t:s0 14 Jun  1 09:55 /var/www/html/index.html
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# grep  index.html  /etc/httpd/conf/httpd.conf 
+    DirectoryIndex index.html
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# grep  -i documentroot   /etc/httpd/conf/httpd.conf 
+# DocumentRoot: The directory out of which you will serve your
+DocumentRoot "/var/www/html"
+    # access content that does not live under the DocumentRoot.
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]#  mkdir /custom
+[root@localhost ~]# 
+[root@localhost ~]# ls -ldZ /custom
+drwxr-xr-x. 2 root root unconfined_u:object_r:default_t:s0 6 Jun  1 10:00 /custom
+[root@localhost ~]# 
+[root@localhost ~]# echo 'This is SERVERA.' > /custom/index.html
+[root@localhost ~]# 
+[root@localhost ~]# ls /custom
+index.html
+[root@localhost ~]# ls  -lZ /custom/index.html 
+-rw-r--r--. 1 root root unconfined_u:object_r:default_t:s0 17 Jun  1 10:01 /custom/index.html
+[root@localhost ~]# 
+[root@localhost ~]# vim /etc/httpd/conf/httpd.conf
+
+124 DocumentRoot "/custom"
+
+
+136 <Directory "/custom">
+
+
+:wq!
+[root@localhost ~]# systemctl restart httpd 
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# curl http://localhost/index.html
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access this resource.</p>
+</body></html>
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /custom
+total 4
+-rw-r--r--. 1 root root 17 Jun  1 10:01 index.html
+[root@localhost ~]# ls -ld  /custom
+drwxr-xr-x. 2 root root 24 Jun  1 10:01 /custom
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /custom
+total 4
+-rw-r--r--. 1 root root 17 Jun  1 10:01 index.html
+[root@localhost ~]# ls -ld  /custom
+drwxr-xr-x. 2 root root 24 Jun  1 10:01 /custom
+[root@localhost ~]# 
+[root@localhost ~]# chcon -R  -v  -t httpd_sys_content_t  /custom
+changing security context of '/custom/index.html'
+changing security context of '/custom'
+[root@localhost ~]# 
+[root@localhost ~]# ls -ldZ  /custom
+drwxr-xr-x. 2 root root unconfined_u:object_r:httpd_sys_content_t:s0 24 Jun  1 10:01 /custom
+[root@localhost ~]# ls -ldZ  /custom/index.html 
+-rw-r--r--. 1 root root unconfined_u:object_r:httpd_sys_content_t:s0 17 Jun  1 10:01 /custom/index.html
+[root@localhost ~]# 
+[root@localhost ~]# curl http://localhost/index.html
+This is SERVERA.
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+[root@localhost ~]# vim /etc/httpd/conf.d/userdir.conf
+ 17     #UserDir disabled      ===> comment this line
+
+ 24     UserDir public_html    ===> uncomment this line
+
+
+:wq!
+
+[root@localhost ~]# systemctl restart httpd
+
+[root@localhost ~]# useradd soniya
+[root@localhost ~]# 
+[root@localhost ~]# passwd soniya
+Changing password for user soniya.
+New password: 
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# su - soniya 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ mkdir public_html
+[soniya@localhost ~]$ ls
+public_html
+[soniya@localhost ~]$ cd public_html
+[soniya@localhost public_html]$ 
+[soniya@localhost public_html]$ echo  webpage testing > index.html 
+[soniya@localhost public_html]$ cd
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls -ldZ public_html
+drwxr-xr-x. 2 soniya soniya unconfined_u:object_r:httpd_user_content_t:s0 24 Jun  1 10:22 public_html
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls -ldZ public_html/index.html 
+-rw-r--r--. 1 soniya soniya unconfined_u:object_r:httpd_user_content_t:s0 16 Jun  1 10:22 public_html/index.html
+[soniya@localhost ~]$ cd
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls -ld  /home/soniya
+drwx------. 5 soniya soniya 111 Jun  1 10:22 /home/soniya
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$  chmod 711 ~
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls -ld  /home/soniya
+drwx--x--x. 5 soniya soniya 111 Jun  1 10:22 /home/soniya
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls -ld  /home/soniya/public_html
+drwxr-xr-x. 2 soniya soniya 24 Jun  1 10:22 /home/soniya/public_html
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls -ld  /home/soniya/public_html/index.html 
+-rw-r--r--. 1 soniya soniya 16 Jun  1 10:22 /home/soniya/public_html/index.html
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ exit
+logout
+[root@localhost ~]# curl http://localhost/~soniya/index.html
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access this resource.</p>
+</body></html>
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls -lZ  /home/soniya/public_html/index.html 
+-rw-r--r--. 1 soniya soniya unconfined_u:object_r:httpd_user_content_t:s0 16 Jun  1 10:22 /home/soniya/public_html/index.html
+[root@localhost ~]# 
+[root@localhost ~]# ps -ZC httpd
+LABEL                               PID TTY          TIME CMD
+system_u:system_r:httpd_t:s0      34682 ?        00:00:00 httpd
+system_u:system_r:httpd_t:s0      34683 ?        00:00:00 httpd
+system_u:system_r:httpd_t:s0      34684 ?        00:00:00 httpd
+system_u:system_r:httpd_t:s0      34685 ?        00:00:00 httpd
+system_u:system_r:httpd_t:s0      34686 ?        00:00:00 httpd
+[root@localhost ~]# 
+[root@localhost ~]# tail -f  /var/log/messages
+
+[root@localhost ~]# getsebool -a 
+[root@localhost ~]# getsebool -a | grep http
+[root@localhost ~]# setsebool -P  httpd_enable_homedirs  1
+[root@localhost ~]# 
+[root@localhost ~]# getsebool -a | grep http
+[root@localhost ~]# curl http://localhost/~soniya/index.html
+webpage testing
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ausearch -m AVC -ts today
+[root@localhost ~]# ausearch -m AVC -ts recent
+----
+time->Sun Jun  1 10:26:47 2025
+type=PROCTITLE msg=audit(1748753807.817:277): proctitle=2F7573722F7362696E2F6874747064002D44464F524547524F554E44
+type=SYSCALL msg=audit(1748753807.817:277): arch=c000003e syscall=262 success=no exit=-13 a0=ffffff9c a1=7f80cc03b330 a2=7f80c3ffe830 a3=0 items=0 ppid=34682 pid=34686 auid=4294967295 uid=48 gid=48 euid=48 suid=48 fsuid=48 egid=48 sgid=48 fsgid=48 tty=(none) ses=4294967295 comm="httpd" exe="/usr/sbin/httpd" subj=system_u:system_r:httpd_t:s0 key=(null)
+type=AVC msg=audit(1748753807.817:277): avc:  denied  { getattr } for  pid=34686 comm="httpd" path="/home/soniya/public_html/index.html" dev="sda2" ino=17916650 scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:httpd_user_content_t:s0 tclass=file permissive=0
+----
+time->Sun Jun  1 10:26:47 2025
+type=PROCTITLE msg=audit(1748753807.817:278): proctitle=2F7573722F7362696E2F6874747064002D44464F524547524F554E44
+type=SYSCALL msg=audit(1748753807.817:278): arch=c000003e syscall=262 success=no exit=-13 a0=ffffff9c a1=7f80cc03b420 a2=7f80c3ffe830 a3=100 items=0 ppid=34682 pid=34686 auid=4294967295 uid=48 gid=48 euid=48 suid=48 fsuid=48 egid=48 sgid=48 fsgid=48 tty=(none) ses=4294967295 comm="httpd" exe="/usr/sbin/httpd" subj=system_u:system_r:httpd_t:s0 key=(null)
+type=AVC msg=audit(1748753807.817:278): avc:  denied  { getattr } for  pid=34686 comm="httpd" path="/home/soniya/public_html/index.html" dev="sda2" ino=17916650 scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:httpd_user_content_t:s0 tclass=file permissive=0
+[root@localhost ~]# 
+
+[root@localhost ~]# semanage  port  -l  |  grep http
+http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
+http_cache_port_t              udp      3130
+http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, 9000
+pegasus_http_port_t            tcp      5988
+pegasus_https_port_t           tcp      5989
+[root@localhost ~]# semanage  port  -a  -t  http_port_t -p tcp 82 
+[root@localhost ~]# semanage  port  -l  |  grep http
+http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
+http_cache_port_t              udp      3130
+http_port_t                    tcp      82, 80, 81, 443, 488, 8008, 8009, 8443, 9000
+pegasus_http_port_t            tcp      5988
+pegasus_https_port_t           tcp      5989
+[root@localhost ~]# 
+
+======================================================================
+
+[root@localhost ~]# firewall-cmd  --permanent --list-services 
+cockpit dhcpv6-client http ssh
+[root@localhost ~]# 
+[root@localhost ~]# cat /usr/lib/firewalld/services/http.xml 
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>WWW (HTTP)</short>
+  <description>HTTP is the protocol used to serve Web pages. If you plan to make your Web server publicly available, enable this option. This option is not required for viewing pages locally or developing Web pages.</description>
+  <port protocol="tcp" port="80"/>
+</service>
+[root@localhost ~]# 
+
+======================================================================
+
+[root@localhost ~]# vim /etc/httpd/conf/httpd.conf 
+
+Listen 82
+
+
+:wq!
+[root@localhost ~]# systemctl restart httpd
+
+
+
+[root@localhost ~]# curl http://localhost:82/~soniya/index.html
+webpage testing
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+ON VM-2
+
+
+[root@localhost ~]# curl http://192.168.1.110:82/~soniya/index.html
+curl: (7) Failed to connect to 192.168.1.110 port 82: No route to host
+[root@localhost ~]# 
+
+
+ON VM-1
+[root@localhost ~]# firewall-cmd  --permanent --add-port=82/tcp
+success
+[root@localhost ~]# firewall-cmd  --reload  
+success
+[root@localhost ~]# 
+
+ON VM-2
+
+[root@localhost ~]# curl http://192.168.1.110:82/~soniya/index.html
+webpage testing
+[root@localhost ~]# 
+
+ON VM-1
+
+[root@localhost ~]# netstat -tunlp  | grep httpd
+tcp6       0      0 :::82                   :::*                    LISTEN      35551/httpd         
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd  --permanent --add-forward-port=port=80:proto=tcp:toport=82 
+success
+[root@localhost ~]# firewall-cmd --reload  
+success
+[root@localhost ~]# 
+
+
+ON VM-2
+
+[root@localhost ~]# curl http://192.168.1.110/~soniya/index.html
+webpage testing
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# curl http://192.168.1.110:82/~soniya/index.html
+webpage testing
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+ON VM-1
+
+[root@localhost ~]# firewall-cmd  --get-active-zones 
+public
+  interfaces: ens160
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd  --list-all
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: ens160
+  sources: 
+  services: cockpit dhcpv6-client http ssh
+  ports: 82/tcp
+  protocols: 
+  forward: yes
+  masquerade: no
+  forward-ports: 
+	port=80:proto=tcp:toport=82:toaddr=
+  source-ports: 
+  icmp-blocks: 
+  rich rules: 
+[root@localhost ~]# firewall-cmd  --list-forward-ports 
+port=80:proto=tcp:toport=82:toaddr=
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd  --permanent --remove-forward-port=port=80:proto=tcp:toport=82
+success
+[root@localhost ~]# firewall-cmd --reload  
+
+success
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd  --list-forward-ports 
+
+[root@localhost ~]# 
+
+================================================================================
+================================================================================
+[root@localhost ~]# yum install nmap  -y
+[root@localhost ~]# nmap  192.168.1.110
+Starting Nmap 7.91 ( https://nmap.org ) at 2025-06-01 11:12 IST
+Nmap scan report for 192.168.1.110
+Host is up (0.00046s latency).
+Not shown: 996 filtered ports
+PORT     STATE  SERVICE
+22/tcp   open   ssh
+80/tcp   closed http
+82/tcp   open   xfer
+9090/tcp closed zeus-admin
+MAC Address: 00:0C:29:86:14:0A (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 4.96 seconds
+[root@localhost ~]# 
+
+================================================================================

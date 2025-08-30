@@ -1,0 +1,577 @@
+==========================================================================
+         Firewall Management OR Network Security Management
+==========================================================================
+
+==========================================================================
+
+1- using TCP Wrapper ===> 1-  /etc/hosts.allow  2- /etc/hosts.deny
+2- Using IP-Tables   ===> default firewall till RHEL-6 ===> using iptables command
+3- Using Firewalld   ===> in RHEL-7-8-9  default firewall ===> using firewall-cmd [CLI based]
+                                                          ===> firewall-config [GUI based]
+                                                          ===> using cockpit ==> other task + firewall rule 
+
+==========================================================================
+
+Objective-1 How we can manage the network security using firewalld                       layer-1  firewall
+
+Objective-2 What types of securtity we have in Linux to manage the files and folders ?   layer-2  linux inbuild security system [DAC]
+
+Objective-3 What is the role of SE-Linux in any Linux operating system ? OR what is the role of SE_linux Policy in linux machine ? layer-3 [MAC]
+
+==========================================================================
+
+[root@localhost ~]# firewall-cmd --get-zones
+
+block dmz drop external home internal nm-shared public trusted work
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd --get-active-zones 
+public
+  interfaces: ens160
+[root@localhost ~]# 
+[root@localhost ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.108  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::20c:29ff:fe86:140a  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:86:14:0a  txqueuelen 1000  (Ethernet)
+        RX packets 8445  bytes 2191969 (2.0 MiB)
+        RX errors 0  dropped 706  overruns 0  frame 0
+        TX packets 1684  bytes 121123 (118.2 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+[root@localhost ~]# firewall-cmd  --list-services  --zone=public
+cockpit dhcpv6-client ssh
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd  --list-ports  --zone=public
+
+[root@localhost ~]# 
+
+[root@localhost ~]# firewall-cmd --list-all 
+
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: ens160
+  sources: 
+  services: cockpit dhcpv6-client ssh
+  ports: 
+  protocols: 
+  forward: yes
+  masquerade: no
+  forward-ports: 
+  source-ports: 
+  icmp-blocks: 
+  rich rules: 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# firewall-cmd --get-services 
+
+
+[root@localhost ~]# cd /usr/lib/firewalld/
+[root@localhost firewalld]# ls
+helpers  icmptypes  ipsets  policies  services  zones
+[root@localhost firewalld]# 
+[root@localhost firewalld]# 
+[root@localhost firewalld]# cd services
+[root@localhost services]# ls
+[root@localhost services]# cat  ssh.xml
+[root@localhost services]# cat http.xml 
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>WWW (HTTP)</short>
+  <description>HTTP is the protocol used to serve Web pages. If you plan to make your Web server publicly available, enable this option. This option is not required for viewing pages locally or developing Web pages.</description>
+  <port protocol="tcp" port="80"/>
+</service>
+[root@localhost services]# cat https.xml 
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Secure WWW (HTTPS)</short>
+  <description>HTTPS is a modified HTTP used to serve Web pages when security is important. Examples are sites that require logins like stores or web mail. This option is not required for viewing pages locally or developing Web pages. You need the httpd package installed for this option to be useful.</description>
+  <port protocol="tcp" port="443"/>
+</service>
+[root@localhost services]# cd
+[root@localhost ~]# 
+
+==========================================================================
+We need to two machine for this firewall and selinux session 
+
+ON VM-1
+
+
+[root@localhost ~]# rpm -qa  iptables
+[root@localhost ~]# rpm -qa  firewalld
+firewalld-1.0.0-4.el9.noarch
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa  iptables
+[root@localhost ~]# rpm -qa  firewalld
+firewalld-1.0.0-4.el9.noarch
+[root@localhost ~]# 
+[root@localhost ~]# which firewall-cmd 
+/usr/bin/firewall-cmd
+[root@localhost ~]# 
+[root@localhost ~]# which firewalld  
+/usr/sbin/firewalld
+[root@localhost ~]# 
+[root@localhost ~]# systemctl is-active firewalld 
+active
+[root@localhost ~]# systemctl is-enabled  firewalld 
+enabled
+[root@localhost ~]# firewall-cmd --state
+running
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+[root@localhost ~]# systemctl stop firewalld 
+[root@localhost ~]# systemctl disable firewalld 
+Removed /etc/systemd/system/multi-user.target.wants/firewalld.service.
+Removed /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service.
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# systemctl start firewalld 
+[root@localhost ~]# systemctl enable  firewalld 
+Created symlink /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service → /usr/lib/systemd/system/firewalld.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/firewalld.service → /usr/lib/systemd/system/firewalld.service.
+[root@localhost ~]# 
+   44  firewall-cmd  --help
+   45  firewall-cmd  --help |  grep port
+   46  firewall-cmd  --help |  grep zone
+   47  firewall-cmd  --help |  grep interface
+   48  history 
+
+[root@localhost ~]# ls /usr/lib/firewalld/zones
+block.xml  dmz.xml  drop.xml  external.xml  home.xml  internal.xml  nm-shared.xml  public.xml  trusted.xml  work.xml
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls /usr/lib/firewalld
+helpers  icmptypes  ipsets  policies  services  zones
+[root@localhost ~]# 
+[root@localhost ~]# ls /usr/lib/firewalld/services
+
+[root@localhost ~]# firewall-cmd  --get-active-zones 
+public
+  interfaces: ens160
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ifconfig 
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.108  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::20c:29ff:fe86:140a  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:86:14:0a  txqueuelen 1000  (Ethernet)
+        RX packets 10785  bytes 2378823 (2.2 MiB)
+        RX errors 0  dropped 1082  overruns 0  frame 0
+        TX packets 1960  bytes 142123 (138.7 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 23  bytes 2464 (2.4 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 23  bytes 2464 (2.4 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd --list-services 
+cockpit dhcpv6-client ssh
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd --list-ports 
+
+[root@localhost ~]# 
+
+Configure YUM cos we need to install required services packages 
+
+   57  nmcli connection down ens160 
+   58  nmcli connection up ens160 
+   59  ifconfig 
+[root@localhost ~]# lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   30G  0 disk 
+├─sda1   8:1    0    1G  0 part /boot
+├─sda2   8:2    0 14.6G  0 part /
+└─sda3   8:3    0    2G  0 part [SWAP]
+sr0     11:0    1    8G  0 rom  /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mount /dev/sr0  /mnt 
+mount: /mnt: WARNING: source write-protected, mounted read-only.
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]#vim /etc/yum.repos.d/abc.repo 
+
+
+[path-1]
+name=abc
+baseurl=file:///mnt/BaseOS
+enabled=1
+gpgcheck=0
+[path-2]
+name=xyz
+baseurl=file:///mnt/AppStream
+enabled=1
+gpgcheck=0
+
+:wq!
+
+[root@localhost ~]# yum install httpd  -y
+[root@localhost ~]# systemctl restart  httpd
+[root@localhost ~]# systemctl enable  httpd
+Created symlink /etc/systemd/system/multi-user.target.wants/httpd.service → /usr/lib/systemd/system/httpd.service.
+[root@localhost ~]# 
+[root@localhost ~]# netstat -tunlp  | grep httpd
+tcp6       0      0 :::80                   :::*                    LISTEN      33220/httpd         
+[root@localhost ~]# 
+[root@localhost ~]# ss  -tunlp  | grep httpd
+tcp   LISTEN 0      511                *:80               *:*    users:(("httpd",pid=33227,fd=4),("httpd",pid=33224,fd=4),("httpd",pid=33223,fd=4),("httpd",pid=33220,fd=4))
+[root@localhost ~]# 
+[root@localhost ~]# ls /var/www/html
+[root@localhost ~]# 
+[root@localhost ~]# echo  hello web page  >  /var/www/html/index.html 
+[root@localhost ~]# 
+[root@localhost ~]# cat /var/www/html/index.html 
+hello web page
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd --list-services 
+cockpit dhcpv6-client ssh
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd --list-ports 
+
+[root@localhost ~]# 
+
+ON VM-2
+
+[root@localhost ~]# ping  192.168.1.108
+PING 192.168.1.108 (192.168.1.108) 56(84) bytes of data.
+64 bytes from 192.168.1.108: icmp_seq=1 ttl=64 time=0.919 ms
+^C
+--- 192.168.1.108 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.919/0.919/0.919/0.000 ms
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# curl  http://192.168.1.108
+curl: (7) Failed to connect to 192.168.1.108 port 80: No route to host
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+ON VM-1
+
+[root@localhost ~]# netstat -tunlp  | grep httpd
+tcp6       0      0 :::80                   :::*                    LISTEN      33220/httpd         
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd --state 
+running
+[root@localhost ~]# 
+
+[root@localhost ~]# firewall-cmd --list-all
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: ens160
+  sources: 
+  services: cockpit dhcpv6-client ssh
+  ports: 
+  protocols: 
+  forward: yes
+  masquerade: no
+  forward-ports: 
+  source-ports: 
+  icmp-blocks: 
+  rich rules: 
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd  --permanent  --add-service=http
+success
+[root@localhost ~]# firewall-cmd --reload  
+success
+[root@localhost ~]# 
+
+
+
+ON VM-2
+
+[root@localhost ~]# curl  http://192.168.1.108
+hello web page
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+Now we are able to access the HTTP service cos this service is availle in current active ZONE
+
+
+
+ON VM-1
+
+[root@localhost ~]# yum install mod_ssl  -y
+[root@localhost ~]# systemctl restart httpd
+[root@localhost ~]# 
+[root@localhost ~]# netstat -tunlp  | grep httpd
+tcp6       0      0 :::80                   :::*                    LISTEN      33868/httpd         
+tcp6       0      0 :::443                  :::*                    LISTEN      33868/httpd         
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+ON VM-2
+[root@localhost ~]# curl -k    https://192.168.1.108
+curl: (7) Failed to connect to 192.168.1.108 port 443: No route to host
+[root@localhost ~]# 
+[root@localhost ~]# curl  http://192.168.1.108
+hello web page
+[root@localhost ~]# 
+
+
+ON VM-1
+
+[root@localhost ~]# firewall-cmd --get-services | grep http
+[root@localhost ~]# cat   /usr/lib/firewalld/services/http.xml 
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>WWW (HTTP)</short>
+  <description>HTTP is the protocol used to serve Web pages. If you plan to make your Web server publicly available, enable this option. This option is not required for viewing pages locally or developing Web pages.</description>
+  <port protocol="tcp" port="80"/>
+</service>
+[root@localhost ~]# 
+[root@localhost ~]# cat   /usr/lib/firewalld/services/https.xml 
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Secure WWW (HTTPS)</short>
+  <description>HTTPS is a modified HTTP used to serve Web pages when security is important. Examples are sites that require logins like stores or web mail. This option is not required for viewing pages locally or developing Web pages. You need the httpd package installed for this option to be useful.</description>
+  <port protocol="tcp" port="443"/>
+</service>
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd  --permanent --add-service=https
+success
+[root@localhost ~]# firewall-cmd  --reload  
+success
+[root@localhost ~]# 
+
+ON VM-2
+
+[root@localhost ~]# curl  http://192.168.1.108               ======> port number  ===>  80
+hello web page
+[root@localhost ~]# 
+[root@localhost ~]# curl -k    https://192.168.1.108          ======> port number  ===>  443
+
+hello web page
+
+[root@localhost ~]# 
+
+
+ON VM-1
+
+
+
+method:-1   using firewall-cmd 
+method-2    using firewall-config
+method-3    using cockpit console management tool
+
+[root@localhost ~]# yum install firewall-config  -y 
+
+[root@localhost ~]# firewall-config 
+
+[root@localhost ~]# yum install cockpit  -y 
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+Last metadata expiration check: 0:14:50 ago on Sat 31 May 2025 10:00:11 AM IST.
+Package cockpit-264.1-1.el9.x86_64 is already installed.
+Dependencies resolved.
+Nothing to do.
+Complete!
+[root@localhost ~]# 
+[root@localhost ~]# systemctl restart cockpit.socket 
+[root@localhost ~]# systemctl enable  cockpit.socket 
+Created symlink /etc/systemd/system/sockets.target.wants/cockpit.socket → /usr/lib/systemd/system/cockpit.socket.
+[root@localhost ~]# 
+[root@localhost ~]# firefox 
+
+https://192.168.1.108:9090                
+
+
+[root@localhost ~]# vim /etc/httpd/conf/httpd.conf 
+
+Listen 82
+
+:wq!
+
+[root@localhost ~]# getenforce 
+Enforcing
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd --state
+running
+[root@localhost ~]# 
+
+[root@localhost ~]# systemctl restart  httpd
+Job for httpd.service failed because the control process exited with error code.
+See "systemctl status httpd.service" and "journalctl -xeu httpd.service" for details.
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# systemctl status httpd.service
+[root@localhost ~]# tail -f  /var/log/messages
+[root@localhost ~]# semanage  port -l  | grep ssh
+ssh_port_t                     tcp      22
+[root@localhost ~]# 
+[root@localhost ~]# semanage  port -l  | grep http
+http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
+http_cache_port_t              udp      3130
+http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, 9000
+pegasus_http_port_t            tcp      5988
+pegasus_https_port_t           tcp      5989
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# semanage  port -a  -t  http_port_t  -p tcp  82   
+[root@localhost ~]# 
+[root@localhost ~]# semanage  port -l  | grep http
+http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
+http_cache_port_t              udp      3130
+http_port_t                    tcp      82, 80, 81, 443, 488, 8008, 8009, 8443, 9000
+pegasus_http_port_t            tcp      5988
+pegasus_https_port_t           tcp      5989
+[root@localhost ~]# 
+
+[root@localhost ~]# systemctl restart  httpd
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# netstat -tunlp  | grep httpd
+tcp6       0      0 :::82                   :::*                    LISTEN      35505/httpd         
+tcp6       0      0 :::443                  :::*                    LISTEN      35505/httpd         
+[root@localhost ~]# 
+
+ON VM-2
+
+[root@localhost ~]# curl  http://192.168.1.108
+curl: (7) Failed to connect to 192.168.1.108 port 80: Connection refused
+[root@localhost ~]# 
+[root@localhost ~]# curl  http://192.168.1.108:82
+curl: (7) Failed to connect to 192.168.1.108 port 82: No route to host
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+ON VM-1
+
+[root@localhost ~]# firewall-cmd --list-all
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: ens160
+  sources: 
+  services: cockpit dhcpv6-client http https ssh
+  ports: 
+  protocols: 
+  forward: yes
+  masquerade: no
+  forward-ports: 
+  source-ports: 
+  icmp-blocks: 
+  rich rules: 
+[root@localhost ~]# 
+[root@localhost ~]# cat /usr/lib/firewalld/services/http.xml 
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>WWW (HTTP)</short>
+  <description>HTTP is the protocol used to serve Web pages. If you plan to make your Web server publicly available, enable this option. This option is not required for viewing pages locally or developing Web pages.</description>
+  <port protocol="tcp" port="80"/>
+</service>
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd --list-services 
+cockpit dhcpv6-client http https ssh
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd  --permanent  --add-port=82/tcp
+success
+[root@localhost ~]# 
+[root@localhost ~]# firewall-cmd  --reload  
+success
+[root@localhost ~]# firewall-cmd --list-all
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: ens160
+  sources: 
+  services: cockpit dhcpv6-client http https ssh
+  ports: 82/tcp
+  protocols: 
+  forward: yes
+  masquerade: no
+  forward-ports: 
+  source-ports: 
+  icmp-blocks: 
+  rich rules: 
+[root@localhost ~]# 
+[root@localhost ~]# curl  http://192.168.1.108:82
+hello web page
+[root@localhost ~]# 
+
+
+ON VM-1
+
+[root@localhost ~]# sealert -a /var/log/audit/audit.log
+
+==============================================================================
+
+Security-Enhanced Linux (SELinux) is a security architecture for Linux® systems that allows administrators to have more control over who can access the system. It was originally developed by the United States National Security Agency (NSA) as a series of patches to the Linux kernel using Linux Security Modules (LSM).  
+
+SELinux was released to the open source community in 2000, and was integrated into the upstream Linux kernel in 2003.
+How does SELinux work?
+SELinux defines access controls for the applications, processes, and files on a system. It uses security policies, which are a set of rules that tell SELinux what can or can’t be accessed, to enforce the access allowed by a policy. 
+
+When an application or process, known as a subject, makes a request to access an object, like a file, SELinux checks with an access vector cache (AVC), where permissions are cached for subjects and objects.
+
+If SELinux is unable to make a decision about access based on the cached permissions, it sends the request to the security server. The security server checks for the security context of the app or process and the file. Security context is applied from the SELinux policy database. Permission is then granted or denied. 
+
+
+==========================================================================
+==========================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==========================================================================
+==========================================================================
+
+https://www.tecmint.com/restrict-network-access-using-firewalld/
+
+https://firewalld.org/2015/12/mac-address-support
+
+https://linuxhandbook.com/firewalld-cmd/
+
+https://www.linuxteck.com/basic-useful-firewall-cmd-commands-in-linux/
+
+https://infotechys.com/using-the-firewall-cmd-command-in-linux/
+
+https://www.tecmint.com/configure-firewalld-rhel-rocky-almalinux/
+
+https://www.tecmint.com/restrict-network-access-using-firewalld/
+
+https://unix.stackexchange.com/questions/550270/how-do-i-use-firewall-cmd-to-block-all-outbound-connections-but-exclude-an-ip-nu
+
+
+==========================================================================
+==========================================================================

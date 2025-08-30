@@ -1,0 +1,19 @@
+==============================================================================================
+
+https://www.tecmint.com/restrict-network-access-using-firewalld/ ===> DONE
+
+https://firewalld.org/2015/12/mac-address-support ===> DONE
+
+https://linuxhandbook.com/firewalld-cmd/ ===> DONE
+
+https://www.linuxteck.com/basic-useful-firewall-cmd-commands-in-linux/ ===> DONE
+
+https://infotechys.com/using-the-firewall-cmd-command-in-linux/  ==> DONE
+
+https://www.tecmint.com/configure-firewalld-rhel-rocky-almalinux/
+
+https://www.tecmint.com/restrict-network-access-using-firewalld/
+
+https://unix.stackexchange.com/questions/550270/how-do-i-use-firewall-cmd-to-block-all-outbound-connections-but-exclude-an-ip-nu
+
+==============================================================================================

@@ -1,0 +1,542 @@
+===========================================================================================
+TAR  [ Tape archive] 
+===========================================================================================
+Data Compressing and Data uncompressing 
+===========================================================================================
+
+1- Examples of tar command  
+ ===========================================================================================
+
+2- Examples of gzip command  
+3- Examples of bzip2 command 
+4- Examples of xz command    
+
+=========================================================================================== 
+
+Tar command basically use to create archive and compress  n number of files and directory.
+
+===========================================================================================
+
+Archive    ==> collection of file and folder into a single tar file.
+
+Compress   ==> data Size will be compress , it will help in storage concept so that 
+               it will use less space rather then the actual size.
+
+===========================================================================================
+
+tar command basically support these compression method :-
+
+Note: If we are not using any option with tar command in that case it will create only the tar file.
+      we can use anyone options as per demands to compress any tar file or actual file.
+
+
+1- gzip    OR  .gz     ==> gunzip              ===>  -z   [ small z ]
+
+2- bzip2   OR   .bz2   ==> bunzip version 2    ===>  -j   [ small j ]
+
+2- xz      OR   .xz    ==> xz                  ===>  -J   [ capital J  ]
+
+
+
+===========================================================================================
+# gzip                     ===> compress
+# gunzip  # gzip -d        ===> decompress OR uncompress
+
+# bzip2                    ===> compress
+# bunzip2   OR bzip2 -d    ===> decompress OR uncompress
+
+# xz                       ===> compress
+# unxz   OR xz -d          ===> decompress OR uncompress
+
+===========================================================================================
+# tar  -cvf                ===> Create archive only without data compression
+# tar  -xvf                ===> Exract the archive file content
+===========================================================================================  
+# tar  -czvf                ===> Create archive with data compression also ===> Choices ===>  -z  OR -j   OR  -J 
+# tar  -xzvf                ===> Exract the archive file content
+=========================================================================================== 
+
+Syntax:
+
+
+
+#  tar   <options>     <archive-name>     <name of the files and directory>
+
+-c    ==> create archive
+-x    ==> Extract
+-r    ==> Append the data in any existing tar file
+-v    ==> verbose [Optional]
+-f    ==> From File  [ Mandatory ]
+-t    ==> to check data listing of any tar file without extract the data
+-C  [capital C] ==>  to change the extract location 
+
+===========================================================================================   
+
+-z    ==> support  .gz extention or method
+-j    ==> support  .bz2 extention or method
+-J    ==> Support  .xz extention or method
+
+===========================================================================================
+1- using gzip command
+2- using bzip2 command
+3- using xz command
+===========================================================================================
+
+Task-1 Examples of Direct data compress and data uncompress using gzip-bzip2-xz command 
+
+
+===========================================================================================
+
+Task-2 Examples of Create archive only 
+===========================================================================================
+
+Task-3 Examples of archive with compress
+
+
+===========================================================================================
+[root@localhost ~]# cp /var/log/messages /root 
+[root@localhost ~]# 
+[root@localhost ~]# ls 
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# du -sh messages 
+484K	messages
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa tar 
+tar-1.34-3.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa gzip
+gzip-1.10-8.el9.x86_64
+[root@localhost ~]# 
+[root@localhost ~]# rpm -qa bzip2
+bzip2-1.0.8-8.el9.x86_64
+[root@localhost ~]# rpm -qa xz
+xz-5.2.5-7.el9.x86_64
+[root@localhost ~]# 
+============================================================================================
+
+[root@localhost ~]# yum install  tar     -y
+[root@localhost ~]# yum install gzip     -y
+[root@localhost ~]# yum install bzip2    -y
+[root@localhost ~]# yum install xz       -y
+
+============================================================================================
+Examples of gzip
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# du -sh messages 
+484K	messages
+[root@localhost ~]# 
+[root@localhost ~]# gzip messages 
+[root@localhost ~]# 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages.gz  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# du -sh  messages.gz 
+68K	messages.gz
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# gzip -l   messages.gz 
+         compressed        uncompressed  ratio uncompressed_name
+              69097              495194  86.1% messages
+[root@localhost ~]# 
+[root@localhost ~]# zcat  messages.gz 
+[root@localhost ~]# zcat  messages.gz | grep -i success
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages.gz  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# gzip -d  messages.gz 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# du -sh messages 
+484K	messages
+[root@localhost ~]# 
+[root@localhost ~]# gzip messages 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages.gz  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# gunzip  messages.gz 
+[root@localhost ~]# 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+
+============================================================================================
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# bzip2  messages 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages.bz2  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# du -sh messages.bz2 
+44K	messages.bz2
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages.bz2  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# bzcat  messages.bz2 
+[root@localhost ~]# bzip2  -d messages.bz2 
+[root@localhost ~]# 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# bzip2  messages 
+[root@localhost ~]# 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages.bz2  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# bzip2  -d messages.bz2 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+
+============================================================================================
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# xz messages 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages.xz  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# du -sh messages.xz 
+36K	messages.xz
+[root@localhost ~]# 
+[root@localhost ~]# xzcat messages.xz 
+
+[root@localhost ~]# unxz  messages.xz 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# xz messages 
+[root@localhost ~]# 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages.xz  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# xz  -d messages.xz 
+[root@localhost ~]# 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# gzip  -k  messages 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages  messages.gz  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf messages
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages.gz  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# gzip -d messages.gz 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  messages  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# touch india 
+[root@localhost ~]# 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  india  messages  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# gzip india  messages 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  india.gz  messages.gz  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# gzip  -d  india.gz 
+[root@localhost ~]# 
+[root@localhost ~]# gzip -d messages.gz 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  india  messages  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf messages india 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+============================================================================================
+Task-2 Examples of Create archive only and how we can extra the archive file
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# touch abc1 abc2 abc3
+[root@localhost ~]# ls
+abc1  abc2  abc3  anaconda-ks.cfg  Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# tar -cvf   india.tar   abc1 abc2 abc3 
+abc1
+abc2
+abc3
+[root@localhost ~]# 
+[root@localhost ~]# ls
+abc1  abc3             Desktop    Downloads  Music     Public     Videos
+abc2  anaconda-ks.cfg  Documents  india.tar  Pictures  Templates
+[root@localhost ~]# 
+[root@localhost ~]# tar  -tvf india.tar 
+-rw-r--r-- root/root         0 2025-06-07 10:33 abc1
+-rw-r--r-- root/root         0 2025-06-07 10:33 abc2
+-rw-r--r-- root/root         0 2025-06-07 10:33 abc3
+[root@localhost ~]# 
+[root@localhost ~]# tar  -tvf india.tar  |  grep abc3
+-rw-r--r-- root/root         0 2025-06-07 10:33 abc3
+[root@localhost ~]# 
+[root@localhost ~]# touch abc4  abc5 
+[root@localhost ~]# 
+[root@localhost ~]# ls
+abc1  abc3  abc5             Desktop    Downloads  Music     Public     Videos
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar  Pictures  Templates
+[root@localhost ~]# 
+[root@localhost ~]# tar  -rvf india.tar  abc4 abc5 
+abc4
+abc5
+[root@localhost ~]# 
+[root@localhost ~]# ls
+abc1  abc3  abc5             Desktop    Downloads  Music     Public     Videos
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar  Pictures  Templates
+[root@localhost ~]# 
+[root@localhost ~]# tar  -tvf india.tar 
+-rw-r--r-- root/root         0 2025-06-07 10:33 abc1
+-rw-r--r-- root/root         0 2025-06-07 10:33 abc2
+-rw-r--r-- root/root         0 2025-06-07 10:33 abc3
+-rw-r--r-- root/root         0 2025-06-07 10:34 abc4
+-rw-r--r-- root/root         0 2025-06-07 10:34 abc5
+[root@localhost ~]# 
+[root@localhost ~]# ls
+abc1  abc3  abc5             Desktop    Downloads  Music     Public     Videos
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar  Pictures  Templates
+[root@localhost ~]# 
+[root@localhost ~]# ls
+abc1  abc3  abc5             Desktop    Downloads  Music     Public     Videos
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar  Pictures  Templates
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf abc* 
+[root@localhost ~]# 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  india.tar  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# tar -xvf  india.tar 
+abc1
+abc2
+abc3
+abc4
+abc5
+[root@localhost ~]# ls
+abc1  abc3  abc5             Desktop    Downloads  Music     Public     Videos
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar  Pictures  Templates
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mkdir /tmp/backup 
+[root@localhost ~]# 
+[root@localhost ~]# tar -xvf  india.tar  -C  /tmp/backup
+abc1
+abc2
+abc3
+abc4
+abc5
+[root@localhost ~]# ls /tmp/backup
+abc1  abc2  abc3  abc4  abc5
+[root@localhost ~]# 
+[root@localhost ~]# ls 
+abc1  abc3  abc5             Desktop    Downloads  Music     Public     Videos
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar  Pictures  Templates
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf abc*  
+[root@localhost ~]# 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  india.tar  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# gzip  india.tar 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  india.tar.gz  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# gzip -d india.tar.gz 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  india.tar  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# tar  -xvf  india.tar 
+anaconda-ks.cfg  Desktop  Documents  Downloads  india.tar  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# tar  -xvf  india.tar 
+abc1
+abc2
+abc3
+abc4
+abc5
+[root@localhost ~]# ls
+abc1  abc3  abc5             Desktop    Downloads  Music     Public     Videos
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar  Pictures  Templates
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf  india.tar 
+[root@localhost ~]# 
+[root@localhost ~]# ls
+abc1  abc3  abc5             Desktop    Downloads  Pictures  Templates
+abc2  abc4  anaconda-ks.cfg  Documents  Music      Public    Videos
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+============================================================================================
+
+Task-3 Examples of Create archive with compress also and how we can extra the archive file
+
+[root@localhost ~]# ls
+abc1  abc3  abc5             Desktop    Downloads     Music     Public     Videos
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar.gz  Pictures  Templates
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf abc* 
+[root@localhost ~]# ls
+anaconda-ks.cfg  Desktop  Documents  Downloads  india.tar.gz  Music  Pictures  Public  Templates  Videos
+[root@localhost ~]# 
+[root@localhost ~]# tar -tvf india.tar.gz 
+-rw-r--r-- root/root         0 2025-06-07 10:33 abc1
+-rw-r--r-- root/root         0 2025-06-07 10:33 abc2
+-rw-r--r-- root/root         0 2025-06-07 10:33 abc3
+-rw-r--r-- root/root         0 2025-06-07 10:34 abc4
+-rw-r--r-- root/root         0 2025-06-07 10:34 abc5
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# tar -xzvf  india.tar.gz 
+abc1
+abc2
+abc3
+abc4
+abc5
+[root@localhost ~]# ls
+abc1  abc3  abc5             Desktop    Downloads     Music     Public     Videos
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar.gz  Pictures  Templates
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf india.tar.gz 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# tar -cjvf  india.tar.bz2   abc*
+abc1
+abc2
+abc3
+abc4
+abc5
+[root@localhost ~]# ls
+abc1  abc3  abc5             Desktop    Downloads      Music     Public     Videos
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar.bz2  Pictures  Templates
+[root@localhost ~]# 
+[root@localhost ~]# tar -xjvf  india.tar.bz2 
+abc1
+abc2
+abc3
+abc4
+abc5
+[root@localhost ~]# 
+[root@localhost ~]# ls
+abc1  abc3  abc5             Desktop    Downloads      Music     Public     Videos
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar.bz2  Pictures  Templates
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf  india.tar.bz2 
+[root@localhost ~]# 
+[root@localhost ~]# ls
+abc1  abc3  abc5             Desktop    Downloads  Pictures  Templates
+abc2  abc4  anaconda-ks.cfg  Documents  Music      Public    Videos
+[root@localhost ~]# 
+[root@localhost ~]# tar -cJvf  india.tar.xz   abc*
+abc1
+abc2
+abc3
+abc4
+abc5
+[root@localhost ~]# ls
+abc1  abc3  abc5             Desktop    Downloads     Music     Public     Videos
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar.xz  Pictures  Templates
+[root@localhost ~]# 
+[root@localhost ~]# tar -xJvf  india.tar.xz 
+abc1
+abc2
+abc3
+abc4
+abc5
+[root@localhost ~]# ls
+abc1  abc3  abc5             Desktop    Downloads     Music     Public     Videos
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar.xz  Pictures  Templates
+[root@localhost ~]# 
+============================================================================================
+
+Method:-1
+
+Method:-2
+
+[root@localhost ~]# du -sh /var/log
+6.0M	/var/log
+[root@localhost ~]# 
+[root@localhost ~]# du -sh /home 
+12K	/home
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# tar -cvf   redhat.tar   /var/log  /home 
+[root@localhost ~]# ls 
+abc1  abc3  abc5             Desktop    Downloads     Music     Public      Templates
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar.xz  Pictures  redhat.tar  Videos
+[root@localhost ~]# 
+[root@localhost ~]# du -sh redhat.tar 
+6.2M	redhat.tar
+[root@localhost ~]# du -sh /var/log
+6.0M	/var/log
+[root@localhost ~]# du -sh /home
+12K	/home
+[root@localhost ~]# 
+[root@localhost ~]# gzip redhat.tar
+[root@localhost ~]# ls
+abc1  abc3  abc5             Desktop    Downloads     Music     Public         Templates
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar.xz  Pictures  redhat.tar.gz  Videos
+[root@localhost ~]# 
+[root@localhost ~]# du -sh redhat.tar.gz 
+808K	redhat.tar.gz
+[root@localhost ~]# 
+
+
+[root@localhost ~]# ls 
+abc1  abc3  abc5             Desktop    Downloads     Music     Public         Templates
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar.xz  Pictures  redhat.tar.gz  Videos
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+============================================================================================
+
+Method:-1
+
+[root@localhost ~]# tar -xzvf redhat.tar.gz 
+
+                    OR
+
+Method-2
+
+[root@localhost ~]# gzip  -d   redhat.tar.gz 
+[root@localhost ~]# ls
+abc1  abc3  abc5             Desktop    Downloads     Music     Public      Templates
+abc2  abc4  anaconda-ks.cfg  Documents  india.tar.xz  Pictures  redhat.tar  Videos
+[root@localhost ~]# 
+[root@localhost ~]# tar -xvf  redhat.tar 
+
+[root@localhost ~]# ls 
+abc1  abc3  abc5             Desktop    Downloads  india.tar.xz  Pictures  redhat.tar  var
+abc2  abc4  anaconda-ks.cfg  Documents  home       Music         Public    Templates   Videos
+[root@localhost ~]# 
+[root@localhost ~]# du -sh var
+6.3M	var
+[root@localhost ~]# 
+[root@localhost ~]# du -sh home
+12K	home
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+============================================================================================
+============================================================================================
+
+

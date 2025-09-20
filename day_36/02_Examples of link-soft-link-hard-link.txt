@@ -1,0 +1,290 @@
+[root@localhost ~]# which ln 
+/usr/bin/ln
+[root@localhost ~]# which unlink 
+/usr/bin/unlink
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+=========================================================================
+Examples of hard link only
+=========================================================================
+Examples of soft link
+1- for any files
+2- for any directory
+=========================================================================
+
+Examples of hard link only
+
+
+  138  mkdir  /data
+  139  mkdir  /backup 
+  140  touch  /data/india 
+  141  ls -i /data/india 
+  142  find /  -inum 18788787
+  143  ls -l  /data/india 
+  144  ln  /data/india   /backup
+  145  ls /data
+  146  ls /backup
+  147  ls -i /data/india 
+  148  ls -i /backup/india 
+  149  echo hello india >  /data/india 
+  150  cat /data/india 
+  151  cat /backup/india 
+  152  du -sh /backup/india 
+  153  du -sh /data/india 
+  154  echo hello world >>  /backup/india 
+  155  du -sh /backup/india 
+  156  cat   /backup/india 
+  157  cat   /data/india 
+  158  ls -l  /data/india 
+  159  ls -l  /backup/india 
+  160  ls -li  /data/india 
+  161  ls -li  /backup/india 
+  162  find /  -inum  18788787
+  163  rm -rf /data/india
+  164  ls /data
+  165  ls /backup
+  166  ls -l  /backup/india 
+  167  cat /backup/india 
+  168  find /  -inum  18788787
+  169  history 
+
+
+[root@localhost ~]# touch /tmp/hello.py  
+[root@localhost ~]# 
+[root@localhost ~]# ll  /tmp/hello.py 
+-rw-r--r--. 1 root root 0 Jun  7 11:35 /tmp/hello.py
+[root@localhost ~]# 
+[root@localhost ~]# chmod  640  /tmp/hello.py 
+[root@localhost ~]# ll  /tmp/hello.py 
+-rw-r-----. 1 root root 0 Jun  7 11:35 /tmp/hello.py
+[root@localhost ~]# 
+[root@localhost ~]# useradd soniya 
+[root@localhost ~]# 
+[root@localhost ~]# setfacl  -m u:soniya:rw-  /tmp/hello.py 
+[root@localhost ~]# 
+[root@localhost ~]# ll  /tmp/hello.py 
+-rw-rw----+ 1 root root 0 Jun  7 11:35 /tmp/hello.py
+[root@localhost ~]# 
+[root@localhost ~]# su - soniya  
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ cat /tmp/hello.py 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ echo  hello india >  /tmp/hello.py 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ cat /tmp/hello.py 
+hello india
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ln /tmp/hello.py   mycode
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls
+mycode
+[soniya@localhost ~]$ ls -i  /tmp/hello.py 
+18788785 /tmp/hello.py
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls -i  /home/soniya/mycode 
+18788785 /home/soniya/mycode
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ echo hello wold  >>  mycode 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ cat mycode 
+hello india
+hello wold
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ cat /tmp/hello.py 
+hello india
+hello wold
+[soniya@localhost ~]$ rm -rf mycode 
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ ls
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ cat /tmp/hello.py 
+hello india
+hello wold
+[soniya@localhost ~]$ ls -l   /tmp/hello.py 
+-rw-rw----+ 1 root root 23 Jun  7 11:37 /tmp/hello.py
+[soniya@localhost ~]$ 
+[soniya@localhost ~]$ exit
+logout
+[root@localhost ~]# 
+
+[root@localhost ~]# ls -li  /tmp/hello.py 
+18788785 -rw-rw----+ 1 root root 23 Jun  7 11:37 /tmp/hello.py
+[root@localhost ~]# 
+[root@localhost ~]# find / -inum 18788785
+/tmp/hello.py
+[root@localhost ~]# 
+[root@localhost ~]# setfacl  --remove-all /tmp/hello.py
+[root@localhost ~]# 
+[root@localhost ~]# chmod  644  /tmp/hello.py 
+[root@localhost ~]# 
+[root@localhost ~]# ls -l    /tmp/hello.py 
+-rw-r--r--. 1 root root 23 Jun  7 11:37 /tmp/hello.py
+[root@localhost ~]# 
+
+[root@localhost ~]# ls -l    /tmp/hello.py 
+-rw-r--r--. 1 root root 23 Jun  7 11:37 /tmp/hello.py
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# ls /data
+[root@localhost ~]# ls /backup
+india
+[root@localhost ~]# ln  /data  /backup
+ln: /data: hard link not allowed for directory
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf /data
+[root@localhost ~]# rm -rf /backup
+[root@localhost ~]# 
+[root@localhost ~]# 
+
+
+
+===============================================================================
+Examples of soft link ?
+
+1- for any file to file  
+
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# mkdir /data
+[root@localhost ~]# 
+[root@localhost ~]# mkdir /backup 
+[root@localhost ~]# 
+[root@localhost ~]# touch  /data/india 
+[root@localhost ~]# 
+[root@localhost ~]# ls -i  /data/india 
+1775878 /data/india
+[root@localhost ~]# 
+[root@localhost ~]# ln  -s  /data/india  /backup/world  
+[root@localhost ~]# 
+[root@localhost ~]# ls /data
+india
+[root@localhost ~]# ls /backup
+world
+[root@localhost ~]# ls -i  /data/india 
+1775878 /data/india
+[root@localhost ~]# 
+[root@localhost ~]# ls -i  /backup/world 
+18788787 /backup/world
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /data/india 
+-rw-r--r--. 1 root root 0 Jun  7 11:43 /data/india
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /backup/world 
+lrwxrwxrwx. 1 root root 11 Jun  7 11:43 /backup/world -> /data/india
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# useradd ravi1
+[root@localhost ~]# adduser ravi2
+[root@localhost ~]# 
+[root@localhost ~]# which useradd
+/usr/sbin/useradd
+[root@localhost ~]# 
+[root@localhost ~]# which adduser 
+/usr/sbin/adduser
+[root@localhost ~]# ls -l  /usr/sbin/useradd
+-rwxr-xr-x. 1 root root 142376 Dec  3  2021 /usr/sbin/useradd
+[root@localhost ~]# 
+[root@localhost ~]# ls -l  /usr/sbin/adduser 
+lrwxrwxrwx. 1 root root 7 Dec  3  2021 /usr/sbin/adduser -> useradd
+[root@localhost ~]# 
+[root@localhost ~]# cat /etc/redhat-release 
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# cat /etc/system-release
+Red Hat Enterprise Linux release 9.0 (Plow)
+[root@localhost ~]# 
+[root@localhost ~]# ls -l   /etc/system-release
+lrwxrwxrwx. 1 root root 14 Apr  6  2022 /etc/system-release -> redhat-release
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# 
+[root@localhost ~]# echo hello world  >  /data/india 
+[root@localhost ~]# 
+[root@localhost ~]# cat /data/india 
+hello world
+[root@localhost ~]# 
+[root@localhost ~]# cat /backup/world 
+hello world
+[root@localhost ~]# du -sh /data/india 
+4.0K	/data/india
+[root@localhost ~]# 
+[root@localhost ~]# du -sh /backup/world 
+0	/backup/world
+[root@localhost ~]# 
+[root@localhost ~]# cp /data/india  /tmp/mybackup  
+[root@localhost ~]# 
+[root@localhost ~]# rm -rf  /data/india 
+[root@localhost ~]# 
+[root@localhost ~]# ls /data
+[root@localhost ~]# ls /backup
+world
+[root@localhost ~]# 
+[root@localhost ~]# ls -l /backup/
+total 0
+lrwxrwxrwx. 1 root root 11 Jun  7 11:43 world -> /data/india
+[root@localhost ~]# 
+[root@localhost ~]# cat  /backup/world 
+cat: /backup/world: No such file or directory
+[root@localhost ~]# 
+[root@localhost ~]# unlink  /backup/world 
+[root@localhost ~]# 
+[root@localhost ~]# ls /data
+[root@localhost ~]# ls /backup
+[root@localhost ~]# 
+
+===============================================================================
+===============================================================================
+2- directory to directory
+
+
+[root@localhost ~]# ls /data
+[root@localhost ~]# ls /backup
+[root@localhost ~]# 
+[root@localhost ~]# ln -s  /data  /backup 
+[root@localhost ~]# 
+[root@localhost ~]# ls /data
+[root@localhost ~]# 
+[root@localhost ~]# ls /backup
+data
+[root@localhost ~]# 
+[root@localhost ~]# touch /data/abc{1..5}
+[root@localhost ~]# 
+[root@localhost ~]# ls /data
+abc1  abc2  abc3  abc4  abc5
+[root@localhost ~]# 
+[root@localhost ~]# ls /backup/data
+abc1  abc2  abc3  abc4  abc5
+[root@localhost ~]# 
+
+===============================================================================
+Partition  ==> SIZE  ==> actual size  <=== used  <== free 
+
+Partition  ==> Inode ==> Total inode  <== used Inode  <== free Inode
+
+===============================================================================
+[root@localhost ~]# 
+[root@localhost ~]# df  -h 
+Filesystem             Size  Used Avail Use% Mounted on
+devtmpfs               1.8G     0  1.8G   0% /dev
+tmpfs                  1.9G     0  1.9G   0% /dev/shm
+tmpfs                  740M  9.7M  730M   2% /run
+/dev/mapper/rhel-root   26G  4.0G   23G  16% /
+/dev/sda1             1014M  261M  754M  26% /boot
+tmpfs                  370M   92K  370M   1% /run/user/0
+/dev/sr0               8.0G  8.0G     0 100% /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+[root@localhost ~]# df  -i 
+Filesystem              Inodes  IUsed    IFree IUse% Mounted on
+devtmpfs                465478    436   465042    1% /dev
+tmpfs                   473197      1   473196    1% /dev/shm
+tmpfs                   819200    919   818281    1% /run
+/dev/mapper/rhel-root 13629440 126765 13502675    1% /
+/dev/sda1               524288    358   523930    1% /boot
+tmpfs                    94639    109    94530    1% /run/user/0
+/dev/sr0                     0      0        0     - /run/media/root/RHEL-9-0-0-BaseOS-x86_64
+[root@localhost ~]# 
+
+
+===============================================================================

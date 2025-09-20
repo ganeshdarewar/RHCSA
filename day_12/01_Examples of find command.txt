@@ -360,3 +360,20 @@ https://medium.com/techtofreedom/mtime-ctime-and-atime-in-linux-whats-the-differ
 
 
 
+✅ Quick Mnemonic for Remembering Common find Options
+
+NUTS PUG
+
+N: -name / -iname
+
+U: -user
+
+T: -type
+
+S: -size / -empty
+
+P: -perm
+
+U: -inum (inode)
+
+G: -group

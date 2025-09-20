@@ -192,7 +192,7 @@ anaconda-ks.cfg  Desktop  Documents  Downloads  messages  Music  Pictures  Publi
 anaconda-ks.cfg  Desktop  Documents  Downloads  messages.bz2  Music  Pictures  Public  Templates  Videos
 [root@localhost ~]# 
 [root@localhost ~]# 
-[root@localhost ~]# bzip2  -d messages.bz2 
+[root@localhost ~]# bunzip2 messages.bz2
 [root@localhost ~]# ls
 anaconda-ks.cfg  Desktop  Documents  Downloads  messages  Music  Pictures  Public  Templates  Videos
 [root@localhost ~]# 
@@ -229,7 +229,7 @@ anaconda-ks.cfg  Desktop  Documents  Downloads  messages  Music  Pictures  Publi
 [root@localhost ~]# ls
 anaconda-ks.cfg  Desktop  Documents  Downloads  messages  Music  Pictures  Public  Templates  Videos
 [root@localhost ~]# 
-[root@localhost ~]# gzip  -k  messages 
+[root@localhost ~]# gzip  -k  messages # compress with new file
 [root@localhost ~]# ls
 anaconda-ks.cfg  Desktop  Documents  Downloads  messages  messages.gz  Music  Pictures  Public  Templates  Videos
 [root@localhost ~]# 
